@@ -1,24 +1,44 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pax Historia Multi</title>
+<title>Monde des Nations</title>
 <style>
-body{margin:0;background:#0f1720;color:#e8e2d4;font:16px/1.5 Georgia,serif}
-main{max-width:1000px;margin:auto;padding:12px}
-h1{font-size:22px;margin:4px 0}h2{font-size:17px;margin:0 0 8px;color:#e0914f}
-.card{background:#1a2430;border:1px solid #2c3a4a;border-radius:12px;padding:12px;margin:10px 0}
-button,select,input,textarea{font:inherit;border-radius:8px;border:1px solid #2c3a4a;background:#0f1720;color:inherit;padding:8px 10px;max-width:100%;box-sizing:border-box}
-button{background:#c4631f;border:0;cursor:pointer;color:#fff;margin:2px 0}button:disabled{opacity:.5;cursor:wait}
-textarea{width:100%;min-height:90px}
-#map{background:#0b2a44;border-radius:12px;overflow:hidden}svg{width:100%;display:block}
-.c{stroke:#0f1720;stroke-width:.4;cursor:pointer}
-.tag{display:inline-block;font-size:12px;border:1px solid #2c3a4a;border-radius:20px;padding:1px 8px;margin:2px}
-.mut{color:#9aa7b5;font-size:14px}.ch{white-space:pre-wrap;margin:6px 0}.err{color:#ff8a7a}
-hr{border:0;border-top:1px solid #2c3a4a}
-</style></head><body><main>
-<h1>🌍 Pax Historia Multi</h1>
-<div id="top"></div><div id="map"></div><div id="side"><p class="mut">Chargement…</p></div>
-</main>
+:root{--bg:#0b1118;--p:#141d29;--p2:#1b2736;--bd:#2a3a4e;--tx:#e9e4d6;--mu:#93a1b3;--ac:#e0914f;--ac2:#c4631f}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1b2b42,transparent),var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+#bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(11,17,24,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
+.logo{font-size:18px}.logo b{font-family:Georgia,serif;color:var(--ac)}
+#wrap{display:grid;gap:12px;max-width:1280px;margin:12px auto;padding:0 12px}
+@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:start}#map{position:sticky;top:64px}}
+#map{background:linear-gradient(#0c3354,#082238);border:1px solid var(--bd);border-radius:14px;overflow:hidden;min-height:160px}
+#map svg{width:100%;display:block}
+.c{stroke:#07131f;stroke-width:.5;cursor:pointer;transition:fill .5s,filter .2s}.c:hover{filter:brightness(1.3)}
+.lb{font-size:13px;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:#000a;stroke-width:3px;pointer-events:none;font-weight:600}
+.empty{padding:60px 16px;text-align:center;color:var(--mu)}
+.card{background:var(--p);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 10px;color:var(--ac)}
+button,select,input,textarea{font:inherit;color:inherit;border-radius:10px;border:1px solid var(--bd);background:var(--p2);padding:9px 12px;max-width:100%}
+button{background:var(--ac2);border:0;color:#fff;cursor:pointer;margin:2px 0;font-weight:600}
+button:hover{filter:brightness(1.1)}button:disabled{opacity:.5;cursor:wait}
+button.ghost{background:var(--p2);border:1px solid var(--bd);color:var(--tx)}
+button.big{width:100%;padding:14px;font-size:17px}
+input,textarea,select{width:100%}input[type=number]{width:120px}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+.mut{color:var(--mu);font-size:14px}.small{font-size:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row select{flex:1;min-width:140px;width:auto}.row button{width:auto}
+.seg,.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.seg button,.tabs button{flex:1;background:var(--p2);border:1px solid var(--bd);color:var(--mu)}
+.seg button.on,.tabs button.on{background:var(--ac2);color:#fff;border-color:var(--ac2)}
+.tag,.chip{display:inline-block;font-size:12px;border:1px solid var(--bd);border-radius:20px;padding:2px 10px;margin:2px;background:var(--p2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toast{background:#2a1f1a;border:1px solid var(--ac2);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:14px}
+.ch{white-space:pre-wrap;margin:8px 0}.ev{border-left:3px solid var(--ac2);padding-left:10px;margin:12px 0}
+.hero h2{font-size:22px;font-family:Georgia,serif}
+</style></head><body>
+<header id="bar"></header>
+<div id="wrap"><div id="map"></div><aside id="side"><p class="mut">Chargement…</p></aside></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -26,29 +46,52 @@ import {getFirestore,doc,setDoc,getDoc,updateDoc,onSnapshot,deleteField,deleteDo
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 import {feature} from "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm";
 
-/* ===== COLLE ICI TA CONFIG FIREBASE (Paramètres du projet > Tes applications > Application web) ===== */
+/* ===== CONFIG FIREBASE (voir README) ===== */
 const FB={apiKey:"AIzaSyDb5Skq2cTDRbkiVcRZ4qtjWSH2Yjwp2Zc",authDomain:"cap-historiageneraror.firebaseapp.com",projectId:"cap-historiageneraror",appId:"1:881302470164:web:8b1ad2fa05f4037807b101"};
-/* ======================================================================================================= */
+/* ======================================== */
 
 const DIFF={facile:"Monde clément : les ordres des joueurs réussissent souvent, les IA sont passives.",normal:"Équilibré et plausible.",réaliste:"Conséquences réalistes (logistique, économie, opinion, rivalités) ; les plans ambitieux échouent souvent.",difficile:"Impitoyable : IA agressives et opportunistes, crises, coups d'État et guerres fréquents."};
+const GL="https://generativelanguage.googleapis.com/v1beta/models";
 const app=initializeApp(FB),auth=getAuth(app),db=getFirestore(app);
 const $=s=>document.querySelector(s);
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ls={get:k=>{try{return localStorage.getItem(k)||""}catch{return ""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
-let user=null,ready=false,G=null,code="",feats=[],names=[],own_={},unsub=null,busy=false,pend=null,msg="",cfgOpen=false,CH=[];
-let KEY=ls.get("gk"),MODEL=ls.get("gm")||"gemini-2.5-flash",PSEUDO=ls.get("pseudo");
-window.LF={year:1936,diff:"normal",ctx:"",jc:""};window.D={};
+const J=(s,d)=>{try{return JSON.parse(s)}catch{return d}};
+let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",msg="",cfgOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null;
+let KEY=ls.get("gk"),MODEL=ls.get("gm")||"gemini-2.5-flash",PSEUDO=ls.get("pseudo"),MODELS=J(ls.get("gmodels"),[]);
+const LIB=J(ls.get("maps"),[]);
+const LF=window.LF={year:1936,diff:"normal",ctx:"",ai:false,md:"",mapObj:null,jc:""};
+const D=window.D={};
+window.side=()=>side();
+const custom=()=>G?!!G.mapJson:LF.ai;
+const names=()=>custom()?(MAPDATA?MAPDATA.t.map(t=>t.n):[]):feats.map(f=>f.properties.name);
 const own=n=>own_[n]||n;
 const me=()=>G&&user&&G.players&&G.players[user.uid]||null;
-const col=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return `hsl(${h},45%,45%)`};
-const nations=()=>[...new Set(names.map(own))].sort((a,b)=>a.localeCompare(b));
+const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return `hsl(${h},45%,45%)`};
+const colorOf=n=>{if(custom()&&MAPDATA){const t=MAPDATA.t.find(x=>x.n===n);if(t)return t.c}return hue(n)};
+const nations=()=>[...new Set(names().map(own))].sort((a,b)=>a.localeCompare(b));
 const say=m=>{msg=m;side()};
 
-/* ---------- IA (Gemini) ---------- */
-async function ask(p,json=true){
+/* ---------- IA Gemini ---------- */
+async function listModels(){
+  const r=await fetch(GL+"?pageSize=200",{headers:{"x-goog-api-key":KEY}});
+  if(!r.ok)throw Error("Clé refusée par Google ("+r.status+")");
+  return ((await r.json()).models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace("models/","")).filter(n=>/^gemini/.test(n)&&!/image|tts|live|audio|embed/.test(n));
+}
+async function pickModel(){
+  const l=await listModels().catch(()=>[]),ok=l.filter(n=>/flash/.test(n)&&!/exp|thinking|vision|robotics|computer/.test(n));
+  return ok.filter(n=>/^gemini-[\d.]+-flash$/.test(n)).sort().pop()||ok.find(n=>/lite/.test(n))||ok[0]||null;
+}
+async function ask(p,json=true,retry=true){
   if(!KEY)throw Error("Ajoute ta clé Gemini dans ⚙️ Réglages.");
-  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(MODEL)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":KEY},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9}:{temperature:.8}})});
-  if(!r.ok)throw Error(r.status==429?"Quota Gemini atteint, réessaie dans une minute.":(r.status==400||r.status==403||r.status==404)?"Clé Gemini invalide ou modèle inconnu (⚙️ Réglages).":"Erreur Gemini "+r.status);
+  const r=await fetch(`${GL}/${encodeURIComponent(MODEL)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":KEY},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9}:{temperature:.8}})});
+  if(!r.ok){
+    let m="";try{m=(await r.json()).error.message||""}catch{}
+    if((r.status==404||/not found|no longer available|not supported/i.test(m))&&retry){
+      const n=await pickModel();if(n&&n!==MODEL){MODEL=n;ls.set("gm",n);return ask(p,json,false)}
+    }
+    throw Error(r.status==429?"Quota Gemini atteint, réessaie dans une minute.":(r.status==400||r.status==403)&&/API key/i.test(m)?"Clé Gemini invalide (⚙️ Réglages).":"Erreur Gemini "+r.status+(m?" : "+m.slice(0,160):""));
+  }
   const j=await r.json(),t=(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text||"").join("");
   if(!t)throw Error("Réponse vide de l'IA (filtre de sécurité ?). Reformule.");
   if(!json)return t;
@@ -60,90 +103,152 @@ async function loadWorld(){
   if(feats.length)return;
   const t=await (await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json")).json();
   feats=feature(t,t.objects.countries).features.filter(f=>f.properties.name&&f.properties.name!=="Antarctica");
-  names=feats.map(f=>f.properties.name);
 }
 function drawMap(){
-  const W=960,H=500,pr=d3.geoNaturalEarth1().fitSize([W,H],{type:"FeatureCollection",features:feats}),pa=d3.geoPath(pr);
-  const svg=d3.select("#map").html("").append("svg").attr("viewBox",`0 0 ${W} ${H}`),g=svg.append("g");
-  g.selectAll("path").data(feats).join("path").attr("class","c").attr("d",pa).on("click",(e,f)=>pick(own(f.properties.name))).append("title").text(f=>f.properties.name);
+  const el=d3.select("#map").html(""),W=1000,H=500;let items=[];
+  if(custom()){
+    if(!MAPDATA){el.append("div").attr("class","empty").text("✨ Décris ta carte, puis génère-la.");return}
+    const ln=d3.line().curve(d3.curveCatmullRomClosed.alpha(.5));
+    items=MAPDATA.t.map(t=>{let c=d3.polygonCentroid(t.pts);if(!c.every(Number.isFinite))c=[d3.mean(t.pts,p=>p[0]),d3.mean(t.pts,p=>p[1])];return{n:t.n,d:ln(t.pts),x:c[0],y:c[1]}});
+  }else{
+    if(!feats.length){el.append("div").attr("class","empty").text("Chargement de la carte…");return}
+    const pa=d3.geoPath(d3.geoNaturalEarth1().fitSize([W,H],{type:"FeatureCollection",features:feats}));
+    items=feats.map(f=>({n:f.properties.name,d:pa(f)}));
+  }
+  const svg=el.append("svg").attr("viewBox",`0 0 ${W} ${H}`),g=svg.append("g");
+  g.selectAll("path").data(items).join("path").attr("class","c").attr("d",d=>d.d).on("click",(e,d)=>pick(own(d.n))).append("title").text(d=>d.n);
+  if(custom())g.selectAll("text").data(items).join("text").attr("class","lb").attr("x",d=>d.x).attr("y",d=>d.y).text(d=>d.n);
   svg.call(d3.zoom().scaleExtent([1,10]).on("zoom",e=>g.attr("transform",e.transform)));
   colorMap();
 }
 function colorMap(){
-  const mine=me()&&me().nation,is=f=>mine&&own(f.properties.name)===mine;
-  d3.selectAll("#map path").style("fill",f=>col(own(f.properties.name))).style("stroke",f=>is(f)?"#fff":null).style("stroke-width",f=>is(f)?1.6:null);
+  const mine=me()&&me().nation,is=d=>mine&&own(d.n)===mine;
+  d3.selectAll("#map path.c").style("fill",d=>colorOf(own(d.n))).style("stroke",d=>is(d)?"#fff":null).style("stroke-width",d=>is(d)?2:null);
 }
+function setMap(o){MAPDATA=o;drawMap()}
 
 /* ---------- Interface ---------- */
-function header(){
-  $("#top").innerHTML=user?`<span class="mut">${esc(PSEUDO||"(sans pseudo)")}</span> <button onclick="cfg()">⚙️ Réglages</button> <button onclick="out()">Déconnexion</button>`:"";
+function bar(){
+  $("#bar").innerHTML=`<div class="logo">🌍 <b>Monde des Nations</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:"");
 }
 function settings(){
-  return `<div class="card"><h2>⚙️ Réglages — assistant de démarrage</h2>
-  <p class="mut"><b>1. Pseudo</b> : seul ce pseudo est visible par les autres joueurs (jamais ton compte Google, ton e-mail ni ta photo).<br><b>2. Clé Gemini</b> : gratuite sur aistudio.google.com, stockée uniquement dans ton navigateur.</p>
-  <p><input id="ps" placeholder="Ton pseudo" maxlength="20" value="${esc(PSEUDO)}"></p>
-  <p><input id="ky" type="password" placeholder="Clé API Gemini" value="${esc(KEY)}" autocomplete="off"></p>
-  <p><input id="md" placeholder="Modèle" value="${esc(MODEL)}"></p>
-  <button onclick="saveCfg()">Enregistrer</button></div>`;
+  const opts=[...new Set([MODEL,...MODELS,"gemini-2.5-flash","gemini-2.5-flash-lite","gemini-3-flash-preview"])];
+  return `<div class="card"><h2>⚙️ Réglages</h2>
+  <label>Pseudo (le seul nom visible par les autres joueurs)</label><input id="ps" maxlength="20" value="${esc(PSEUDO)}">
+  <label>Clé API Gemini (gratuite : aistudio.google.com/apikey)</label><input id="ky" type="password" autocomplete="off" value="${esc(KEY)}">
+  <label>Modèle IA</label><div class="row"><select id="md">${opts.map(o=>`<option ${o===MODEL?"selected":""}>${esc(o)}</option>`).join("")}</select><button class="ghost" onclick="loadModels()" ${busy?"disabled":""}>↻ Charger mes modèles</button></div>
+  <p><button onclick="saveCfg()">Enregistrer</button></p></div>`;
+}
+function lobby(){
+  return `<div class="card"><h2>🗺️ 1 · La carte</h2>
+  <div class="seg"><button class="${LF.ai?"":"on"}" onclick="mk(0)">🌍 Monde réel</button><button class="${LF.ai?"on":""}" onclick="mk(1)">✨ Carte IA</button></div>
+  ${LF.ai?`<textarea placeholder="Décris ta carte : « un archipel de 12 cités-États sous la mer », « la Terre du Milieu », « l'Europe si Rome n'était jamais tombée »…" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
+  <p><button onclick="genMap()" ${busy?"disabled":""}>${busy==="map"?"L'IA dessine…":"✨ Générer la carte"}</button></p>
+  ${LIB.length?`<label>Cartes déjà générées (sans appel IA)</label><select onchange="useMap(this.value)"><option value="">— choisir —</option>${LIB.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("")}</select>`:""}`
+  :`<p class="mut">Vraies frontières. Clique sur un pays pour l'explorer.</p>`}</div>
+  <div class="card"><h2>📜 2 · Époque et difficulté</h2>
+  <div class="row"><input type="number" value="${esc(LF.year)}" oninput="LF.year=this.value"> <span class="mut">Année de départ</span></div>
+  <div class="seg" style="margin-top:8px">${Object.keys(DIFF).map(k=>`<button class="${k===LF.diff?"on":""}" onclick="LF.diff='${k}';side()">${k}</button>`).join("")}</div>
+  <p class="mut small">${esc(DIFF[LF.diff])}</p>
+  <textarea placeholder="Contexte historique (ou laisse l'IA l'écrire)" oninput="LF.ctx=this.value">${esc(LF.ctx)}</textarea>
+  <p><button class="ghost" onclick="scen()" ${busy?"disabled":""}>${busy==="scen"?"L'IA écrit…":"✨ Générer le contexte"}</button></p></div>
+  <button class="big" onclick="create()" ${busy?"disabled":""}>🚀 Créer la partie</button>
+  <div class="card" style="margin-top:12px"><h2>🔑 Rejoindre une partie</h2><div class="row"><input placeholder="Code" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">Rejoindre</button></div></div>`;
+}
+function game(){
+  if(D.turn!==G.turn){D.d=undefined;D.turn=G.turn}
+  const P=Object.entries(G.players||{}),m=me(),host=G.host===user.uid,od=(G.orders&&G.orders[user.uid])||"";
+  let b="";
+  if(TAB==="play"){
+    b=!m?`<div class="card"><p>Tu n'es plus dans cette partie.</p><button onclick="join('${esc(code)}')">Revenir</button></div>`
+    :!m.nation?`<div class="card"><h2>Choisis ta nation</h2><p class="mut">Clique sur la carte, ou utilise la liste (pratique pour les petits pays).</p><div class="row"><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select><button onclick="pickSel(document.getElementById('nsel').value)">Jouer</button></div></div>`
+    :`<div class="card"><h2>Tes ordres — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value" placeholder="Que fait ton gouvernement cette année ?">${esc(D.d??od)}</textarea>
+    <div class="row"><button class="ghost" onclick="send()">💾 Valider</button><button onclick="resolve()" ${busy?"disabled":""}>${busy==="turn"?"L'IA simule…":"⏩ Résoudre le tour"}</button></div></div>`;
+  }else if(TAB==="adv"){
+    b=!m||!m.nation?`<div class="card"><p class="mut">Choisis d'abord une nation.</p></div>`
+    :`<div class="card"><h2>🧠 Ton conseiller</h2>${CH.slice(-6).map(c=>`<div class="ch"><b>${esc(c.r)} :</b> ${esc(c.t)}</div>`).join("")||`<p class="mut">Pose une question ou demande des idées d'ordres.</p>`}
+    <input placeholder="Ta question…" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":"Demander"}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>💡 Suggérer des ordres</button></div></div>`;
+  }else if(TAB==="log"){
+    b=`<div class="card"><h2>📖 Contexte</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>📜 Chronique</h2>${(G.log||[]).slice().reverse().map(l=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.year)})</span><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">Rien pour l'instant.</p>`}</div>`;
+  }else{
+    b=`<div class="card"><h2>👥 Joueurs</h2>${P.map(([id,p])=>`<div><span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")}${id===user.uid?" (toi)":""}</div>`).join("")}</div>
+    <div class="card"><h2>🔗 Inviter</h2><p class="mut">Code : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">📋 Copier le lien</button><button class="ghost" onclick="leave()">Quitter</button>${host?`<button class="ghost" onclick="del()">🗑️ Supprimer</button>`:""}</div></div>`;
+  }
+  return `<div class="card head"><b>Année ${esc(G.year)}</b><span>· Tour ${esc(G.turn)}</span><span class="tag">${esc(G.diff)}</span></div>
+  <div class="tabs">${[["play","🎮 Jouer"],["adv","🧠 Conseiller"],["log","📜 Chronique"],["ppl","👥 Joueurs"]].map(([k,l])=>`<button class="${TAB===k?"on":""}" onclick="tab('${k}')">${l}</button>`).join("")}</div>`+b;
 }
 function side(){
-  header();const s=$("#side");
+  bar();const s=$("#side");
   if(!ready){s.innerHTML=`<p class="mut">Chargement…</p>`;return}
-  if(!user){s.innerHTML=`<div class="card"><h2>Connexion</h2><p class="mut">Google sert uniquement à t'identifier. Les autres joueurs ne verront que ton pseudo.</p><button onclick="login()">Se connecter avec Google</button></div><p class="err">${esc(msg)}</p>`;return}
+  const t=msg?`<div class="toast">${esc(msg)}</div>`:"";
+  if(!user){s.innerHTML=`<div class="card hero"><h2>Dirige une nation. Réécris l'histoire.</h2><p class="mut">Géopolitique multijoueur propulsée par l'IA : cartes réelles ou inventées, scénarios historiques, conseiller personnel.</p><button class="big" onclick="login()">Se connecter avec Google</button><p class="mut small">Les autres joueurs ne voient jamais ton compte Google, seulement ton pseudo.</p></div>${t}`;return}
   const cfg=(cfgOpen||!PSEUDO||!KEY)?settings():"";
-  if(!G){
-    s.innerHTML=cfg+`<div class="card"><h2>Nouvelle partie</h2>
-    <p>Année : <input type="number" value="${esc(LF.year)}" oninput="LF.year=this.value" style="width:100px"> Difficulté : <select onchange="LF.diff=this.value">${Object.keys(DIFF).map(k=>`<option ${k===LF.diff?"selected":""}>${k}</option>`).join("")}</select></p>
-    <textarea oninput="LF.ctx=this.value" placeholder="Contexte historique (ex : Europe 1914, guerre froide, monde où Rome n'est jamais tombée…) ou laisse l'IA l'écrire.">${esc(LF.ctx)}</textarea>
-    <p><button onclick="scen()" ${busy?"disabled":""}>${busy?"L'IA écrit…":"✨ Générer scénario + frontières historiques"}</button> <button onclick="create()" ${busy?"disabled":""}>Créer la partie</button></p></div>
-    <div class="card"><h2>Rejoindre</h2><input placeholder="Code" size="10" value="${esc(LF.jc)}" oninput="LF.jc=this.value"> <button onclick="join(LF.jc)">Rejoindre</button></div><p class="err">${esc(msg)}</p>`;
-    return;
-  }
-  if(D.turn!==G.turn){D.d=undefined;D.turn=G.turn}
-  const P=Object.entries(G.players||{}),m=me(),od=(G.orders&&G.orders[user.uid])||"",host=G.host===user.uid;
-  s.innerHTML=cfg+`<div class="card"><h2>Partie ${esc(code)} · Année ${esc(G.year)} · Tour ${esc(G.turn)} · ${esc(G.diff)}</h2>
-  <p class="mut">${esc(G.context)}</p>
-  <button onclick="copyLink()">📋 Lien d'invitation</button> <button onclick="leave()">Quitter</button>${host?` <button onclick="del()">🗑️ Supprimer</button>`:""}</div>
-  <div class="card"><h2>👥 Joueurs</h2>${P.map(([id,p])=>`<span class="tag">${esc(p.name)} — ${esc(p.nation||"…")}${id===user.uid?" (toi)":""}</span>`).join("")}</div>
-  ${!m?`<div class="card"><p>Tu n'es plus dans cette partie. <button onclick="join('${esc(code)}')">Revenir</button></p></div>`
-  :!m.nation?`<div class="card"><h2>Choisis ta nation</h2><p class="mut">Clique sur la carte ou utilise la liste (utile pour les petits pays).</p><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select> <button onclick="pickSel(document.getElementById('nsel').value)">Jouer</button></div>`
-  :`<div class="card"><h2>Tes ordres — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value">${esc(D.d??od)}</textarea>
-  <p><button onclick="send()">Valider mes ordres</button> <button onclick="resolve()" ${busy?"disabled":""}>${busy?"L'IA simule…":"⏩ Résoudre le tour"}</button></p></div>
-  <div class="card"><h2>🧠 Conseiller</h2>${CH.slice(-6).map(c=>`<div class="ch"><b>${esc(c.r)} :</b> ${esc(c.t)}</div>`).join("")}
-  <input placeholder="Pose une question à ton conseiller…" value="${esc(D.q||"")}" oninput="D.q=this.value" style="width:100%"><p><button onclick="advise(false)" ${busy?"disabled":""}>Demander</button> <button onclick="advise(true)" ${busy?"disabled":""}>💡 Suggérer des ordres</button></p></div>`}
-  <p class="err">${esc(msg)}</p>
-  <div class="card"><h2>Chronique</h2>${(G.log||[]).slice().reverse().map(l=>`<div><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.year)})</span><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div><hr>`).join("")||"<p class='mut'>Rien pour l'instant.</p>"}</div>`;
+  s.innerHTML=cfg+t+(G?game():lobby());
 }
 
 /* ---------- Actions ---------- */
 window.login=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>say(e.code==="auth/popup-blocked"?"Autorise les pop-ups pour ce site.":"Connexion impossible : "+e.code));
 window.out=()=>{stop();signOut(auth)};
 window.cfg=()=>{cfgOpen=!cfgOpen;side()};
+window.tab=t=>{TAB=t;msg="";side()};
+function readCfg(){const p=$("#ps"),k=$("#ky"),m=$("#md");if(p)PSEUDO=p.value.replace(/[<>]/g,"").trim().slice(0,20);if(k)KEY=k.value.trim();if(m&&m.value)MODEL=m.value}
+window.loadModels=async()=>{
+  readCfg();if(!KEY)return say("Colle d'abord ta clé Gemini.");
+  busy="mod";side();
+  try{MODELS=await listModels();ls.set("gmodels",JSON.stringify(MODELS));cfgOpen=true;msg=MODELS.length+" modèles trouvés pour ta clé.";if(!MODELS.includes(MODEL)&&MODELS.length)MODEL=MODELS.find(n=>/^gemini-[\d.]+-flash$/.test(n))||MODELS[0]}
+  catch(e){msg=e.message}
+  busy="";side();
+};
 window.saveCfg=async()=>{
-  const p=$("#ps").value.replace(/[<>]/g,"").trim().slice(0,20),k=$("#ky").value.trim(),m=$("#md").value.trim();
-  if(!p){return say("Choisis un pseudo.")}
-  PSEUDO=p;KEY=k;MODEL=m||"gemini-2.5-flash";ls.set("pseudo",PSEUDO);ls.set("gk",KEY);ls.set("gm",MODEL);cfgOpen=false;msg="";
+  readCfg();if(!PSEUDO)return say("Choisis un pseudo.");
+  ls.set("pseudo",PSEUDO);ls.set("gk",KEY);ls.set("gm",MODEL);cfgOpen=false;msg="";
   if(G&&me())try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.name`]:PSEUDO})}catch{}
   side();
+  if(!G&&location.hash.length>1)join(location.hash.slice(1));
+};
+window.mk=a=>{LF.ai=!!a;setMap(a?LF.mapObj:null);side()};
+window.useMap=id=>{const m=LIB.find(x=>x.id===id);if(m){LF.mapObj=m;LF.md=m.md||LF.md;setMap(m);side()}};
+window.genMap=async()=>{
+  if(!LF.md.trim())return say("Décris d'abord ta carte.");
+  busy="map";msg="";side();
+  try{
+    const r=await ask(`Crée une carte politique stylisée pour un jeu de géopolitique, d'après cette demande (monde réel ou fictif) : « ${LF.md.slice(0,300)} ».
+Canevas 1000x500. Entre 10 et 16 nations ou territoires aux noms courts (24 caractères max), formes organiques qui se touchent (frontières partagées), disposition cohérente avec la demande, avec de la mer entre les continents.
+Réponds UNIQUEMENT en JSON : {"name":"nom de la carte","context":"contexte historique ou univers en 4 à 6 phrases en français","t":[{"n":"Nom","pts":[[x,y],[x,y]],"c":"#rrggbb"}]}.
+Chaque territoire : 8 à 14 points [x,y] entiers (x de 0 à 1000, y de 0 à 500) formant un polygone simple.`);
+    const used=new Set,t=[];
+    for(const x of Array.isArray(r.t)?r.t:[]){
+      const n=String(x.n||"").replace(/[\/]/g,"").trim().slice(0,24);
+      const pts=(Array.isArray(x.pts)?x.pts:[]).map(p=>Array.isArray(p)?[+p[0],+p[1]]:[NaN,NaN]).filter(p=>p.every(Number.isFinite)).map(p=>[Math.max(0,Math.min(1000,p[0])),Math.max(0,Math.min(500,p[1]))]).slice(0,16);
+      if(!n||used.has(n)||pts.length<3)continue;used.add(n);
+      t.push({n,pts,c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n)});
+    }
+    if(t.length<4)throw Error("Carte invalide, réessaie avec une description plus précise.");
+    const m={id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),t:t.slice(0,18)};
+    LIB.push(m);while(LIB.length>8||JSON.stringify(LIB).length>3e6)LIB.shift();ls.set("maps",JSON.stringify(LIB));
+    LF.mapObj=m;if(r.context)LF.ctx=String(r.context).slice(0,1500);setMap(m);
+  }catch(e){msg=e.message}
+  busy="";side();
 };
 window.scen=async()=>{
-  busy=true;msg="";side();
+  busy="scen";msg="";side();
   try{
-    const y=+LF.year||1936;
-    const r=await ask(`Jeu de géopolitique sur une carte moderne. Année ${y}. Thème : "${LF.ctx||"monde réel"}".
-Noms de pays valides (exactement) : ${names.join("; ")}.
-Réponds en JSON : {"context":"contexte historique de 5 à 8 phrases en français (puissances, alliances, tensions)","owners":{"<nom de pays valide>":"<nom en français de l'État ou empire qui le contrôle en ${y}>"}}. owners ne liste que les territoires dont le contrôleur en ${y} diffère du pays moderne (empires, colonies, URSS…), 150 entrées maximum.`);
-    const o={};for(const [k,v] of Object.entries(r.owners||{}))if(names.includes(k)&&typeof v==="string"&&v.trim()&&v!==k)o[k]=v.trim().slice(0,40);
-    pend=o;LF.ctx=String(r.context||LF.ctx);
+    const y=+LF.year||1936,n=names();
+    const r=await ask(`Jeu de géopolitique ${custom()?"sur une carte inventée ("+(MAPDATA?MAPDATA.name:"")+")":"sur la carte du monde moderne"}. Année ${y}. Thème : "${LF.ctx||LF.md||"monde réel"}".
+Noms de territoires valides (exactement) : ${n.join("; ")}.
+Réponds en JSON : {"context":"contexte historique de 5 à 8 phrases en français (puissances, alliances, tensions)","owners":{"<nom valide>":"<nom en français de l'État qui le contrôle en ${y}>"}}. owners ne liste que les territoires dont le contrôleur diffère de leur nom (empires, colonies, URSS…), 150 entrées maximum.`);
+    const o={};for(const [k,v] of Object.entries(r.owners||{}))if(n.includes(k)&&typeof v==="string"&&v.trim()&&v!==k)o[k]=v.trim().slice(0,40);
+    LF.owners=o;LF.ctx=String(r.context||LF.ctx);
   }catch(e){msg=e.message}
-  busy=false;side();
+  busy="";side();
 };
 window.create=async()=>{
   if(!PSEUDO||!KEY){cfgOpen=true;return say("Renseigne d'abord pseudo et clé Gemini.")}
+  if(LF.ai&&!MAPDATA)return say("Génère d'abord une carte.");
   const c=Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>"ABCDEFGHJKMNPQRSTUVWXYZ23456789"[x%31]).join("");
   try{
-    await setDoc(doc(db,"games",c),{host:user.uid,year:Math.trunc(+LF.year)||1936,turn:1,diff:LF.diff,context:(LF.ctx||"Monde réel.").slice(0,2000),ownersJson:JSON.stringify(pend||{}),log:[],orders:{},players:{[user.uid]:{name:PSEUDO,nation:""}},created:Date.now()});
-    pend=null;watch(c);
+    await setDoc(doc(db,"games",c),{host:user.uid,year:Math.trunc(+LF.year)||1936,turn:1,diff:LF.diff,context:(LF.ctx||"Monde réel.").slice(0,2000),ownersJson:JSON.stringify(LF.owners||{}),mapJson:LF.ai?JSON.stringify(MAPDATA):"",log:[],orders:{},players:{[user.uid]:{name:PSEUDO,nation:""}},created:Date.now()});
+    LF.owners=null;TAB="play";watch(c);
   }catch(e){say("Création impossible : "+(e.code||e.message))}
 };
 window.join=async c=>{
@@ -151,19 +256,20 @@ window.join=async c=>{
   if(!PSEUDO){cfgOpen=true;return say("Choisis d'abord un pseudo.")}
   if(!c)return say("Entre un code.");
   try{
-    const s=await getDoc(doc(db,"games",c));
-    if(!s.exists())return say("Code inconnu.");
+    const s=await getDoc(doc(db,"games",c));if(!s.exists())return say("Code inconnu.");
     await updateDoc(doc(db,"games",c),{[`players.${user.uid}.name`]:PSEUDO,...((s.data().players||{})[user.uid]?{}:{[`players.${user.uid}.nation`]:""})});
-    watch(c);
+    TAB="play";watch(c);
   }catch(e){say("Impossible de rejoindre : "+(e.code||e.message))}
 };
-function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;history.replaceState(null,"",location.pathname);colorMap()}
+function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;MAPDATA=LF.ai?LF.mapObj:null;history.replaceState(null,"",location.pathname);drawMap()}
 function watch(c){
   stop();code=c;msg="";history.replaceState(null,"","#"+c);
   unsub=onSnapshot(doc(db,"games",c),s=>{
     if(!s.exists()){stop();return say("La partie a été supprimée.")}
-    G=s.data();try{own_=JSON.parse(G.ownersJson||"{}")}catch{own_={}}
-    colorMap();const a=document.activeElement;if(!a||!["TEXTAREA","INPUT","SELECT"].includes(a.tagName))side();
+    G=s.data();own_=J(G.ownersJson||"{}",{});
+    const mj=G.mapJson||"";
+    if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else colorMap();
+    const a=document.activeElement;if(!a||!["TEXTAREA","INPUT","SELECT"].includes(a.tagName))side();
   },e=>{stop();say("Connexion à la partie perdue : "+e.code)});
 }
 window.copyLink=async()=>{const l=location.origin+location.pathname+"#"+code;try{await navigator.clipboard.writeText(l);say("Lien copié ✓")}catch{say("Copie ce lien : "+l)}};
@@ -183,33 +289,33 @@ const hist=()=>(G.log||[]).slice(-3).map(l=>`${l.year}: ${l.recit}`).join("\n")|
 window.advise=async s=>{
   const m=me(),q=s?"Propose-moi 3 ordres concrets et réalistes pour ce tour.":(D.q||"").trim();
   if(!m||!m.nation||!q)return;
-  CH.push({r:"Toi",t:s?"Suggère-moi des ordres.":q});D.q="";busy=true;msg="";side();
+  CH.push({r:"Toi",t:s?"Suggère-moi des ordres.":q});D.q="";busy="adv";msg="";side();
   try{CH.push({r:"Conseiller",t:await ask(`Tu es le conseiller de ${m.nation} dans un jeu de géopolitique. Année ${G.year}. Contexte : ${G.context}. Difficulté : ${G.diff}. Événements récents :\n${hist()}\nContrôleurs modifiés : ${G.ownersJson}.\nQuestion du dirigeant : ${q}\nRéponds en français en moins de 120 mots, concret et fidèle à l'époque. Ne révèle rien des ordres des autres joueurs.`,false)})}
   catch(e){CH.push({r:"⚠️",t:e.message})}
-  busy=false;side();
+  busy="";side();
 };
 window.resolve=async()=>{
-  busy=true;msg="";side();
+  busy="turn";msg="";side();
   try{
-    const o=G.orders||{},ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
-    const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur (style Pax Historia). Année : ${G.year}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}.
-Contrôleurs actuels qui diffèrent du pays moderne : ${G.ownersJson}.
-Noms de pays valides (exactement) : ${names.join("; ")}.
+    const o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
+    const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur. Année : ${G.year}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}.
+Contrôleurs actuels qui diffèrent du nom d'origine : ${G.ownersJson}.
+Noms de territoires valides (exactement) : ${n.join("; ")}.
 Historique récent :\n${hist()}
 Ordres des joueurs :\n${ords}
 Toutes les autres nations sont dirigées par toi, de façon cohérente et plausible selon l'époque.
-Simule les 12 prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases en français","evenements":[{"nation":"","texte":"court"}],"changements":[{"pays":"<nom de pays valide>","proprietaire":"<nom de l'État>"}]}. 3 à 8 événements ; changements seulement si des territoires changent de main.`);
+Simule les 12 prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases en français","evenements":[{"nation":"","texte":"court"}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}]}. 3 à 8 événements ; changements seulement si des territoires changent de main.`);
     const w={...own_};
-    (Array.isArray(r.changements)?r.changements:[]).forEach(c=>{if(!c||!names.includes(c.pays))return;const v=typeof c.proprietaire==="string"?c.proprietaire.trim().slice(0,40):"";if(!v||v===c.pays)delete w[c.pays];else w[c.pays]=v});
+    (Array.isArray(r.changements)?r.changements:[]).forEach(c=>{if(!c||!n.includes(c.pays))return;const v=typeof c.proprietaire==="string"?c.proprietaire.trim().slice(0,40):"";if(!v||v===c.pays)delete w[c.pays];else w[c.pays]=v});
     const entry={titre:String(r.titre||"Nouveau tour").slice(0,120),recit:String(r.recit||"").slice(0,1500),year:G.year,evenements:(Array.isArray(r.evenements)?r.evenements:[]).slice(0,8).map(e=>({nation:String(e.nation||"").slice(0,40),texte:String(e.texte||"").slice(0,200)}))};
     const ref=doc(db,"games",code),turn=G.turn;
     await runTransaction(db,async t=>{
       const s=await t.get(ref);if(!s.exists()||s.data().turn!==turn)throw Error("Ce tour a déjà été résolu par un autre joueur.");
       t.update(ref,{year:s.data().year+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),log:[...(s.data().log||[]),entry].slice(-30)});
     });
-    D.d=undefined;
+    D.d=undefined;TAB="log";
   }catch(e){msg=e.message||"Erreur"}
-  busy=false;side();
+  busy="";side();
 };
 
 onAuthStateChanged(auth,async u=>{
