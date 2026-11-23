@@ -2,26 +2,29 @@
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1118">
+<title>Monde des Nations</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-<title>Monde des Nations</title>
 <style>
 :root{--bg:#0b1118;--p:#141d29;--p2:#1b2736;--bd:#2a3a4e;--tx:#e9e4d6;--mu:#93a1b3;--ac:#e0914f;--ac2:#c4631f}
 *{box-sizing:border-box}
 body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1b2b42,transparent),var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-#bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(11,17,24,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
+#bar{position:sticky;top:0;z-index:2000;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(11,17,24,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
 .logo{font-size:18px}.logo b{font-family:Georgia,serif;color:var(--ac)}
 #wrap{display:grid;gap:12px;max-width:1280px;margin:12px auto;padding:0 12px}
-@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:start}#mapbox{top:64px}#map{max-height:calc(100vh - 100px)}}
-#mapbox{position:sticky;top:52px;z-index:4;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#10456f,#082238 80%)}
-#map{width:100%;max-height:62vh}
-#map svg{width:100%;height:100%;display:block;touch-action:none}
-.zc{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px}
-.zc button{width:36px;height:36px;padding:0;border-radius:10px;background:rgba(11,17,24,.75);border:1px solid var(--bd);font-size:18px}
-.bd{fill:none;stroke:#05101a;stroke-width:1.1;stroke-opacity:.8;vector-effect:non-scaling-stroke;pointer-events:none}
-.c{stroke:#07131f;stroke-width:.5;cursor:pointer;transition:fill .5s,filter .2s;vector-effect:non-scaling-stroke}.c:hover{filter:brightness(1.3)}
-.lb{font-size:13px;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:#000a;stroke-width:3px;pointer-events:none;font-weight:600}
-.empty{padding:60px 16px;text-align:center;color:var(--mu)}
+@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:start}#mapbox{top:64px!important}}
+#mapbox{position:sticky;top:52px;z-index:4;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:#082238;display:none}
+#lmap,#cmap{width:100%}#lmap{aspect-ratio:1.73/1}#cmap{aspect-ratio:5/3;display:none}
+#mapbox.big #lmap,#mapbox.big #cmap{aspect-ratio:auto;height:66vh}
+.leaflet-container{background:#082238;font:inherit}
+#cmsg{position:absolute;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:var(--mu);pointer-events:none}
+.zc{position:absolute;right:8px;top:8px;z-index:1000}
+.zc button{width:36px;height:36px;padding:0;border-radius:10px;background:rgba(11,17,24,.8);border:1px solid var(--bd);font-size:17px}
+#sel{position:absolute;left:8px;bottom:8px;z-index:1000;display:none;align-items:center;gap:8px;background:rgba(11,17,24,.9);border:1px solid var(--bd);border-radius:12px;padding:6px 10px;max-width:72%;cursor:pointer}
+.cl span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font:700 12px system-ui;color:#fff;text-shadow:0 0 3px #000,0 0 3px #000,0 0 5px #000;pointer-events:none}
+.mk{font-size:22px;filter:drop-shadow(0 1px 3px #000);line-height:1}
+.fl{width:36px;height:24px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px #0006;flex:none}
+.cc{display:flex;gap:12px;align-items:center;margin-bottom:8px}.cc .fl{width:64px;height:42px}.cc h2{margin:0}
 .card{background:var(--p);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
 h2{font-size:17px;margin:0 0 10px;color:var(--ac)}
 button,select,input,textarea{font:inherit;color:inherit;border-radius:10px;border:1px solid var(--bd);background:var(--p2);padding:9px 12px;max-width:100%}
@@ -29,11 +32,13 @@ button{background:var(--ac2);border:0;color:#fff;cursor:pointer;margin:2px 0;fon
 button:hover{filter:brightness(1.1)}button:disabled{opacity:.5;cursor:wait}
 button.ghost{background:var(--p2);border:1px solid var(--bd);color:var(--tx)}
 button.big{width:100%;padding:14px;font-size:17px}
-input,textarea,select{width:100%}input[type=number]{width:120px}
+input,textarea,select{width:100%}input[type=number]{width:110px}input[type=checkbox]{width:auto}
 textarea{min-height:90px;resize:vertical}
 label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+a{color:var(--ac)}
 .mut{color:var(--mu);font-size:14px}.small{font-size:12px}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row select{flex:1;min-width:140px;width:auto}.row button{width:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .seg,.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .seg button,.tabs button{flex:1;background:var(--p2);border:1px solid var(--bd);color:var(--mu)}
 .seg button.on,.tabs button.on{background:var(--ac2);color:#fff;border-color:var(--ac2)}
@@ -43,79 +48,103 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
 .toast{background:#2a1f1a;border:1px solid var(--ac2);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:14px}
 .ch{white-space:pre-wrap;margin:8px 0}.ev{border-left:3px solid var(--ac2);padding-left:10px;margin:12px 0}
 .hero h2{font-size:22px;font-family:Georgia,serif}
-#lmap{width:100%;height:46vh;min-height:260px;display:none}
-@media(min-width:960px){#lmap{height:calc(100vh - 110px);max-height:760px}}
-.leaflet-container{background:#082238;font:inherit}
-#sel{position:absolute;left:8px;bottom:8px;z-index:1000;display:none;align-items:center;gap:8px;background:rgba(11,17,24,.9);border:1px solid var(--bd);border-radius:12px;padding:6px 10px;max-width:72%;cursor:pointer}
-.fl{width:36px;height:24px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px #0006;flex:none}
-.cc{display:flex;gap:12px;align-items:center;margin-bottom:8px}.cc .fl{width:64px;height:42px}.cc h2{margin:0}
 .bar{display:flex;align-items:center;gap:8px;font-size:13px;margin:4px 0}.bar span{width:84px;color:var(--mu)}.bar b{flex:1;height:8px;border-radius:6px;background:var(--p2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac2),var(--ac))}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:14px;margin:8px 0}.kv span:nth-child(odd){color:var(--mu)}
-.sh{pointer-events:none}
 </style></head><body>
 <header id="bar"></header>
-<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="map"></div><div id="sel"></div><div class="zc"><button onclick="zm(1.6)" aria-label="Zoom +">＋</button><button onclick="zm(0.625)" aria-label="Zoom -">－</button><button onclick="zm(0)" aria-label="Reset">⌂</button></div></div><aside id="side"><p class="mut">Chargement…</p></aside></div>
+<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Agrandir">⤢</button></div></div><aside id="side"><p class="mut">Chargement…</p></aside></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,doc,setDoc,getDoc,updateDoc,onSnapshot,deleteField,deleteDoc,runTransaction} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
+import {getAuth,GoogleAuthProvider,GithubAuthProvider,FacebookAuthProvider,TwitterAuthProvider,OAuthProvider,signInWithPopup,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,setDoc,getDoc,updateDoc,onSnapshot,deleteField,runTransaction,writeBatch,Timestamp,arrayUnion,arrayRemove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {feature} from "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm";
 
-/* ===== CONFIG FIREBASE (voir README) ===== */
+/* ===== CONFIG FIREBASE ===== */
 const FB={apiKey:"AIzaSyDb5Skq2cTDRbkiVcRZ4qtjWSH2Yjwp2Zc",authDomain:"cap-historiageneraror.firebaseapp.com",projectId:"cap-historiageneraror",appId:"1:881302470164:web:8b1ad2fa05f4037807b101"};
-/* ======================================== */
+/* =========================== */
 
 const DIFF={facile:"Monde clément : les ordres des joueurs réussissent souvent, les IA sont passives.",normal:"Équilibré et plausible.",réaliste:"Conséquences réalistes (logistique, économie, opinion, rivalités) ; les plans ambitieux échouent souvent.",difficile:"Impitoyable : IA agressives et opportunistes, crises, coups d'État et guerres fréquents."};
+const MO=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],DAY=864e5,MAXG=4;
 const GL="https://generativelanguage.googleapis.com/v1beta/models";
+const PROV={
+  gemini:{n:"Google Gemini · gratuit",free:1,k:"https://aistudio.google.com/apikey",def:["gemini-2.5-flash","gemini-2.5-flash-lite"]},
+  openrouter:{n:"OpenRouter · modèles gratuits",free:0,k:"https://openrouter.ai/keys",base:"https://openrouter.ai/api/v1",def:["meta-llama/llama-3.3-70b-instruct:free","deepseek/deepseek-chat-v3-0324:free"]},
+  groq:{n:"Groq · gratuit",free:1,k:"https://console.groq.com/keys",base:"https://api.groq.com/openai/v1",def:["llama-3.3-70b-versatile","llama-3.1-8b-instant"]},
+  openai:{n:"OpenAI · payant",k:"https://platform.openai.com/api-keys",base:"https://api.openai.com/v1",def:["gpt-4o-mini","gpt-4.1-mini"]},
+  anthropic:{n:"Claude (Anthropic) · payant",k:"https://console.anthropic.com/settings/keys",def:["claude-haiku-5-5","claude-sonnet-5-5"]},
+  xai:{n:"Grok (xAI) · payant",k:"https://console.x.ai",base:"https://api.x.ai/v1",def:["grok-3-mini","grok-4"]}
+};
 const app=initializeApp(FB),auth=getAuth(app),db=getFirestore(app);
 const $=s=>document.querySelector(s);
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ls={get:k=>{try{return localStorage.getItem(k)||""}catch{return ""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
 const J=(s,d)=>{try{return JSON.parse(s)}catch{return d}};
-let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",msg="",cfgOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null;
-let KEY=ls.get("gk"),MODEL=ls.get("gm")||"gemini-2.5-flash",PSEUDO=ls.get("pseudo"),MODELS=J(ls.get("gmodels"),[]);
-const LIB=J(ls.get("maps"),[]).filter(m=>m&&m.t&&m.t[0]&&m.t[0].r>0);
-const LF=window.LF={year:1936,diff:"normal",ctx:"",ai:false,md:"",mapObj:null,view:null,owners:null,jc:""};
+let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",msg="",cfgOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null,SEL="",MINE=[],LM=null,LG=null,CM=null,TR=null,OV=null,CL=null,EVL={},fitted=false,cgen=0,osig="",csig="";
+const FP={},FI=J(ls.get("fiches"),{}),RC={};
+let PSEUDO=ls.get("pseudo"),DEV=ls.get("dev");if(!DEV){DEV=Array.from(crypto.getRandomValues(new Uint8Array(12)),x=>x.toString(16).padStart(2,"0")).join("");ls.set("dev",DEV)}
+let AI=J(ls.get("ai"),null);
+if(!AI){AI={prov:"gemini",keys:{},models:{},lists:{}};if(ls.get("gk"))AI.keys.gemini=ls.get("gk");if(ls.get("gm"))AI.models.gemini=ls.get("gm")}
+AI.keys=AI.keys||{};AI.models=AI.models||{};AI.lists=AI.lists||{};if(!PROV[AI.prov])AI.prov="gemini";
+const saveAI=()=>ls.set("ai",JSON.stringify(AI)),mdl=()=>AI.models[AI.prov]||PROV[AI.prov].def[0];
+const LIB=J(ls.get("maps"),[]).filter(m=>m&&m.v===2&&m.t&&m.t[0]);
+const LF=window.LF={name:"",max:6,step:12,year:1936,month:1,diff:"normal",aiOthers:true,ctx:"",ai:false,md:"",mapObj:null,view:null,owners:null,jc:"",menu:""};
 const D=window.D={};
-let SEL="",LM=null,LG=null;const FP={},FI=J(ls.get("fiches"),{});
-window.side=()=>side();
 const custom=()=>G?!!G.mapJson:LF.ai;
 const names=()=>custom()?(MAPDATA?MAPDATA.t.map(t=>t.n):[]):feats.map(f=>f.properties.n);
 const own=n=>own_[n]||n;
 const me=()=>G&&user&&G.players&&G.players[user.uid]||null;
-const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return `hsl(${h},45%,45%)`};
+const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;const l=.45,a=.45*Math.min(l,1-l),f=k=>{const t=(k+h/30)%12;return l-a*Math.max(-1,Math.min(t-3,9-t,1))};return "#"+[f(0),f(8),f(4)].map(v=>Math.round(v*255).toString(16).padStart(2,"0")).join("")};
 const colorOf=n=>{if(custom()&&MAPDATA){const t=MAPDATA.t.find(x=>x.n===n);if(t)return t.c}return hue(n)};
 const nations=()=>[...new Set(names().map(own))].sort((a,b)=>a.localeCompare(b));
+const dateStr=g=>MO[(g.month||1)-1]+" "+g.year;
+const touch=()=>({lastActive:Date.now(),expireAt:Timestamp.fromMillis(Date.now()+14*DAY)});
 const say=m=>{msg=m;side()};
+window.side=()=>side();
+const needVerify=()=>user&&user.email&&!user.emailVerified&&user.providerData.some(p=>p.providerId==="password");
 
-/* ---------- IA Gemini ---------- */
-async function listModels(){
-  const r=await fetch(GL+"?pageSize=200",{headers:{"x-goog-api-key":KEY}});
-  if(!r.ok)throw Error("Clé refusée par Google ("+r.status+")");
-  return ((await r.json()).models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace("models/","")).filter(n=>/^gemini/.test(n)&&!/image|tts|live|audio|embed/.test(n));
+/* ---------- IA : Gemini, OpenRouter, Groq, OpenAI, Claude, Grok ---------- */
+const bad=async r=>{let m="";try{const j=await r.json();m=j.error?.message||j.error||j.message||""}catch{}return typeof m==="string"?m:JSON.stringify(m)};
+async function listModels(P=AI.prov){
+  const K=AI.keys[P];if(!K)throw Error("Colle d'abord ta clé.");let r;
+  if(P==="gemini")r=await fetch(GL+"?pageSize=200",{headers:{"x-goog-api-key":K}});
+  else if(P==="anthropic")r=await fetch("https://api.anthropic.com/v1/models?limit=100",{headers:{"x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}});
+  else r=await fetch(PROV[P].base+"/models",{headers:{authorization:"Bearer "+K}});
+  if(!r.ok)throw Error("Clé refusée ("+r.status+")");
+  const j=await r.json();let l;
+  if(P==="gemini")l=(j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")).map(m=>m.name.replace("models/","")).filter(n=>/^gemini/.test(n));
+  else l=(j.data||[]).map(m=>m.id);
+  l=l.filter(n=>!/embed|whisper|tts|dall|image|audio|moderation|realtime|transcribe|guard|rerank/i.test(n));
+  if(P==="openai")l=l.filter(n=>/^(gpt|o\d|chatgpt)/.test(n));
+  if(P==="openrouter")l.sort((a,b)=>(/:free$/.test(b)-/:free$/.test(a))||a.localeCompare(b));else l.sort();
+  return l.slice(0,300);
 }
-async function pickModel(){
-  const l=await listModels().catch(()=>[]),ok=l.filter(n=>/flash/.test(n)&&!/exp|thinking|vision|robotics|computer/.test(n));
-  return ok.filter(n=>/^gemini-[\d.]+-flash$/.test(n)).sort().pop()||ok.find(n=>/lite/.test(n))||ok[0]||null;
+const best=(P,l)=>P==="gemini"?l.filter(n=>/^gemini-[\d.]+-flash$/.test(n)).sort().pop()||l.find(n=>/flash/.test(n))||l[0]:l[0];
+async function call(p,json,M){
+  const P=AI.prov,K=AI.keys[P];let r;
+  if(P==="gemini")r=await fetch(`${GL}/${encodeURIComponent(M)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":K},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9}:{temperature:.8}})});
+  else if(P==="anthropic")r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:M,max_tokens:4096,messages:[{role:"user",content:p}]})});
+  else r=await fetch(PROV[P].base+"/chat/completions",{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+K},body:JSON.stringify({model:M,messages:[{role:"user",content:p}],temperature:.9})});
+  if(!r.ok){const e=Error("api");e.status=r.status;e.m=await bad(r);throw e}
+  const j=await r.json();
+  return P==="gemini"?(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text||"").join(""):P==="anthropic"?(j.content||[]).map(x=>x.text||"").join(""):(j.choices?.[0]?.message?.content||"");
 }
 async function ask(p,json=true,retry=true){
-  if(!KEY)throw Error("Ajoute ta clé Gemini dans ⚙️ Réglages.");
-  const r=await fetch(`${GL}/${encodeURIComponent(MODEL)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":KEY},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9}:{temperature:.8}})});
-  if(!r.ok){
-    let m="";try{m=(await r.json()).error.message||""}catch{}
-    if((r.status==404||/not found|no longer available|not supported/i.test(m))&&retry){
-      const n=await pickModel();if(n&&n!==MODEL){MODEL=n;ls.set("gm",n);return ask(p,json,false)}
+  const P=AI.prov;if(!AI.keys[P])throw Error("Ajoute ta clé "+PROV[P].n+" dans ⚙️ Réglages.");
+  let t;
+  try{t=await call(p,json,mdl())}catch(e){
+    if(e.message!=="api")throw Error("Connexion impossible : ce fournisseur bloque peut-être les requêtes depuis un navigateur, ou tu es hors ligne.");
+    if(retry&&(e.status===404||/not found|does not exist|decommission|deprecat|no longer/i.test(e.m))){
+      const l=await listModels(P).catch(()=>[]),n=best(P,l);if(n&&n!==mdl()){AI.models[P]=n;saveAI();return ask(p,json,false)}
     }
-    throw Error(r.status==429?"Quota Gemini atteint, réessaie dans une minute.":(r.status==400||r.status==403)&&/API key/i.test(m)?"Clé Gemini invalide (⚙️ Réglages).":"Erreur Gemini "+r.status+(m?" : "+m.slice(0,160):""));
+    throw Error(e.status===429?"Quota atteint, réessaie dans une minute ou change de modèle.":e.status===401||e.status===403?"Clé refusée par "+PROV[P].n.split(" ·")[0]+" (⚙️ Réglages).":"Erreur "+e.status+(e.m?" : "+e.m.slice(0,160):""));
   }
-  const j=await r.json(),t=(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text||"").join("");
   if(!t)throw Error("Réponse vide de l'IA (filtre de sécurité ?). Reformule.");
   if(!json)return t;
-  try{return JSON.parse(t.replace(/^\s*```(?:json)?|```\s*$/g,"").trim())}catch{throw Error("Réponse IA illisible, réessaie.")}
+  const a=t.indexOf("{"),b=t.lastIndexOf("}");
+  try{return JSON.parse(t.slice(a,b+1))}catch{throw Error("Réponse IA illisible, réessaie (ou choisis un autre modèle).")}
 }
 
-/* ---------- Carte ---------- */
+/* ---------- Monde réel : Natural Earth + tuiles ---------- */
 const SRC=["https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_50m_admin_0_countries.geojson","https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson"];
 async function loadWorld(){
   if(feats.length)return;
@@ -129,73 +158,107 @@ async function loadWorld(){
     FP[n]=f.properties;return true;
   });
 }
-function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-/* Carte inventée : Voronoï sur grille irrégulière + bruit fractal + relief ; identique chez tous les joueurs (graine) */
-function buildMap(M){
-  const W=1000,H=750,S=8,R=rng(M.seed|0),T=M.t.map(t=>({...t})),pts=[];
-  for(let y=S/2;y<H;y+=S)for(let x=S/2;x<W;x+=S)pts.push([x+(R()-.5)*S*.9,y+(R()-.5)*S*.9]);
-  const a=R()*6,b=R()*6,c=R()*6,nz=(x,y)=>.45*Math.sin(x*.012+y*.008+a)+.27*Math.sin(x*.027-y*.021+b)+.18*Math.sin(x*.055+y*.047+c)+.1*Math.sin(x*.13+y*.11+a*2);
-  const zv=pts.map(([x,y])=>nz(x,y));let own;
-  for(let k=0;k<4;k++){
-    own=pts.map(([x,y],i)=>{let o=-1,bs=1;T.forEach((t,j)=>{const s=Math.hypot(x-t.x,y-t.y)/t.r*(1+.3*zv[i]);if(s<bs){bs=s;o=j}});return o});
-    const cnt=T.map(()=>0);own.forEach(o=>o>=0&&cnt[o]++);
-    const low=cnt.map((n,i)=>n<40?i:-1).filter(i=>i>=0);
-    if(!low.length)break;low.forEach(i=>T[i].r*=1.4);
-  }
-  const del=d3.Delaunay.from(pts),vor=del.voronoi([0,0,W,H]),g=T.map(()=>[]),dk=[],lt=[],poly=pts.map((_,i)=>vor.cellPolygon(i)||[]),f=v=>v.toFixed(1);
-  own.forEach((o,i)=>{if(o<0||!poly[i].length)return;const d="M"+poly[i].map(p=>f(p[0])+" "+f(p[1])).join("L")+"Z";g[o].push(d);if(zv[i]<-.28)dk.push(d);else if(zv[i]>.34)lt.push(d)});
-  const key=p=>Math.round(p[0]*10)+","+Math.round(p[1]*10),bd=[];
-  pts.forEach((_,i)=>{const ks=new Set(poly[i].map(key));for(const j of del.neighbors(i)){if(j<=i||own[j]===own[i])continue;const sh=poly[j].filter(p=>ks.has(key(p)));if(sh.length>1)bd.push("M"+f(sh[0][0])+" "+f(sh[0][1])+"L"+f(sh[1][0])+" "+f(sh[1][1]))}});
-  const sx=T.map(()=>[0,0,0]);own.forEach((o,i)=>{if(o>=0){sx[o][0]+=pts[i][0];sx[o][1]+=pts[i][1];sx[o][2]++}});
-  return{items:T.map((t,i)=>({n:t.n,d:g[i].join(""),x:sx[i][2]?sx[i][0]/sx[i][2]:t.x,y:sx[i][2]?sx[i][1]/sx[i][2]:t.y})),bd:bd.join(""),dk:dk.join(""),lt:lt.join("")};
-}
-let zoomB=null,svgSel=null,lw=0,rt=0;
-function drawMap(){
-  const sv=custom();
-  $("#lmap").style.display=sv?"none":"block";$("#map").style.display=sv?"block":"none";document.querySelector(".zc").style.display=sv?"flex":"none";
-  if(sv)drawSvg();else drawLeaf();
-  showSel();
-}
-function drawSvg(){
-  const el=d3.select("#map").html(""),W=1000,H=750;
-  if(!MAPDATA||!MAPDATA.t[0]||!(MAPDATA.t[0].r>0)){el.style("aspect-ratio","4/3").append("div").attr("class","empty").text("✨ Décris ta carte, puis génère-la.");return}
-  const m=buildMap(MAPDATA);el.style("aspect-ratio",W+"/"+H);lw=el.node().clientWidth;
-  const svg=el.append("svg").attr("viewBox",`0 0 ${W} ${H}`),g=svg.append("g");
-  g.append("path").attr("d",[...Array(9)].map((_,i)=>`M0 ${(i+1)*75}H${W}M${(i+1)*100} 0V${H}`).join("")).attr("fill","none").attr("stroke","#fff").attr("stroke-opacity",.05).attr("vector-effect","non-scaling-stroke");
-  g.selectAll("path.c").data(m.items).join("path").attr("class","c").attr("d",d=>d.d).on("click",(e,d)=>select(d.n)).append("title").text(d=>d.n);
-  g.append("path").attr("class","sh").attr("d",m.dk).attr("fill","#000").attr("fill-opacity",.17);
-  g.append("path").attr("class","sh").attr("d",m.lt).attr("fill","#fff").attr("fill-opacity",.1);
-  g.append("path").attr("class","bd").attr("d",m.bd);
-  const f0=Math.max(13,Math.min(34,11/((lw||360)/W)));
-  g.selectAll("text").data(m.items).join("text").attr("class","lb").attr("x",d=>d.x).attr("y",d=>d.y).style("font-size",f0+"px").text(d=>d.n);
-  zoomB=d3.zoom().scaleExtent([1,14]).translateExtent([[0,0],[W,H]]).on("zoom",e=>{g.attr("transform",e.transform);g.selectAll("text").style("font-size",f0/e.transform.k+"px")});
-  svgSel=svg.call(zoomB);
-  colorMap();
-}
-/* Monde réel : vraie carte (tuiles OpenStreetMap/CARTO/Esri) + frontières Natural Earth 1:50m */
 function lstyle(f){const n=f.properties.n,mine=me()&&me().nation&&own(n)===me().nation;return{color:mine?"#fff":"#0b1118",weight:mine?2.5:.7,fillColor:colorOf(own(n)),fillOpacity:SEL&&own(SEL)===own(n)?.72:.45}}
 const curView=()=>{const v=G?J(G.viewJson||"",null):LF.view;return v&&Number.isFinite(+v.lat)&&Number.isFinite(+v.lng)?v:null};
+function fitWorld(){
+  const b=L.latLngBounds([[-58,-170],[80,180]]);LM.invalidateSize();const z=LM.getBoundsZoom(b,false);
+  LM.setMinZoom(Math.max(0,z-1));LM.setView([20,5],z,{animate:false});
+}
 function drawLeaf(){
   if(!LM){
-    LM=L.map("lmap",{minZoom:2,maxZoom:12,zoomSnap:.5,maxBounds:[[-85,-190],[85,190]],maxBoundsViscosity:.8,preferCanvas:true}).setView([28,12],2);
-    const tl=(u,o)=>L.tileLayer(u,{noWrap:true,maxZoom:19,...o}),att="© OpenStreetMap · © CARTO";
-    const base={"🌑 Sombre":tl("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:att}),"🗺️ Clair":tl("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:att}),"🛰️ Satellite":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:"Imagery © Esri",maxZoom:18})};
-    base["🌑 Sombre"].addTo(LM);L.control.layers(base,null,{position:"topleft"}).addTo(LM);
+    LM=L.map("lmap",{minZoom:1,maxZoom:14,zoomSnap:.5,worldCopyJump:true,maxBounds:[[-85,-9999],[85,9999]],maxBoundsViscosity:.6,preferCanvas:true}).setView([20,5],2);
+    const tl=(u,o)=>L.tileLayer(u,{maxZoom:19,...o}),at="© OpenStreetMap · © CARTO",es="Tiles © Esri";
+    const base={"🌑 Sombre":tl("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:at}),"🗺️ Clair":tl("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:at}),"🛣️ Rues":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18}),"⛰️ Relief":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18}),"🛰️ Satellite":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18})};
+    const cities=L.layerGroup(),labels=tl("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",{subdomains:"abcd",pane:"shadowPane"});
+    base["🌑 Sombre"].addTo(LM);L.control.layers(base,{"🏙️ Villes (grandes villes)":cities,"🔤 Noms (sur satellite)":labels},{position:"topleft"}).addTo(LM);
+    let cl=false;LM.on("overlayadd",async e=>{if(e.layer!==cities||cl)return;cl=true;
+      for(const u of["https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_10m_populated_places_simple.geojson","https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_populated_places_simple.geojson"]){
+        try{const j=await (await fetch(u)).json();(j.features||[]).filter(f=>(f.properties.pop_max||f.properties.POP_MAX||0)>=7e5).forEach(f=>{const p=f.properties,c=f.geometry.coordinates;L.circleMarker([c[1],c[0]],{radius:3,color:"#fff",weight:1,fillColor:"#e0914f",fillOpacity:1}).bindTooltip((p.name||p.NAME)+" · "+Math.round((p.pop_max||p.POP_MAX)/1e5)/10+" M").addTo(cities)});break}catch{}}});
     LM.on("click",()=>{SEL="";showSel();colorMap();side()});
   }
   LM.invalidateSize();
   if(LG){LG.remove();LG=null}
   if(!feats.length)return;
   LG=L.geoJSON(feats,{renderer:L.canvas({padding:.5}),style:lstyle,onEachFeature:(f,l)=>{l.bindTooltip(f.properties.n,{sticky:true});l.on("click",e=>{L.DomEvent.stopPropagation(e);select(f.properties.n)})}}).addTo(LM);
+  if(!fitted){fitWorld();fitted=true}
   const v=curView();if(v)LM.setView([+v.lat,+v.lng],Math.max(2,Math.min(8,+v.z||3)));
 }
-function colorMap(){
-  if(!custom()){if(LG)LG.setStyle(lstyle);return}
-  const mine=me()&&me().nation,is=d=>mine&&own(d.n)===mine;
-  d3.selectAll("#map path.c").style("fill",d=>colorOf(own(d.n))).style("stroke",d=>colorOf(own(d.n))).style("stroke-width",.8).style("filter",d=>is(d)?"brightness(1.35) drop-shadow(0 0 4px #fff)":null);
+
+/* ---------- Carte inventée : relief procédural (bruit fractal) ---------- */
+const TW=1000,TH=600,SC=1;
+function noise(seed){
+  const H=(x,y)=>{let h=Math.imul(x,374761393)^Math.imul(y,668265263)^Math.imul(seed,1274126177);h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967296};
+  const vn=(x,y)=>{const xi=Math.floor(x),yi=Math.floor(y);let xf=x-xi,yf=y-yi;xf=xf*xf*(3-2*xf);yf=yf*yf*(3-2*yf);return(H(xi,yi)*(1-xf)+H(xi+1,yi)*xf)*(1-yf)+(H(xi,yi+1)*(1-xf)+H(xi+1,yi+1)*xf)*yf};
+  return(x,y,o)=>{let s=0,a=.5,f=1;for(let i=0;i<o;i++){s+=a*vn(x*f,y*f);f*=2;a*=.5}return s};
 }
-window.zm=k=>{if(!svgSel)return;k?svgSel.transition().duration(250).call(zoomB.scaleBy,k):svgSel.transition().duration(300).call(zoomB.transform,d3.zoomIdentity)};
-addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{if(LM)LM.invalidateSize();const w=$("#map").clientWidth;if(w&&Math.abs(w-lw)>40)drawMap()},300)});
+const hex=c=>{const n=parseInt(String(c).slice(1),16)||0;return[n>>16&255,n>>8&255,n&255]};
+function terrain(M){
+  const fb=noise(M.seed|0),N=M.t,k=N.length,W=TW,H=TH,cx=N.map(t=>t.x),cy=N.map(t=>t.y),cr=N.map(t=>t.r),col=N.map(t=>hex(t.c));
+  const el=new Float32Array(W*H),ids=new Uint8Array(W*H).fill(255);
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const u=x/SC,v=y/SC,wp=1+.3*(fb(u*.02+50,v*.02+50,1)-.48);let m=0,bs=1e9,bi=0;
+    for(let i=0;i<k;i++){const d=Math.hypot(u-cx[i],v-cy[i])/cr[i],g=Math.exp(-d*d*1.1);if(g>m)m=g;const w=d*wp;if(w<bs){bs=w;bi=i}}
+    const e=.5*fb(u*.006,v*.006,5)+.75*m+.18*(fb(u*.035+9,v*.035+9,3)-.48);
+    el[y*W+x]=e;if(e>.5)ids[y*W+x]=bi;
+  }
+  const img=new ImageData(W,H),px=new Uint32Array(img.data.buffer),cs=N.map(()=>[0,0,0]);
+  const c=[0,0,0],mx=(a,b,t)=>{c[0]=a[0]+(b[0]-a[0])*t;c[1]=a[1]+(b[1]-a[1])*t;c[2]=a[2]+(b[2]-a[2])*t},mc=(b,t)=>{c[0]+=(b[0]-c[0])*t;c[1]+=(b[1]-c[1])*t;c[2]+=(b[2]-c[2])*t},ml=f=>{c[0]*=f;c[1]*=f;c[2]*=f};
+  const G1=[84,140,72],G2=[140,172,94],T1=[184,166,110],R1=[132,122,112],S1=[242,242,246],S0=[62,148,176],S2=[10,38,76],DK=[18,28,40],cl=v=>v<0?0:v>255?255:v|0;
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+    const i=y*W+x,e=el[i],id=ids[i];
+    if(id===255)mx(S0,S2,Math.min(1,(.5-e)/.3));
+    else{
+      const h=e-.5;if(h<.1)mx(G1,G2,h/.1);else if(h<.25)mx(G2,T1,(h-.1)/.15);else if(h<.4)mx(T1,R1,(h-.25)/.15);else mx(R1,S1,Math.min(1,(h-.4)/.2));
+      mc(col[id],.34);
+      if(x>2&&y>2&&x<W-3&&y<H-3)ml(1+Math.max(-.3,Math.min(.3,(el[i-1]-el[i+1]+el[i-W]-el[i+W])*6)));
+      if(x<W-2&&y<H-2){const a=ids[i+2],b=ids[i+2*W];
+        if((a!==id&&a!==255)||(b!==id&&b!==255))ml(.45);
+        else if(a===255||b===255||(x>1&&ids[i-2]===255)||(y>1&&ids[i-2*W]===255))mc(DK,.6)}
+      cs[id][0]+=x/SC;cs[id][1]+=y/SC;cs[id][2]++;
+    }
+    px[i]=(255<<24)|(cl(c[2])<<16)|(cl(c[1])<<8)|cl(c[0]);
+  }
+  const cv=document.createElement("canvas");cv.width=W;cv.height=H;cv.getContext("2d").putImageData(img,0,0);
+  return{url:cv.toDataURL("image/png"),ids,W,H,cent:cs.map((s,i)=>s[2]>150?[s[0]/s[2],s[1]/s[2]]:[cx[i],cy[i]])};
+}
+const ll=(x,y)=>[600-y,x];
+async function drawCustom(){
+  if(!CM){CM=L.map("cmap",{crs:L.CRS.Simple,minZoom:-3,maxZoom:3,zoomSnap:.25,attributionControl:false});CM.on("click",e=>{const T=TR;if(!T)return;const x=Math.floor(e.latlng.lng*SC),y=Math.floor((600-e.latlng.lat)*SC),id=x>=0&&y>=0&&x<T.W&&y<T.H?T.ids[y*T.W+x]:255;SEL=id===255?"":MAPDATA.t[id].n;showSel();colorMap();side()})}
+  if(CL){CL.remove();CL=null}if(OV){OV.remove();OV=null}TR=null;osig="";
+  const mg=$("#cmsg");
+  if(!MAPDATA||!MAPDATA.t[0]||MAPDATA.v!==2){mg.style.display="flex";mg.textContent="✨ Décris ta carte, puis génère-la.";return}
+  const my=++cgen;mg.style.display="flex";mg.textContent="Génération du relief…";await new Promise(r=>setTimeout(r,40));
+  const T=RC[MAPDATA.id]||(RC[MAPDATA.id]=terrain(MAPDATA));if(my!==cgen)return;TR=T;
+  CL=L.layerGroup().addTo(CM);L.imageOverlay(T.url,[[0,0],[600,1000]]).addTo(CL);
+  MAPDATA.t.forEach((t,i)=>{const p=T.cent[i];L.marker(ll(p[0],p[1]),{interactive:false,icon:L.divIcon({className:"cl",html:`<span>${t.cap?"⭐ ":""}${esc(t.n)}</span>`,iconSize:[0,0]})}).addTo(CL)});
+  OV=L.imageOverlay("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",[[0,0],[600,1000]],{zIndex:5}).addTo(CM);
+  CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:false});CM.setMinZoom(CM.getZoom()-1);
+  mg.style.display="none";paintOv();drawEv();
+}
+function paintOv(){
+  if(!TR||!OV||!MAPDATA)return;
+  const m=me()&&me().nation,sg=JSON.stringify(own_)+"|"+SEL+"|"+m;if(sg===osig)return;osig=sg;
+  const T=TR,img=new ImageData(T.W,T.H),px=new Uint32Array(img.data.buffer),pk=(r,g,b,a)=>(a<<24)|(b<<16)|(g<<8)|r;
+  const tint=MAPDATA.t.map(t=>{const o=own(t.n);if(SEL&&own(SEL)===o)return pk(255,255,255,90);if(m&&o===m)return pk(255,215,0,70);if(o===t.n)return 0;const c=hex(colorOf(o));return pk(c[0],c[1],c[2],150)});
+  for(let i=0;i<px.length;i++){const id=T.ids[i];if(id!==255&&tint[id])px[i]=tint[id]}
+  const cv=document.createElement("canvas");cv.width=T.W;cv.height=T.H;cv.getContext("2d").putImageData(img,0,0);OV.setUrl(cv.toDataURL("image/png"));
+}
+function drawEv(){
+  const mp=custom()?CM:LM;if(!mp)return;
+  const sg=(G&&G.log?G.log.length:0)+"|"+custom()+"|"+(G?code:"");if(sg===csig&&EVL.g&&EVL.m===mp)return;csig=sg;
+  if(EVL.g)EVL.g.remove();EVL={g:L.layerGroup().addTo(mp),m:mp};
+  const ev=G&&G.log&&G.log.length?G.log[G.log.length-1].evenements||[]:[];
+  ev.forEach(e=>{const p=custom()?(Number.isFinite(e.x)&&Number.isFinite(e.y)?ll(e.x,e.y):null):(Number.isFinite(e.lat)&&Number.isFinite(e.lng)?[e.lat,e.lng]:null);if(!p)return;
+    L.marker(p,{icon:L.divIcon({className:"mk",html:esc(e.ic||"📍"),iconSize:[24,24]})}).bindTooltip(esc((e.nation?e.nation+" : ":"")+e.texte)).addTo(EVL.g)});
+}
+function colorMap(){if(custom())paintOv();else if(LG)LG.setStyle(lstyle)}
+function drawMap(){
+  if(!user)return;
+  const cu=custom();$("#lmap").style.display=cu?"none":"block";$("#cmap").style.display=cu?"block":"none";
+  if(cu)drawCustom();else drawLeaf();showSel();drawEv();
+}
+window.eb=()=>{$("#mapbox").classList.toggle("big");setTimeout(()=>{if(custom()&&CM&&TR){CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:false})}else if(LM)fitWorld()},60)};
+addEventListener("resize",()=>{clearTimeout(window._rt);window._rt=setTimeout(()=>{if(LM)LM.invalidateSize();if(CM)CM.invalidateSize()},250)});
 
 /* ---------- Drapeaux et fiches pays ---------- */
 function gflag(n,c){
@@ -233,13 +296,13 @@ function card(){
     const bar=(l,v)=>Number.isFinite(+v)?`<div class="bar"><span>${l}</span><b><i style="width:${Math.max(0,Math.min(100,+v))}%"></i></b></div>`:"";
     bars=bar("Armée",a.army)+bar("Économie",a.eco)+bar("Technologie",a.tech)+bar("Stabilité",a.stab);
   }
-  kv=kv.filter(([,v])=>v!=null&&v!==""&&v!=="undefined M"&&v!=="undefined Md$");
+  kv=kv.filter(([,v])=>v!=null&&v!==""&&!String(v).startsWith("undefined"));
   const free=!Object.values((G&&G.players)||{}).some(p=>p.nation===o),canPlay=G&&m&&!m.nation&&free;
   return `<div class="card" id="cc"><div class="cc">${flagOf(n)}<div><h2>${esc(n)}</h2>${o!==n?`<div class="mut">Contrôlé par ${esc(o)}</div>`:""}</div></div>
   ${a&&a.desc?`<p class="mut">${esc(a.desc)}</p>`:""}<div class="kv">${kv.map(([k,v])=>`<span>${k}</span><span>${esc(v)}</span>`).join("")}</div>${bars}
-  <div class="row">${canPlay?`<button data-n="${esc(o)}" onclick="pickSel(this.dataset.n)">🎮 Jouer ${esc(o)}</button>`:""}${!custom()&&!a?`<button class="ghost" onclick="ficheAI()" ${busy?"disabled":""}>${busy==="fi"?"L'IA rédige…":"📋 Fiche détaillée (IA)"}</button>`:""}<button class="ghost" onclick="SEL='';showSel();colorMap();side()">Fermer</button></div></div>`;
+  <div class="row">${canPlay?`<button data-n="${esc(o)}" onclick="pickSel(this.dataset.n)">🎮 Jouer ${esc(o)}</button>`:""}${!custom()&&!a?`<button class="ghost" onclick="ficheAI()" ${busy?"disabled":""}>${busy==="fi"?"L'IA rédige…":"📋 Fiche détaillée (IA)"}</button>`:""}<button class="ghost" onclick="selClear()">Fermer</button></div></div>`;
 }
-window.showSel=showSel;window.colorMap=colorMap;
+window.selClear=()=>{SEL="";showSel();colorMap();side()};
 window.ficheAI=async()=>{
   const o=own(SEL);if(!o||busy)return;busy="fi";msg="";side();
   try{
@@ -250,110 +313,147 @@ Réponds UNIQUEMENT en JSON : {"gov":"régime politique","cap":"capitale","leade
   }catch(e){msg=e.message}
   busy="";side();
 };
-function setMap(o){MAPDATA=o;drawMap()}
 
 /* ---------- Interface ---------- */
-function bar(){
-  $("#bar").innerHTML=`<div class="logo">🌍 <b>Monde des Nations</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:"");
+function bar(){$("#bar").innerHTML=`<div class="logo">🌍 <b>Monde des Nations</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:"")}
+function loginCard(){
+  return `<div class="card hero"><h2>Dirige une nation. Réécris l'histoire.</h2><p class="mut">Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, parties sauvegardées.</p>
+  <div class="grid2">${[["google","Google"],["microsoft","Microsoft"],["github","GitHub"],["apple","Apple"],["facebook","Facebook"],["twitter","X (Twitter)"]].map(([k,l])=>`<button class="ghost" onclick="loginWith('${k}')">${l}</button>`).join("")}</div>
+  <h2 style="margin-top:14px">Ou par e-mail</h2>
+  <input type="email" placeholder="E-mail" value="${esc(D.em||"")}" oninput="D.em=this.value"><input type="password" placeholder="Mot de passe (6 caractères min.)" value="${esc(D.pw||"")}" oninput="D.pw=this.value" style="margin-top:6px">
+  <div class="row"><button onclick="emailAuth('in')">Se connecter</button><button class="ghost" onclick="emailAuth('up')">Créer un compte</button><button class="ghost" onclick="emailAuth('reset')">Mot de passe oublié</button></div>
+  <p class="mut small">Un seul compte par personne : une adresse e-mail ne peut servir qu'à un compte, et un même appareil ne peut pas occuper deux comptes dans une partie. Les autres joueurs ne voient que ton pseudo.</p></div>`;
 }
 function settings(){
-  const opts=[...new Set([MODEL,...MODELS,"gemini-2.5-flash","gemini-2.5-flash-lite","gemini-3-flash-preview"])];
+  const P=AI.prov,fr=id=>PROV[P].free||/:free$/.test(id),L=[...new Set([mdl(),...(AI.lists[P]||[]),...PROV[P].def])];
   return `<div class="card"><h2>⚙️ Réglages</h2>
   <label>Pseudo (le seul nom visible par les autres joueurs)</label><input id="ps" maxlength="20" value="${esc(PSEUDO)}">
-  <label>Clé API Gemini (gratuite : aistudio.google.com/apikey)</label><input id="ky" type="password" autocomplete="off" value="${esc(KEY)}">
-  <label>Modèle IA</label><div class="row"><select id="md">${opts.map(o=>`<option ${o===MODEL?"selected":""}>${esc(o)}</option>`).join("")}</select><button class="ghost" onclick="loadModels()" ${busy?"disabled":""}>↻ Charger mes modèles</button></div>
+  <label>Fournisseur d'IA</label><select id="pv" onchange="chProv(this.value)">${Object.entries(PROV).map(([k,v])=>`<option value="${k}" ${k===P?"selected":""}>${v.n}</option>`).join("")}</select>
+  <label>Clé API <a href="${PROV[P].k}" target="_blank" rel="noopener">(obtenir une clé)</a></label><input id="ky" type="password" autocomplete="off" value="${esc(AI.keys[P]||"")}">
+  <label>Modèle</label><div class="row"><select id="md">${L.map(o=>`<option value="${esc(o)}" ${o===mdl()?"selected":""}>${fr(o)?"🆓 ":""}${esc(o)}</option>`).join("")}</select><button class="ghost" onclick="loadModels()" ${busy?"disabled":""}>↻ Charger mes modèles</button></div>
+  <p class="mut small">Tes clés restent dans ce navigateur et ne sont jamais envoyées à d'autres joueurs. Les modèles 🆓 ont un quota gratuit.</p>
   <p><button onclick="saveCfg()">Enregistrer</button></p></div>`;
 }
+function readCfg(){const p=$("#ps"),v=$("#pv"),k=$("#ky"),m=$("#md");if(p)PSEUDO=p.value.replace(/[<>]/g,"").trim().slice(0,20);if(v&&PROV[v.value])AI.prov=v.value;if(k)AI.keys[AI.prov]=k.value.trim();if(m&&m.value)AI.models[AI.prov]=m.value}
 function lobby(){
-  return `<div class="card"><h2>🗺️ 1 · La carte</h2>
-  <div class="seg"><button class="${LF.ai?"":"on"}" onclick="mk(0)">🌍 Monde réel</button><button class="${LF.ai?"on":""}" onclick="mk(1)">✨ Carte IA</button></div>
-  ${LF.ai?`<textarea placeholder="Décris ta carte (monde réel ou imaginaire)…" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
+  const T=LF.menu||(MINE.length?"mine":"new"),tabs=[["mine",`📂 Mes parties (${MINE.length}/${MAXG})`],["new","➕ Créer"],["join","🔑 Rejoindre"]].map(([k,l])=>`<button class="${T===k?"on":""}" onclick="mt('${k}')">${l}</button>`).join("");
+  let b="";
+  if(T==="mine")b=MINE.length?MINE.map(g=>{const idle=Math.floor((Date.now()-(g.lastActive||g.created||Date.now()))/DAY),host=g.host===user.uid;
+    return `<div class="card"><b>${esc(g.name||"Partie")}</b><div class="mut">${dateStr(g)} · ${Object.keys(g.players||{}).length}/${g.maxPlayers||8} joueurs · code ${esc(g.c)}${host?" · 👑 hôte":""}</div>${idle>=7?`<div class="toast">⚠️ Inactive depuis ${idle} jours. Sans activité elle sera supprimée automatiquement 14 jours après la dernière action. Veux-tu la garder ?</div>`:""}
+    <div class="row"><button data-c="${esc(g.c)}" onclick="join(this.dataset.c)">▶ Ouvrir</button>${idle>=7?`<button class="ghost" data-c="${esc(g.c)}" onclick="keepG(this.dataset.c)">Garder</button>`:""}${host?`<button class="ghost" data-c="${esc(g.c)}" onclick="delG(this.dataset.c)">🗑️ Supprimer</button>`:`<button class="ghost" data-c="${esc(g.c)}" onclick="leaveG(this.dataset.c)">Quitter</button>`}</div></div>`}).join(""):`<div class="card"><p class="mut">Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte, même si tu changes d'appareil.</p></div>`;
+  else if(T==="join")b=`<div class="card"><h2>🔑 Rejoindre une partie</h2><div class="row"><input placeholder="Code de la partie" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">Rejoindre</button></div></div>`;
+  else b=`<div class="card"><h2>🎛️ Paramètres</h2>
+  <label>Nom de la partie</label><input maxlength="40" placeholder="Partie de ${esc(PSEUDO)}" value="${esc(LF.name)}" oninput="LF.name=this.value">
+  <div class="row"><div><label>Joueurs max</label><input type="number" min="2" max="12" value="${esc(LF.max)}" oninput="LF.max=this.value"></div><div style="flex:1"><label>Durée d'un tour</label><select onchange="LF.step=+this.value">${[[1,"1 mois"],[3,"3 mois"],[6,"6 mois"],[12,"1 an"]].map(([v,l])=>`<option value="${v}" ${v==LF.step?"selected":""}>${l}</option>`).join("")}</select></div></div>
+  <div class="row"><div><label>Année de départ</label><input type="number" value="${esc(LF.year)}" oninput="LF.year=this.value"></div><div style="flex:1"><label>Mois</label><select onchange="LF.month=+this.value">${MO.map((m,i)=>`<option value="${i+1}" ${i+1==LF.month?"selected":""}>${m}</option>`).join("")}</select></div></div>
+  <label>Difficulté</label><div class="seg">${Object.keys(DIFF).map(k=>`<button class="${k===LF.diff?"on":""}" onclick="LF.diff='${k}';side()">${k}</button>`).join("")}</div><p class="mut small">${esc(DIFF[LF.diff])}</p>
+  <label><input type="checkbox" ${LF.aiOthers?"checked":""} onchange="LF.aiOthers=this.checked"> Les nations non jouées sont dirigées par l'IA (sinon elles restent passives)</label></div>
+  <div class="card"><h2>🗺️ Carte</h2><div class="seg"><button class="${LF.ai?"":"on"}" onclick="mk(0)">🌍 Monde réel</button><button class="${LF.ai?"on":""}" onclick="mk(1)">✨ Monde inventé</button></div>
+  ${LF.ai?`<textarea placeholder="Décris ton monde (réel ou imaginaire)…" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
   <div>${["Un archipel de cités-États","La Terre du Milieu","L'Europe si Rome n'était jamais tombée","Un supercontinent futuriste en 2300"].map(i=>`<span class="tag" style="cursor:pointer" data-v="${esc(i)}" onclick="LF.md=this.dataset.v;side()">${esc(i)}</span>`).join("")}</div>
   <p><button onclick="genMap()" ${busy?"disabled":""}>${busy==="map"?"L'IA dessine…":"✨ Générer la carte"}</button></p>
-  ${LIB.length?`<label>Cartes déjà générées (sans appel IA)</label><select onchange="useMap(this.value)"><option value="">— choisir —</option>${LIB.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("")}</select>`:""}`
-  :`<p class="mut">Vraie carte du monde (relief, satellite, villes). Clique sur un pays pour voir son drapeau et sa fiche. Le scénario IA peut aussi redessiner les frontières de l'époque.</p>`}</div>
-  <div class="card"><h2>📜 2 · Époque et difficulté</h2>
-  <div class="row"><input type="number" value="${esc(LF.year)}" oninput="LF.year=this.value"> <span class="mut">Année de départ</span></div>
-  <div class="seg" style="margin-top:8px">${Object.keys(DIFF).map(k=>`<button class="${k===LF.diff?"on":""}" onclick="LF.diff='${k}';side()">${k}</button>`).join("")}</div>
-  <p class="mut small">${esc(DIFF[LF.diff])}</p>
-  <textarea placeholder="Contexte historique (ou laisse l'IA l'écrire)" oninput="LF.ctx=this.value">${esc(LF.ctx)}</textarea>
+  ${LIB.length?`<label>Mondes déjà générés (sans appel IA)</label><select onchange="useMap(this.value)"><option value="">— choisir —</option>${LIB.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("")}</select>`:""}`
+  :`<p class="mut">Vraie carte du monde (relief, satellite, rues, villes). Clique sur un pays pour voir son drapeau et sa fiche.</p>`}</div>
+  <div class="card"><h2>📜 Contexte historique</h2><textarea placeholder="Contexte (ou laisse l'IA l'écrire et redessiner les frontières de l'époque)" oninput="LF.ctx=this.value">${esc(LF.ctx)}</textarea>
   <p><button class="ghost" onclick="scen()" ${busy?"disabled":""}>${busy==="scen"?"L'IA écrit…":"✨ Générer le contexte"}</button></p></div>
-  <button class="big" onclick="create()" ${busy?"disabled":""}>🚀 Créer la partie</button>
-  <div class="card" style="margin-top:12px"><h2>🔑 Rejoindre une partie</h2><div class="row"><input placeholder="Code" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">Rejoindre</button></div></div>`;
+  <button class="big" onclick="create()" ${busy?"disabled":""}>🚀 Créer la partie</button>`;
+  return `<div class="tabs">${tabs}</div>${b}`;
 }
 function game(){
   if(D.turn!==G.turn){D.d=undefined;D.turn=G.turn}
-  const P=Object.entries(G.players||{}),m=me(),host=G.host===user.uid,od=(G.orders&&G.orders[user.uid])||"";
-  let b="";
+  const P=Object.entries(G.players||{}),m=me(),host=G.host===user.uid,od=(G.orders&&G.orders[user.uid])||"",pl=P.filter(([,p])=>p.nation),nr=pl.filter(([,p])=>p.rt===G.turn).length;
+  const idle=Math.floor((Date.now()-(G.lastActive||G.created||Date.now()))/DAY);let b="";
   if(TAB==="play"){
     b=!m?`<div class="card"><p>Tu n'es plus dans cette partie.</p><button onclick="join('${esc(code)}')">Revenir</button></div>`
-    :!m.nation?`<div class="card"><h2>Choisis ta nation</h2><p class="mut">Clique sur la carte, ou utilise la liste (pratique pour les petits pays).</p><div class="row"><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select><button onclick="pickSel(document.getElementById('nsel').value)">Jouer</button></div></div>`
-    :`<div class="card"><h2>Tes ordres — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value" placeholder="Que fait ton gouvernement cette année ?">${esc(D.d??od)}</textarea>
-    <div class="row"><button class="ghost" onclick="send()">💾 Valider</button><button onclick="resolve()" ${busy?"disabled":""}>${busy==="turn"?"L'IA simule…":"⏩ Résoudre le tour"}</button></div></div>`;
+    :!m.nation?`<div class="card"><h2>Choisis ta nation</h2><p class="mut">Clique sur la carte puis 🎮 Jouer, ou utilise la liste.</p><div class="row"><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select><button onclick="pickSel(document.getElementById('nsel').value)">Jouer</button></div></div>`
+    :`<div class="card"><h2>Tes ordres — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value" placeholder="Que fait ton gouvernement pendant ce tour ?">${esc(D.d??od)}</textarea>
+    <p class="mut">${m.rt===G.turn?"✅ Tu es prêt":"⏳ Pas encore prêt"} · ${nr}/${pl.length} joueurs prêts</p>
+    <div class="row">${m.rt===G.turn?`<button class="ghost" onclick="rdy(0)">↩️ Pas prêt</button>`:`<button onclick="rdy(1)" ${busy?"disabled":""}>✅ Je suis prêt</button>`}<button class="ghost" onclick="saveO()">💾 Enregistrer</button>${host?`<button class="ghost" onclick="force()" ${busy?"disabled":""}>${busy==="turn"?"L'IA simule…":"⏩ Forcer le tour"}</button>`:""}</div>
+    <p class="mut small">Le tour se résout automatiquement quand tous les joueurs sont prêts.</p></div>`;
   }else if(TAB==="adv"){
     b=!m||!m.nation?`<div class="card"><p class="mut">Choisis d'abord une nation.</p></div>`
     :`<div class="card"><h2>🧠 Ton conseiller</h2>${CH.slice(-6).map(c=>`<div class="ch"><b>${esc(c.r)} :</b> ${esc(c.t)}</div>`).join("")||`<p class="mut">Pose une question ou demande des idées d'ordres.</p>`}
     <input placeholder="Ta question…" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":"Demander"}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>💡 Suggérer des ordres</button></div></div>`;
   }else if(TAB==="log"){
-    b=`<div class="card"><h2>📖 Contexte</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>📜 Chronique</h2>${(G.log||[]).slice().reverse().map(l=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.year)})</span><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">Rien pour l'instant.</p>`}</div>`;
+    b=`<div class="card"><h2>📖 Contexte</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>📜 Chronique</h2>${(G.log||[]).slice().reverse().map(l=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)})</span><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">Rien pour l'instant.</p>`}</div>`;
   }else{
-    b=`<div class="card"><h2>👥 Joueurs</h2>${P.map(([id,p])=>`<div><span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")}${id===user.uid?" (toi)":""}</div>`).join("")}</div>
-    <div class="card"><h2>🔗 Inviter</h2><p class="mut">Code : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">📋 Copier le lien</button><button class="ghost" onclick="leave()">Quitter</button>${host?`<button class="ghost" onclick="del()">🗑️ Supprimer</button>`:""}</div></div>`;
+    b=`<div class="card"><h2>👥 Joueurs (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${id===user.uid?" (toi)":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">Exclure</button>`:""}</div>`).join("")}</div>
+    <div class="card"><h2>🔗 Inviter</h2><p class="mut">Code : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">📋 Copier le lien</button><button class="ghost" onclick="leaveG()">Quitter</button>${host?`<button class="ghost" onclick="delG()">🗑️ Supprimer</button>`:""}</div></div>
+    ${host?`<div class="card"><h2>🎛️ Paramètres de la partie</h2><label>Nom</label><input maxlength="40" value="${esc(G.name||"")}" onchange="setParam('name',this.value)">
+    <div class="row"><div><label>Joueurs max</label><input type="number" min="2" max="12" value="${esc(G.maxPlayers||8)}" onchange="setParam('maxPlayers',this.value)"></div><div style="flex:1"><label>Durée d'un tour</label><select onchange="setParam('step',this.value)">${[[1,"1 mois"],[3,"3 mois"],[6,"6 mois"],[12,"1 an"]].map(([v,l])=>`<option value="${v}" ${v==(G.step||12)?"selected":""}>${l}</option>`).join("")}</select></div></div>
+    <label>Difficulté</label><select onchange="setParam('diff',this.value)">${Object.keys(DIFF).map(k=>`<option ${k===G.diff?"selected":""}>${k}</option>`).join("")}</select>
+    <label><input type="checkbox" ${G.aiOthers!==false?"checked":""} onchange="setParam('aiOthers',this.checked)"> Nations non jouées dirigées par l'IA</label>
+    <label><input type="checkbox" ${G.locked?"checked":""} onchange="setParam('locked',this.checked)"> Fermer la partie aux nouveaux joueurs</label></div>`:""}`;
   }
-  return `<div class="card head"><b>Année ${esc(G.year)}</b><span>· Tour ${esc(G.turn)}</span><span class="tag">${esc(G.diff)}</span></div>
+  return `${idle>=7?`<div class="toast">⚠️ Cette partie est inactive depuis ${idle} jours. Sans activité elle sera supprimée automatiquement 14 jours après la dernière action. <button class="ghost" onclick="keepG(code)">Garder la partie</button></div>`:""}
+  <div class="card head"><b>${esc(G.name||"Partie")}</b><span>· ${esc(dateStr(G))} · Tour ${esc(G.turn)}</span><span class="tag">${esc(G.diff)}</span><span class="tag">⏱ ${G.step===12||!G.step?"1 an":G.step+" mois"}/tour</span></div>
   <div class="tabs">${[["play","🎮 Jouer"],["adv","🧠 Conseiller"],["log","📜 Chronique"],["ppl","👥 Joueurs"]].map(([k,l])=>`<button class="${TAB===k?"on":""}" onclick="tab('${k}')">${l}</button>`).join("")}</div>`+b;
 }
 function side(){
-  bar();const s=$("#side");
+  bar();const s=$("#side");$("#mapbox").style.display=user?"block":"none";
   if(!ready){s.innerHTML=`<p class="mut">Chargement…</p>`;return}
   const t=msg?`<div class="toast">${esc(msg)}</div>`:"";
-  if(!user){s.innerHTML=`<div class="card hero"><h2>Dirige une nation. Réécris l'histoire.</h2><p class="mut">Géopolitique multijoueur propulsée par l'IA : cartes réelles ou inventées, scénarios historiques, conseiller personnel.</p><button class="big" onclick="login()">Se connecter avec Google</button><p class="mut small">Les autres joueurs ne voient jamais ton compte Google, seulement ton pseudo.</p></div>${t}`;return}
-  const cfg=(cfgOpen||!PSEUDO||!KEY)?settings():"";
-  s.innerHTML=cfg+t+card()+(G?game():lobby());
+  if(!user){s.innerHTML=loginCard()+t;return}
+  const vb=needVerify()?`<div class="toast">📧 Vérifie ton adresse e-mail pour jouer (regarde aussi les spams). <div class="row"><button class="ghost" onclick="resend()">Renvoyer l'e-mail</button><button class="ghost" onclick="reloadU()">J'ai vérifié</button></div></div>`:"";
+  s.innerHTML=((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+t+card()+(G?game():lobby());
 }
 
-/* ---------- Actions ---------- */
-window.login=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>say(e.code==="auth/popup-blocked"?"Autorise les pop-ups pour ce site.":"Connexion impossible : "+e.code));
-window.out=()=>{stop();signOut(auth)};
+/* ---------- Connexion ---------- */
+const authErr=e=>{const c=e.code||"";say(({"auth/operation-not-allowed":"Ce mode de connexion n'est pas activé dans Firebase.","auth/account-exists-with-different-credential":"Un compte existe déjà avec cet e-mail via un autre mode de connexion : utilise celui-là.","auth/email-already-in-use":"Cet e-mail a déjà un compte : connecte-toi.","auth/invalid-credential":"E-mail ou mot de passe incorrect.","auth/wrong-password":"E-mail ou mot de passe incorrect.","auth/user-not-found":"E-mail ou mot de passe incorrect.","auth/weak-password":"Mot de passe trop faible (6 caractères min.).","auth/invalid-email":"Adresse e-mail invalide.","auth/too-many-requests":"Trop d'essais, réessaie plus tard.","auth/popup-blocked":"Autorise les pop-ups pour ce site.","auth/popup-closed-by-user":"","auth/cancelled-popup-request":"","auth/unauthorized-domain":"Domaine non autorisé dans Firebase (Authentication > Paramètres)."})[c]??"Connexion impossible : "+c)};
+const PR={google:()=>new GoogleAuthProvider(),github:()=>new GithubAuthProvider(),facebook:()=>new FacebookAuthProvider(),twitter:()=>new TwitterAuthProvider(),microsoft:()=>new OAuthProvider("microsoft.com"),apple:()=>new OAuthProvider("apple.com")};
+window.loginWith=k=>signInWithPopup(auth,PR[k]()).catch(authErr);
+window.emailAuth=async m=>{
+  const e=(D.em||"").trim(),p=D.pw||"";if(!e)return say("Entre ton e-mail.");
+  try{
+    if(m==="reset"){await sendPasswordResetEmail(auth,e);return say("E-mail de réinitialisation envoyé.")}
+    if(p.length<6)return say("Mot de passe : 6 caractères minimum.");
+    if(m==="up"){const c=await createUserWithEmailAndPassword(auth,e,p);await sendEmailVerification(c.user)}else await signInWithEmailAndPassword(auth,e,p);
+  }catch(x){authErr(x)}
+};
+window.resend=async()=>{try{await sendEmailVerification(user);say("E-mail renvoyé.")}catch(e){authErr(e)}};
+window.reloadU=async()=>{try{await user.reload();user=auth.currentUser;say("")}catch(e){authErr(e)}};
+window.out=()=>{stop();MINE=[];signOut(auth)};
 window.cfg=()=>{cfgOpen=!cfgOpen;side()};
+window.chProv=p=>{readCfg();AI.prov=p;side()};
 window.tab=t=>{TAB=t;msg="";side()};
-function readCfg(){const p=$("#ps"),k=$("#ky"),m=$("#md");if(p)PSEUDO=p.value.replace(/[<>]/g,"").trim().slice(0,20);if(k)KEY=k.value.trim();if(m&&m.value)MODEL=m.value}
+window.mt=t=>{LF.menu=t;msg="";side()};
 window.loadModels=async()=>{
-  readCfg();if(!KEY)return say("Colle d'abord ta clé Gemini.");
+  readCfg();if(!AI.keys[AI.prov])return say("Colle d'abord ta clé.");
   busy="mod";side();
-  try{MODELS=await listModels();ls.set("gmodels",JSON.stringify(MODELS));cfgOpen=true;msg=MODELS.length+" modèles trouvés pour ta clé.";if(!MODELS.includes(MODEL)&&MODELS.length)MODEL=MODELS.find(n=>/^gemini-[\d.]+-flash$/.test(n))||MODELS[0]}
+  try{const l=await listModels();AI.lists[AI.prov]=l;if(!l.includes(mdl())&&l.length)AI.models[AI.prov]=best(AI.prov,l);saveAI();cfgOpen=true;msg=l.length+" modèles trouvés pour ta clé."}
   catch(e){msg=e.message}
   busy="";side();
 };
 window.saveCfg=async()=>{
   readCfg();if(!PSEUDO)return say("Choisis un pseudo.");
-  ls.set("pseudo",PSEUDO);ls.set("gk",KEY);ls.set("gm",MODEL);cfgOpen=false;msg="";
+  ls.set("pseudo",PSEUDO);saveAI();cfgOpen=false;msg="";
   if(G&&me())try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.name`]:PSEUDO})}catch{}
-  side();
-  if(!G&&location.hash.length>1)join(location.hash.slice(1));
+  side();if(!G&&location.hash.length>1)join(location.hash.slice(1));
 };
-window.mk=a=>{LF.ai=!!a;setMap(a?LF.mapObj:null);side()};
-window.useMap=id=>{const m=LIB.find(x=>x.id===id);if(m){LF.mapObj=m;LF.md=m.md||LF.md;setMap(m);side()}};
+
+/* ---------- Cartes : création, scénario ---------- */
+window.mk=a=>{LF.ai=!!a;MAPDATA=a?LF.mapObj:null;drawMap();side()};
+window.useMap=id=>{const m=LIB.find(x=>x.id===id);if(m){LF.mapObj=m;LF.md=m.md||LF.md;MAPDATA=m;SEL="";drawMap();side()}};
 window.genMap=async()=>{
-  if(!LF.md.trim())return say("Décris d'abord ta carte.");
+  if(!LF.md.trim())return say("Décris d'abord ton monde.");
   busy="map";msg="";side();
   try{
     const r=await ask(`Conçois la carte politique et les nations jouables d'un jeu de géopolitique d'après cette demande (monde réel ou fictif) : « ${LF.md.slice(0,300)} ».
-Canevas 1000x750. Donne 10 à 16 nations crédibles et variées (noms, régimes, capitales cohérents avec l'univers). Chacune a un centre (x de 80 à 920, y de 80 à 670), un rayon r (de 50 à 150) qui fixe sa taille, une couleur, et des attributs de jeu. Les nations voisines se touchent (distance entre centres inférieure à la somme des rayons), les continents sont séparés par de la mer, la disposition respecte la géographie de la demande. Les notes (army, eco, tech, stab) vont de 0 à 100 et doivent différer d'une nation à l'autre : des puissances, des nations moyennes, des petits États fragiles.
+Canevas 1000x600. Donne 10 à 16 nations crédibles et variées (noms, régimes, capitales cohérents avec l'univers). Chacune a un centre (x de 80 à 920, y de 70 à 530), un rayon r (de 50 à 140) qui fixe sa taille, une couleur et des attributs de jeu. Les nations voisines se touchent (distance entre centres inférieure à la somme des rayons) pour former des continents ; sépare les continents par de la mer ; respecte la géographie de la demande. Les notes (army, eco, tech, stab) vont de 0 à 100 et doivent différer d'une nation à l'autre : des puissances, des nations moyennes, des petits États fragiles.
 Réponds UNIQUEMENT en JSON : {"name":"nom de la carte","context":"contexte historique ou univers en 4 à 6 phrases en français","t":[{"n":"Nom court (24 caractères max)","x":300,"y":200,"r":90,"c":"#aabbcc","gov":"régime","cap":"capitale","pop":12.5,"gdp":300,"army":60,"eco":55,"tech":70,"stab":40,"res":["fer","blé"],"desc":"une phrase sur la nation"}]}. pop en millions d'habitants, gdp en milliards de dollars.`);
     const used=new Set,num=(v,lo,hi,d)=>{v=+v;return Number.isFinite(v)?Math.max(lo,Math.min(hi,v)):d};let t=[];
     for(const x of Array.isArray(r.t)?r.t:[]){
       const n=String(x.n||"").replace(/[\/]/g,"").trim().slice(0,24),X=+x.x,Y=+x.y,Rr=+x.r;
       if(!n||used.has(n)||![X,Y,Rr].every(Number.isFinite))continue;used.add(n);
-      t.push({n,x:X,y:Y,r:Math.max(40,Math.min(170,Rr)),c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n),gov:String(x.gov||"").slice(0,40),cap:String(x.cap||"").slice(0,30),pop:Math.round(num(x.pop,.01,2000,10)*10)/10,gdp:Math.round(num(x.gdp,.1,30000,100)*10)/10,army:Math.round(num(x.army,0,100,50)),eco:Math.round(num(x.eco,0,100,50)),tech:Math.round(num(x.tech,0,100,50)),stab:Math.round(num(x.stab,0,100,50)),res:(Array.isArray(x.res)?x.res:[]).map(v=>String(v).slice(0,24)).slice(0,3),desc:String(x.desc||"").slice(0,160)});
+      t.push({n,x:X,y:Y,r:Math.max(40,Math.min(150,Rr)),c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n),gov:String(x.gov||"").slice(0,40),cap:String(x.cap||"").slice(0,30),pop:Math.round(num(x.pop,.01,2000,10)*10)/10,gdp:Math.round(num(x.gdp,.1,30000,100)*10)/10,army:Math.round(num(x.army,0,100,50)),eco:Math.round(num(x.eco,0,100,50)),tech:Math.round(num(x.tech,0,100,50)),stab:Math.round(num(x.stab,0,100,50)),res:(Array.isArray(x.res)?x.res:[]).map(v=>String(v).slice(0,24)).slice(0,3),desc:String(x.desc||"").slice(0,160)});
     }
     t=t.slice(0,18);if(t.length<4)throw Error("Carte invalide, réessaie avec une description plus précise.");
     const x0=Math.min(...t.map(p=>p.x-p.r)),x1=Math.max(...t.map(p=>p.x+p.r)),y0=Math.min(...t.map(p=>p.y-p.r)),y1=Math.max(...t.map(p=>p.y+p.r));
-    const k=Math.max(.5,Math.min(1.8,Math.min(920/(x1-x0),690/(y1-y0))));
-    t=t.map(p=>({...p,x:Math.round((p.x-(x0+x1)/2)*k+500),y:Math.round((p.y-(y0+y1)/2)*k+375),r:Math.round(p.r*k)}));
-    const m={id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),seed:Math.floor(Math.random()*1e9),t};
+    const k=Math.max(.5,Math.min(1.8,Math.min(930/(x1-x0),540/(y1-y0))));
+    t=t.map(p=>({...p,x:Math.round((p.x-(x0+x1)/2)*k+500),y:Math.round((p.y-(y0+y1)/2)*k+300),r:Math.round(p.r*k)}));
+    const m={v:2,id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),seed:Math.floor(Math.random()*1e9),t};
     LIB.push(m);while(LIB.length>8)LIB.shift();ls.set("maps",JSON.stringify(LIB));
-    SEL="";LF.mapObj=m;if(r.context)LF.ctx=String(r.context).slice(0,1500);setMap(m);
+    SEL="";LF.mapObj=m;if(r.context)LF.ctx=String(r.context).slice(0,1500);MAPDATA=m;drawMap();
   }catch(e){msg=e.message}
   busy="";side();
 };
@@ -370,87 +470,139 @@ Réponds en JSON : {"context":"contexte historique de 5 à 8 phrases en françai
   }catch(e){msg=e.message}
   busy="";side();
 };
+
+/* ---------- Parties : sauvegarde, quotas, multijoueur ---------- */
+async function loadMine(){
+  if(!user)return;
+  try{
+    const s=await getDoc(doc(db,"users",user.uid)),codes=s.exists()?(s.data().games||[]):[],out=[];
+    for(const c of codes){try{const g=await getDoc(doc(db,"games",c));if(g.exists()&&(g.data().players||{})[user.uid])out.push({c,...g.data()})}catch{}}
+    MINE=out;
+    if(out.length!==codes.length)await setDoc(doc(db,"users",user.uid),{games:out.map(x=>x.c),seen:Date.now()},{merge:true});
+  }catch(e){msg="Impossible de charger tes parties : "+(e.code||e.message)}
+}
+const gate=k=>{if(!PSEUDO||(k&&!AI.keys[AI.prov])){cfgOpen=true;say(k?"Renseigne d'abord ton pseudo et une clé d'IA.":"Choisis d'abord un pseudo.");return false}if(needVerify()){say("Vérifie d'abord ton adresse e-mail.");return false}return true};
 window.create=async()=>{
-  if(!PSEUDO||!KEY){cfgOpen=true;return say("Renseigne d'abord pseudo et clé Gemini.")}
-  if(LF.ai&&!MAPDATA)return say("Génère d'abord une carte.");
+  if(!gate(1))return;
+  if(LF.ai&&!MAPDATA)return say("Génère d'abord un monde.");
+  if(MINE.length>=MAXG)return say(`Limite de ${MAXG} parties atteinte : quitte ou supprime une partie.`);
   const c=Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>"ABCDEFGHJKMNPQRSTUVWXYZ23456789"[x%31]).join("");
   try{
-    await setDoc(doc(db,"games",c),{host:user.uid,year:Math.trunc(+LF.year)||1936,turn:1,diff:LF.diff,context:(LF.ctx||"Monde réel.").slice(0,2000),ownersJson:JSON.stringify(LF.owners||{}),mapJson:LF.ai?JSON.stringify(MAPDATA):"",viewJson:LF.view?JSON.stringify(LF.view):"",log:[],orders:{},players:{[user.uid]:{name:PSEUDO,nation:""}},created:Date.now()});
-    LF.owners=null;TAB="play";watch(c);
-  }catch(e){say("Création impossible : "+(e.code||e.message))}
+    const b=writeBatch(db);
+    b.set(doc(db,"users",user.uid),{games:arrayUnion(c),seen:Date.now()},{merge:true});
+    b.set(doc(db,"games",c),{host:user.uid,name:(LF.name||"Partie de "+PSEUDO).slice(0,40),maxPlayers:Math.max(2,Math.min(12,Math.trunc(+LF.max)||6)),step:+LF.step||12,aiOthers:LF.aiOthers!==false,locked:false,diff:LF.diff,year:Math.trunc(+LF.year)||1936,month:+LF.month||1,turn:1,context:(LF.ctx||"Monde réel.").slice(0,2000),ownersJson:JSON.stringify(LF.owners||{}),mapJson:LF.ai?JSON.stringify(MAPDATA):"",viewJson:LF.view?JSON.stringify(LF.view):"",log:[],orders:{},players:{[user.uid]:{name:PSEUDO,nation:"",dev:DEV,rt:0}},created:Date.now(),...touch()});
+    await b.commit();LF.owners=null;TAB="play";await loadMine();watch(c);
+  }catch(e){say(e.code==="permission-denied"?"Refusé : limite de parties atteinte ou règles Firebase pas à jour.":"Création impossible : "+(e.code||e.message))}
 };
 window.join=async c=>{
-  c=(c||"").trim().toUpperCase();
-  if(!PSEUDO){cfgOpen=true;return say("Choisis d'abord un pseudo.")}
-  if(!c)return say("Entre un code.");
+  c=(c||"").trim().toUpperCase();if(!gate(0))return;if(!c)return say("Entre un code.");
   try{
-    const s=await getDoc(doc(db,"games",c));if(!s.exists())return say("Code inconnu.");
-    await updateDoc(doc(db,"games",c),{[`players.${user.uid}.name`]:PSEUDO,...((s.data().players||{})[user.uid]?{}:{[`players.${user.uid}.nation`]:""})});
-    TAB="play";watch(c);
-  }catch(e){say("Impossible de rejoindre : "+(e.code||e.message))}
+    const ref=doc(db,"games",c),s=await getDoc(ref);if(!s.exists())return say("Code inconnu.");
+    const g=s.data(),P=g.players||{},has=!!P[user.uid];
+    if(!has){
+      if(g.locked)return say("Cette partie est fermée aux nouveaux joueurs.");
+      if(Object.keys(P).length>=(g.maxPlayers||8))return say("Partie complète.");
+      if(Object.entries(P).some(([id,p])=>id!==user.uid&&p.dev&&p.dev===DEV))return say("Un autre compte est déjà utilisé sur cet appareil dans cette partie.");
+      if(MINE.length>=MAXG&&!MINE.some(x=>x.c===c))return say(`Limite de ${MAXG} parties atteinte : quitte ou supprime une partie.`);
+    }
+    const b=writeBatch(db);
+    b.update(ref,{[`players.${user.uid}.name`]:PSEUDO,[`players.${user.uid}.dev`]:DEV,...(has?{}:{[`players.${user.uid}.nation`]:"",[`players.${user.uid}.rt`]:0}),...touch()});
+    b.set(doc(db,"users",user.uid),{games:arrayUnion(c),seen:Date.now()},{merge:true});
+    await b.commit();await loadMine();TAB="play";watch(c);
+  }catch(e){say(e.code==="permission-denied"?"Refusé : limite de parties atteinte ou règles Firebase pas à jour.":"Impossible de rejoindre : "+(e.code||e.message))}
 };
-function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;MAPDATA=LF.ai?LF.mapObj:null;history.replaceState(null,"",location.pathname);drawMap()}
+function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;SEL="";MAPDATA=LF.ai?LF.mapObj:null;csig="";history.replaceState(null,"",location.pathname);drawMap()}
 function watch(c){
   stop();code=c;msg="";history.replaceState(null,"","#"+c);
   unsub=onSnapshot(doc(db,"games",c),s=>{
-    if(!s.exists()){stop();return say("La partie a été supprimée.")}
+    if(!s.exists()){stop();loadMine();return say("La partie a été supprimée.")}
     G=s.data();own_=J(G.ownersJson||"{}",{});
+    if(!(G.players||{})[user.uid]){stop();loadMine();return say("Tu n'es plus dans cette partie.")}
     const mj=G.mapJson||"";
-    if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else colorMap();
+    if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else{colorMap();drawEv()}
     const a=document.activeElement;if(!a||!["TEXTAREA","INPUT","SELECT"].includes(a.tagName))side();
   },e=>{stop();say("Connexion à la partie perdue : "+e.code)});
 }
 window.copyLink=async()=>{const l=location.origin+location.pathname+"#"+code;try{await navigator.clipboard.writeText(l);say("Lien copié ✓")}catch{say("Copie ce lien : "+l)}};
-window.leave=async()=>{try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}`]:deleteField()})}catch{}stop();side()};
-window.del=async()=>{if(!confirm("Supprimer définitivement cette partie pour tout le monde ?"))return;try{await deleteDoc(doc(db,"games",code))}catch(e){say("Suppression impossible : "+e.code)}};
+window.keepG=async c=>{try{await updateDoc(doc(db,"games",c||code),touch());await loadMine();say("Partie conservée ✓")}catch(e){say("Échec : "+(e.code||e.message))}};
+window.leaveG=async c=>{
+  c=c||code;if(!confirm("Quitter cette partie ?"))return;
+  try{const b=writeBatch(db);b.update(doc(db,"games",c),{[`players.${user.uid}`]:deleteField()});b.set(doc(db,"users",user.uid),{games:arrayRemove(c)},{merge:true});await b.commit()}catch{}
+  if(c===code)stop();await loadMine();side();
+};
+window.delG=async c=>{
+  c=c||code;if(!confirm("Supprimer définitivement cette partie pour tout le monde ?"))return;
+  try{const b=writeBatch(db);b.delete(doc(db,"games",c));b.set(doc(db,"users",user.uid),{games:arrayRemove(c)},{merge:true});await b.commit()}catch(e){return say("Suppression impossible : "+(e.code||e.message))}
+  if(c===code)stop();await loadMine();side();
+};
+window.setParam=async(k,v)=>{
+  if(!G||G.host!==user.uid)return;
+  const val=k==="step"||k==="maxPlayers"?Math.max(1,Math.min(12,+v||1)):k==="locked"||k==="aiOthers"?!!v:String(v).slice(0,40);
+  try{await updateDoc(doc(db,"games",code),{[k]:val,...touch()})}catch(e){say("Échec : "+e.code)}
+};
+window.kick=async id=>{if(!G||G.host!==user.uid||id===user.uid)return;try{await updateDoc(doc(db,"games",code),{[`players.${id}`]:deleteField(),[`orders.${id}`]:deleteField(),...touch()})}catch(e){say("Échec : "+e.code)}};
 async function pick(n){
   if(!G||!me())return;
   if(me().nation)return say("Tu joues déjà "+me().nation+".");
   if(Object.values(G.players).some(p=>p.nation===n))return say(n+" est déjà prise.");
-  try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.nation`]:n});say("")}catch(e){say("Choix impossible : "+e.code)}
+  try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.nation`]:n,...touch()});say("")}catch(e){say("Choix impossible : "+e.code)}
 }
 window.pickSel=n=>n&&pick(n);
-window.send=async()=>{
-  try{await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:String(D.d??"").slice(0,1500)});D.d=undefined;say("Ordres enregistrés ✓")}catch(e){say("Échec : "+e.code)}
+const orderTxt=()=>String(D.d??((G.orders||{})[user.uid]||"")).slice(0,1500);
+window.saveO=async()=>{try{await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:orderTxt(),...touch()});D.d=undefined;say("Ordres enregistrés ✓")}catch(e){say("Échec : "+e.code)}};
+window.rdy=async v=>{
+  const m=me();if(!m||!m.nation||busy)return;
+  try{
+    await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:orderTxt(),[`players.${user.uid}.rt`]:v?G.turn:0,...touch()});D.d=undefined;
+    if(v&&Object.entries(G.players).filter(([,p])=>p.nation).every(([id,p])=>id===user.uid||p.rt===G.turn))return resolve();
+    say(v?"Tu es prêt ✓":"")
+  }catch(e){say("Échec : "+e.code)}
 };
-const hist=()=>(G.log||[]).slice(-3).map(l=>`${l.year}: ${l.recit}`).join("\n")||"(début de partie)";
+window.force=()=>{if(G&&G.host===user.uid)resolve()};
+const hist=()=>(G.log||[]).slice(-3).map(l=>`${l.date||l.year}: ${l.recit}`).join("\n")||"(début de partie)";
 window.advise=async s=>{
   const m=me(),q=s?"Propose-moi 3 ordres concrets et réalistes pour ce tour.":(D.q||"").trim();
   if(!m||!m.nation||!q)return;
   CH.push({r:"Toi",t:s?"Suggère-moi des ordres.":q});D.q="";busy="adv";msg="";side();
-  try{CH.push({r:"Conseiller",t:await ask(`Tu es le conseiller de ${m.nation} dans un jeu de géopolitique. Année ${G.year}. Contexte : ${G.context}. Difficulté : ${G.diff}. Événements récents :\n${hist()}\nContrôleurs modifiés : ${G.ownersJson}.\nQuestion du dirigeant : ${q}\nRéponds en français en moins de 120 mots, concret et fidèle à l'époque. Ne révèle rien des ordres des autres joueurs.`,false)})}
+  try{CH.push({r:"Conseiller",t:await ask(`Tu es le conseiller de ${m.nation} dans un jeu de géopolitique. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff}. Événements récents :\n${hist()}\nContrôleurs modifiés : ${G.ownersJson}.\nQuestion du dirigeant : ${q}\nRéponds en français en moins de 120 mots, concret et fidèle à l'époque. Ne révèle rien des ordres des autres joueurs.`,false)})}
   catch(e){CH.push({r:"⚠️",t:e.message})}
   busy="";side();
 };
-window.resolve=async()=>{
-  busy="turn";msg="";side();
+async function resolve(){
+  if(busy)return;busy="turn";msg="";side();
   try{
-    const o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
-    const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur. Année : ${G.year}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}.
+    const step=G.step||12,cu=custom(),o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
+    const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}.
 Contrôleurs actuels qui diffèrent du nom d'origine : ${G.ownersJson}.
 Noms de territoires valides (exactement) : ${n.join("; ")}.
-${custom()&&MAPDATA?"Attributs des nations : "+JSON.stringify(MAPDATA.t.map(t=>({n:t.n,gov:t.gov,pop:t.pop,gdp:t.gdp,army:t.army,eco:t.eco,tech:t.tech,stab:t.stab})))+"\n":""}Historique récent :\n${hist()}
+${cu&&MAPDATA?"Attributs des nations : "+JSON.stringify(MAPDATA.t.map(t=>({n:t.n,gov:t.gov,pop:t.pop,gdp:t.gdp,army:t.army,eco:t.eco,tech:t.tech,stab:t.stab})))+"\n":""}Historique récent :\n${hist()}
 Ordres des joueurs :\n${ords}
-Toutes les autres nations sont dirigées par toi, de façon cohérente et plausible selon l'époque.
-Simule les 12 prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases en français","evenements":[{"nation":"","texte":"court"}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}]}. 3 à 8 événements ; changements seulement si des territoires changent de main.`);
+${G.aiOthers===false?"Les nations non jouées restent passives et n'agissent pas.":"Toutes les autres nations sont dirigées par toi, de façon cohérente et plausible selon l'époque."}
+Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases en français","evenements":[{"nation":"","texte":"court","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}]}. 3 à 8 événements localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).`);
     const w={...own_};
     (Array.isArray(r.changements)?r.changements:[]).forEach(c=>{if(!c||!n.includes(c.pays))return;const v=typeof c.proprietaire==="string"?c.proprietaire.trim().slice(0,40):"";if(!v||v===c.pays)delete w[c.pays];else w[c.pays]=v});
-    const entry={titre:String(r.titre||"Nouveau tour").slice(0,120),recit:String(r.recit||"").slice(0,1500),year:G.year,evenements:(Array.isArray(r.evenements)?r.evenements:[]).slice(0,8).map(e=>({nation:String(e.nation||"").slice(0,40),texte:String(e.texte||"").slice(0,200)}))};
+    const nu=v=>Number.isFinite(+v)&&v!==null&&v!==""?+v:undefined;
+    const evs=(Array.isArray(r.evenements)?r.evenements:[]).slice(0,8).map(e=>{const q={nation:String(e.nation||"").slice(0,40),texte:String(e.texte||"").slice(0,200),ic:String(e.ic||"📍").slice(0,4)};
+      if(cu){const x=nu(e.x),y=nu(e.y);if(x!==undefined&&y!==undefined){q.x=Math.max(0,Math.min(1000,x));q.y=Math.max(0,Math.min(600,y))}}
+      else{const a=nu(e.lat),b=nu(e.lng);if(a!==undefined&&b!==undefined&&Math.abs(a)<=85&&Math.abs(b)<=180){q.lat=a;q.lng=b}}return q});
     const ref=doc(db,"games",code),turn=G.turn;
     await runTransaction(db,async t=>{
       const s=await t.get(ref);if(!s.exists()||s.data().turn!==turn)throw Error("Ce tour a déjà été résolu par un autre joueur.");
-      t.update(ref,{year:s.data().year+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),log:[...(s.data().log||[]),entry].slice(-30)});
+      const d=s.data(),m0=(d.month||1)-1+(d.step||12),ny=d.year+Math.floor(m0/12),nm=m0%12+1;
+      t.update(ref,{year:ny,month:nm,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),...touch(),log:[...(d.log||[]),{titre:String(r.titre||"Nouveau tour").slice(0,120),recit:String(r.recit||"").slice(0,1500),year:d.year,date:dateStr(d),evenements:evs}].slice(-30)});
     });
     D.d=undefined;TAB="log";
   }catch(e){msg=e.message||"Erreur"}
   busy="";side();
-};
+}
+window.resolve=resolve;
 
 $("#sel").onclick=()=>{const c=$("#cc");if(c)scrollTo({top:c.getBoundingClientRect().top+scrollY-(innerWidth<960?$("#mapbox").offsetHeight+64:70),behavior:"smooth"})};
 onAuthStateChanged(auth,async u=>{
   user=u;ready=true;side();
   if(!u){stop();return}
-  try{await loadWorld();drawMap()}catch{return say("Impossible de charger la carte. Recharge la page.")}
+  await Promise.all([loadWorld().catch(()=>{}),loadMine()]);
+  drawMap();side();
   if(location.hash.length>1&&PSEUDO)join(location.hash.slice(1));
 });
 </script></body></html>
