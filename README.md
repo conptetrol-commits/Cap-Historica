@@ -1,6 +1,6 @@
 # 🌍 World of Nations · Monde des Nations · Mundo de Naciones
 
-**🎮 Play / Jouer / Jugar:** https://conptetrol-commits.github.io/multiplayer-AI-country-simulator/
+**🎮 Play / Jouer / Jugar:** https://conptetrol-commits.github.io/Multiplayer-AI-country-simulator/
 
 [Français](#-français) · [English](#-english) · [Español](#-español) · [Credits](#-credits--crédits--créditos)
 
