@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1118">
 <title>Monde des Nations</title>
 <style>
 :root{--bg:#0b1118;--p:#141d29;--p2:#1b2736;--bd:#2a3a4e;--tx:#e9e4d6;--mu:#93a1b3;--ac:#e0914f;--ac2:#c4631f}
@@ -9,10 +10,14 @@ body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1b2b42,transp
 #bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(11,17,24,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
 .logo{font-size:18px}.logo b{font-family:Georgia,serif;color:var(--ac)}
 #wrap{display:grid;gap:12px;max-width:1280px;margin:12px auto;padding:0 12px}
-@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:start}#map{position:sticky;top:64px}}
-#map{background:linear-gradient(#0c3354,#082238);border:1px solid var(--bd);border-radius:14px;overflow:hidden;min-height:160px}
-#map svg{width:100%;display:block}
-.c{stroke:#07131f;stroke-width:.5;cursor:pointer;transition:fill .5s,filter .2s}.c:hover{filter:brightness(1.3)}
+@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:start}#mapbox{top:64px}#map{max-height:calc(100vh - 100px)}}
+#mapbox{position:sticky;top:52px;z-index:4;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,#10456f,#082238 80%)}
+#map{width:100%;max-height:62vh}
+#map svg{width:100%;height:100%;display:block;touch-action:none}
+.zc{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px}
+.zc button{width:36px;height:36px;padding:0;border-radius:10px;background:rgba(11,17,24,.75);border:1px solid var(--bd);font-size:18px}
+.bd{fill:none;stroke:#05101a;stroke-width:1.1;stroke-opacity:.8;vector-effect:non-scaling-stroke;pointer-events:none}
+.c{stroke:#07131f;stroke-width:.5;cursor:pointer;transition:fill .5s,filter .2s;vector-effect:non-scaling-stroke}.c:hover{filter:brightness(1.3)}
 .lb{font-size:13px;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:#000a;stroke-width:3px;pointer-events:none;font-weight:600}
 .empty{padding:60px 16px;text-align:center;color:var(--mu)}
 .card{background:var(--p);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
@@ -38,7 +43,7 @@ label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
 .hero h2{font-size:22px;font-family:Georgia,serif}
 </style></head><body>
 <header id="bar"></header>
-<div id="wrap"><div id="map"></div><aside id="side"><p class="mut">Chargement…</p></aside></div>
+<div id="wrap"><div id="mapbox"><div id="map"></div><div class="zc"><button onclick="zm(1.6)" aria-label="Zoom +">＋</button><button onclick="zm(0.625)" aria-label="Zoom -">－</button><button onclick="zm(0)" aria-label="Reset">⌂</button></div></div><aside id="side"><p class="mut">Chargement…</p></aside></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -59,7 +64,7 @@ const ls={get:k=>{try{return localStorage.getItem(k)||""}catch{return ""}},set:(
 const J=(s,d)=>{try{return JSON.parse(s)}catch{return d}};
 let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",msg="",cfgOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null;
 let KEY=ls.get("gk"),MODEL=ls.get("gm")||"gemini-2.5-flash",PSEUDO=ls.get("pseudo"),MODELS=J(ls.get("gmodels"),[]);
-const LIB=J(ls.get("maps"),[]);
+const LIB=J(ls.get("maps"),[]).filter(m=>m&&m.t&&m.t[0]&&m.t[0].r>0);
 const LF=window.LF={year:1936,diff:"normal",ctx:"",ai:false,md:"",mapObj:null,jc:""};
 const D=window.D={};
 window.side=()=>side();
@@ -104,27 +109,53 @@ async function loadWorld(){
   const t=await (await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json")).json();
   feats=feature(t,t.objects.countries).features.filter(f=>f.properties.name&&f.properties.name!=="Antarctica");
 }
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+/* Génère la géographie d'une carte IA : diagramme de Voronoï sur grille irrégulière + bruit, identique chez tous les joueurs (graine) */
+function buildMap(M){
+  const W=1000,H=750,S=10,R=rng(M.seed|0),T=M.t.map(t=>({...t})),pts=[];
+  for(let y=S/2;y<H;y+=S)for(let x=S/2;x<W;x+=S)pts.push([x+(R()-.5)*S*.9,y+(R()-.5)*S*.9]);
+  const a=R()*6,b=R()*6,c=R()*6,nz=(x,y)=>.5*Math.sin(x*.012+y*.008+a)+.3*Math.sin(x*.027-y*.021+b)+.2*Math.sin(x*.055+y*.047+c);
+  let own;
+  for(let k=0;k<4;k++){
+    own=pts.map(([x,y])=>{let o=-1,bs=1;T.forEach((t,i)=>{const s=Math.hypot(x-t.x,y-t.y)/t.r*(1+.3*nz(x,y));if(s<bs){bs=s;o=i}});return o});
+    const cnt=T.map(()=>0);own.forEach(o=>o>=0&&cnt[o]++);
+    const low=cnt.map((n,i)=>n<25?i:-1).filter(i=>i>=0);
+    if(!low.length)break;low.forEach(i=>T[i].r*=1.4);
+  }
+  const del=d3.Delaunay.from(pts),vor=del.voronoi([0,0,W,H]),g=T.map(()=>[]),poly=pts.map((_,i)=>vor.cellPolygon(i)||[]),f=v=>v.toFixed(1);
+  own.forEach((o,i)=>{if(o>=0&&poly[i].length)g[o].push("M"+poly[i].map(p=>f(p[0])+" "+f(p[1])).join("L")+"Z")});
+  const key=p=>Math.round(p[0]*10)+","+Math.round(p[1]*10),bd=[];
+  pts.forEach((_,i)=>{const ks=new Set(poly[i].map(key));for(const j of del.neighbors(i)){if(j<=i||own[j]===own[i])continue;const sh=poly[j].filter(p=>ks.has(key(p)));if(sh.length>1)bd.push("M"+f(sh[0][0])+" "+f(sh[0][1])+"L"+f(sh[1][0])+" "+f(sh[1][1]))}});
+  const sx=T.map(()=>[0,0,0]);own.forEach((o,i)=>{if(o>=0){sx[o][0]+=pts[i][0];sx[o][1]+=pts[i][1];sx[o][2]++}});
+  return{items:T.map((t,i)=>({n:t.n,d:g[i].join(""),x:sx[i][2]?sx[i][0]/sx[i][2]:t.x,y:sx[i][2]?sx[i][1]/sx[i][2]:t.y})),bd:bd.join("")};
+}
+let zoomB=null,svgSel=null,lw=0,rt=0;
 function drawMap(){
-  const el=d3.select("#map").html(""),W=1000,H=500;let items=[];
+  const el=d3.select("#map").html("");let items=[],W=1000,H=560,bd="";
   if(custom()){
-    if(!MAPDATA){el.append("div").attr("class","empty").text("✨ Décris ta carte, puis génère-la.");return}
-    const ln=d3.line().curve(d3.curveCatmullRomClosed.alpha(.5));
-    items=MAPDATA.t.map(t=>{let c=d3.polygonCentroid(t.pts);if(!c.every(Number.isFinite))c=[d3.mean(t.pts,p=>p[0]),d3.mean(t.pts,p=>p[1])];return{n:t.n,d:ln(t.pts),x:c[0],y:c[1]}});
+    if(!MAPDATA||!MAPDATA.t[0]||!(MAPDATA.t[0].r>0)){el.style("aspect-ratio","4/3").append("div").attr("class","empty").text("✨ Décris ta carte, puis génère-la.");return}
+    H=750;const m=buildMap(MAPDATA);items=m.items;bd=m.bd;
   }else{
-    if(!feats.length){el.append("div").attr("class","empty").text("Chargement de la carte…");return}
+    if(!feats.length){el.style("aspect-ratio",null).append("div").attr("class","empty").text("Chargement de la carte…");return}
     const pa=d3.geoPath(d3.geoNaturalEarth1().fitSize([W,H],{type:"FeatureCollection",features:feats}));
     items=feats.map(f=>({n:f.properties.name,d:pa(f)}));
   }
+  el.style("aspect-ratio",W+"/"+H);lw=el.node().clientWidth;
   const svg=el.append("svg").attr("viewBox",`0 0 ${W} ${H}`),g=svg.append("g");
-  g.selectAll("path").data(items).join("path").attr("class","c").attr("d",d=>d.d).on("click",(e,d)=>pick(own(d.n))).append("title").text(d=>d.n);
-  if(custom())g.selectAll("text").data(items).join("text").attr("class","lb").attr("x",d=>d.x).attr("y",d=>d.y).text(d=>d.n);
-  svg.call(d3.zoom().scaleExtent([1,10]).on("zoom",e=>g.attr("transform",e.transform)));
+  g.selectAll("path.c").data(items).join("path").attr("class","c").attr("d",d=>d.d).on("click",(e,d)=>pick(own(d.n))).append("title").text(d=>d.n);
+  if(bd)g.append("path").attr("class","bd").attr("d",bd);
+  const f0=Math.max(13,Math.min(34,11/((lw||360)/W)));
+  if(custom())g.selectAll("text").data(items).join("text").attr("class","lb").attr("x",d=>d.x).attr("y",d=>d.y).style("font-size",f0+"px").text(d=>d.n);
+  zoomB=d3.zoom().scaleExtent([1,14]).translateExtent([[0,0],[W,H]]).on("zoom",e=>{g.attr("transform",e.transform);g.selectAll("text").style("font-size",f0/e.transform.k+"px")});
+  svgSel=svg.call(zoomB);
   colorMap();
 }
 function colorMap(){
-  const mine=me()&&me().nation,is=d=>mine&&own(d.n)===mine;
-  d3.selectAll("#map path.c").style("fill",d=>colorOf(own(d.n))).style("stroke",d=>is(d)?"#fff":null).style("stroke-width",d=>is(d)?2:null);
+  const mine=me()&&me().nation,cu=custom(),is=d=>mine&&own(d.n)===mine;
+  d3.selectAll("#map path.c").style("fill",d=>colorOf(own(d.n))).style("stroke",d=>cu?colorOf(own(d.n)):is(d)?"#fff":null).style("stroke-width",d=>cu?.8:is(d)?2:null).style("filter",d=>cu&&is(d)?"brightness(1.35) drop-shadow(0 0 4px #fff)":null);
 }
+window.zm=k=>{if(!svgSel)return;k?svgSel.transition().duration(250).call(zoomB.scaleBy,k):svgSel.transition().duration(300).call(zoomB.transform,d3.zoomIdentity)};
+addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{const w=$("#map").clientWidth;if(w&&Math.abs(w-lw)>40)drawMap()},300)});
 function setMap(o){MAPDATA=o;drawMap()}
 
 /* ---------- Interface ---------- */
@@ -142,7 +173,8 @@ function settings(){
 function lobby(){
   return `<div class="card"><h2>🗺️ 1 · La carte</h2>
   <div class="seg"><button class="${LF.ai?"":"on"}" onclick="mk(0)">🌍 Monde réel</button><button class="${LF.ai?"on":""}" onclick="mk(1)">✨ Carte IA</button></div>
-  ${LF.ai?`<textarea placeholder="Décris ta carte : « un archipel de 12 cités-États sous la mer », « la Terre du Milieu », « l'Europe si Rome n'était jamais tombée »…" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
+  ${LF.ai?`<textarea placeholder="Décris ta carte (monde réel ou imaginaire)…" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
+  <div>${["Un archipel de cités-États","La Terre du Milieu","L'Europe si Rome n'était jamais tombée","Un supercontinent futuriste en 2300"].map(i=>`<span class="tag" style="cursor:pointer" data-v="${esc(i)}" onclick="LF.md=this.dataset.v;side()">${esc(i)}</span>`).join("")}</div>
   <p><button onclick="genMap()" ${busy?"disabled":""}>${busy==="map"?"L'IA dessine…":"✨ Générer la carte"}</button></p>
   ${LIB.length?`<label>Cartes déjà générées (sans appel IA)</label><select onchange="useMap(this.value)"><option value="">— choisir —</option>${LIB.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("")}</select>`:""}`
   :`<p class="mut">Vraies frontières. Clique sur un pays pour l'explorer.</p>`}</div>
@@ -212,20 +244,21 @@ window.genMap=async()=>{
   if(!LF.md.trim())return say("Décris d'abord ta carte.");
   busy="map";msg="";side();
   try{
-    const r=await ask(`Crée une carte politique stylisée pour un jeu de géopolitique, d'après cette demande (monde réel ou fictif) : « ${LF.md.slice(0,300)} ».
-Canevas 1000x500. Entre 10 et 16 nations ou territoires aux noms courts (24 caractères max), formes organiques qui se touchent (frontières partagées), disposition cohérente avec la demande, avec de la mer entre les continents.
-Réponds UNIQUEMENT en JSON : {"name":"nom de la carte","context":"contexte historique ou univers en 4 à 6 phrases en français","t":[{"n":"Nom","pts":[[x,y],[x,y]],"c":"#rrggbb"}]}.
-Chaque territoire : 8 à 14 points [x,y] entiers (x de 0 à 1000, y de 0 à 500) formant un polygone simple.`);
-    const used=new Set,t=[];
+    const r=await ask(`Conçois la carte politique d'un jeu de géopolitique d'après cette demande (monde réel ou fictif) : « ${LF.md.slice(0,300)} ».
+Canevas 1000x750. Donne 10 à 16 nations. Chacune a un centre (x de 80 à 920, y de 80 à 670), un rayon r (de 50 à 150) qui fixe sa taille, et une couleur. Les nations voisines doivent se toucher (distance entre centres inférieure à la somme des rayons), les continents sont séparés par de la mer, la disposition respecte la géographie de la demande.
+Réponds UNIQUEMENT en JSON : {"name":"nom de la carte","context":"contexte historique ou univers en 4 à 6 phrases en français","t":[{"n":"Nom court (24 caractères max)","x":300,"y":200,"r":90,"c":"#aabbcc"}]}.`);
+    const used=new Set;let t=[];
     for(const x of Array.isArray(r.t)?r.t:[]){
-      const n=String(x.n||"").replace(/[\/]/g,"").trim().slice(0,24);
-      const pts=(Array.isArray(x.pts)?x.pts:[]).map(p=>Array.isArray(p)?[+p[0],+p[1]]:[NaN,NaN]).filter(p=>p.every(Number.isFinite)).map(p=>[Math.max(0,Math.min(1000,p[0])),Math.max(0,Math.min(500,p[1]))]).slice(0,16);
-      if(!n||used.has(n)||pts.length<3)continue;used.add(n);
-      t.push({n,pts,c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n)});
+      const n=String(x.n||"").replace(/[\/]/g,"").trim().slice(0,24),X=+x.x,Y=+x.y,Rr=+x.r;
+      if(!n||used.has(n)||![X,Y,Rr].every(Number.isFinite))continue;used.add(n);
+      t.push({n,x:X,y:Y,r:Math.max(40,Math.min(170,Rr)),c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n)});
     }
-    if(t.length<4)throw Error("Carte invalide, réessaie avec une description plus précise.");
-    const m={id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),t:t.slice(0,18)};
-    LIB.push(m);while(LIB.length>8||JSON.stringify(LIB).length>3e6)LIB.shift();ls.set("maps",JSON.stringify(LIB));
+    t=t.slice(0,18);if(t.length<4)throw Error("Carte invalide, réessaie avec une description plus précise.");
+    const x0=Math.min(...t.map(p=>p.x-p.r)),x1=Math.max(...t.map(p=>p.x+p.r)),y0=Math.min(...t.map(p=>p.y-p.r)),y1=Math.max(...t.map(p=>p.y+p.r));
+    const k=Math.max(.5,Math.min(1.8,Math.min(920/(x1-x0),690/(y1-y0))));
+    t=t.map(p=>({...p,x:Math.round((p.x-(x0+x1)/2)*k+500),y:Math.round((p.y-(y0+y1)/2)*k+375),r:Math.round(p.r*k)}));
+    const m={id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),seed:Math.floor(Math.random()*1e9),t};
+    LIB.push(m);while(LIB.length>8)LIB.shift();ls.set("maps",JSON.stringify(LIB));
     LF.mapObj=m;if(r.context)LF.ctx=String(r.context).slice(0,1500);setMap(m);
   }catch(e){msg=e.message}
   busy="";side();
