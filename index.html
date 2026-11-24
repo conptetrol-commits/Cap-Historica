@@ -1,71 +1,307 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1118">
-<title>Monde des Nations</title>
+<meta name="theme-color" content="#07131f">
+<title>Cap Historica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-:root{--bg:#0b1118;--p:#141d29;--p2:#1b2736;--bd:#2a3a4e;--tx:#e9e4d6;--mu:#93a1b3;--ac:#e0914f;--ac2:#c4631f}
+:root,[data-th=ocean]{--bg:#07131f;--bg2:#0f2a44;--p:#0f2236;--p2:#173250;--bd:#25506f;--tx:#e8f1f8;--mu:#8fb0c8;--ac:#f5b942;--ac2:#e08a1e;--hi:#2dd4bf;--on:#1a1205;--sea:#082238}
+[data-th=parch]{--bg:#efe4cc;--bg2:#e2d0a8;--p:#f8f0dc;--p2:#efe2c3;--bd:#cdb88a;--tx:#2f2415;--mu:#7a6747;--ac:#b45f1c;--ac2:#8f4510;--hi:#2f7d6b;--on:#fff8ea;--sea:#cfe3ea}
+[data-th=night]{--bg:#0f0d1a;--bg2:#241d4a;--p:#1a1630;--p2:#262046;--bd:#3d3470;--tx:#ece8ff;--mu:#a59fcc;--ac:#c4a1ff;--ac2:#8b5cf6;--hi:#f472b6;--on:#0f0820;--sea:#120f2a}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1b2b42,transparent),var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-#bar{position:sticky;top:0;z-index:2000;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(11,17,24,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
-.logo{font-size:18px}.logo b{font-family:Georgia,serif;color:var(--ac)}
-#wrap{display:grid;gap:12px;max-width:1280px;margin:12px auto;padding:0 12px}
-@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);align-items:start}#mapbox{top:64px!important}}
-#mapbox{position:sticky;top:52px;z-index:4;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:#082238;display:none}
+body{margin:0;background:radial-gradient(1000px 520px at 12% -8%,var(--bg2),transparent),var(--bg);color:var(--tx);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+h1,h2,.logo b{font-family:Cinzel,Georgia,serif;letter-spacing:.4px}
+#bar{position:sticky;top:0;z-index:2000;display:flex;justify-content:space-between;align-items:center;padding:9px 14px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
+.logo{display:flex;align-items:center;gap:9px;font-size:19px}.logo b{font-size:20px;background:linear-gradient(90deg,var(--ac),var(--hi));-webkit-background-clip:text;background-clip:text;color:transparent}
+#wrap{display:grid;gap:14px;max-width:1320px;margin:14px auto 40px;padding:0 12px}
+@media(min-width:960px){#wrap{grid-template-columns:minmax(0,1.75fr) minmax(350px,1fr);align-items:start}#mapbox{top:66px!important}}
+#mapbox{position:sticky;top:54px;z-index:4;border:1px solid var(--bd);border-radius:18px;overflow:hidden;background:var(--sea);display:none;box-shadow:0 14px 40px #0007,inset 0 0 0 1px #ffffff10}
 #lmap,#cmap{width:100%}#lmap{aspect-ratio:1.73/1}#cmap{aspect-ratio:5/3;display:none}
-#mapbox.big #lmap,#mapbox.big #cmap{aspect-ratio:auto;height:66vh}
-.leaflet-container{background:#082238;font:inherit}
+#mapbox.big #lmap,#mapbox.big #cmap{aspect-ratio:auto;height:68vh}
+.leaflet-container{background:var(--sea);font:inherit}
 #cmsg{position:absolute;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:var(--mu);pointer-events:none}
-.zc{position:absolute;right:8px;top:8px;z-index:1000}
-.zc button{width:36px;height:36px;padding:0;border-radius:10px;background:rgba(11,17,24,.8);border:1px solid var(--bd);font-size:17px}
-#sel{position:absolute;left:8px;bottom:8px;z-index:1000;display:none;align-items:center;gap:8px;background:rgba(11,17,24,.9);border:1px solid var(--bd);border-radius:12px;padding:6px 10px;max-width:72%;cursor:pointer}
-.cl span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font:700 12px system-ui;color:#fff;text-shadow:0 0 3px #000,0 0 3px #000,0 0 5px #000;pointer-events:none}
+.zc{position:absolute;right:8px;top:8px;z-index:1000;display:flex;flex-direction:column;gap:5px}
+.zc button{width:38px;height:38px;padding:0;border-radius:11px;background:color-mix(in srgb,var(--bg) 82%,transparent);border:1px solid var(--bd);color:var(--tx);font-size:17px;backdrop-filter:blur(6px)}
+#sel{position:absolute;left:8px;bottom:8px;z-index:1000;display:none;align-items:center;gap:9px;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border:1px solid var(--bd);border-radius:14px;padding:7px 12px;max-width:72%;cursor:pointer}
+.cl span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font:700 12px Inter,system-ui;color:#fff;text-shadow:0 0 3px #000,0 0 3px #000,0 0 6px #000;pointer-events:none}
+.cl i{font-weight:400;font-size:10px;opacity:.85}
+.ct{width:6px;height:6px;border-radius:50%;background:#fff;border:1.5px solid #000a;margin:-3px 0 0 -3px}
 .mk{font-size:22px;filter:drop-shadow(0 1px 3px #000);line-height:1}
-.fl{width:36px;height:24px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px #0006;flex:none}
+.fl{width:36px;height:24px;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px #0006;flex:none}
 .cc{display:flex;gap:12px;align-items:center;margin-bottom:8px}.cc .fl{width:64px;height:42px}.cc h2{margin:0}
-.card{background:var(--p);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.card{background:linear-gradient(180deg,color-mix(in srgb,var(--p2) 55%,var(--p)),var(--p));border:1px solid var(--bd);border-radius:16px;padding:15px;margin-bottom:13px;box-shadow:0 6px 22px #0004}
 h2{font-size:17px;margin:0 0 10px;color:var(--ac)}
-button,select,input,textarea{font:inherit;color:inherit;border-radius:10px;border:1px solid var(--bd);background:var(--p2);padding:9px 12px;max-width:100%}
-button{background:var(--ac2);border:0;color:#fff;cursor:pointer;margin:2px 0;font-weight:600}
-button:hover{filter:brightness(1.1)}button:disabled{opacity:.5;cursor:wait}
-button.ghost{background:var(--p2);border:1px solid var(--bd);color:var(--tx)}
-button.big{width:100%;padding:14px;font-size:17px}
-input,textarea,select{width:100%}input[type=number]{width:110px}input[type=checkbox]{width:auto}
+button,select,input,textarea{font:inherit;color:inherit;border-radius:11px;border:1px solid var(--bd);background:var(--p2);padding:9px 12px;max-width:100%}
+button{background:linear-gradient(135deg,var(--ac2),var(--ac));border:0;color:var(--on);cursor:pointer;margin:2px 0;font-weight:700;transition:transform .12s,filter .12s,box-shadow .12s;box-shadow:0 3px 10px #0004}
+button:hover{filter:brightness(1.08);transform:translateY(-1px)}button:active{transform:none}button:disabled{opacity:.5;cursor:wait;transform:none}
+button.ghost{background:var(--p2);border:1px solid var(--bd);color:var(--tx);box-shadow:none}
+button.big{width:100%;padding:15px;font-size:17px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--hi);outline-offset:0}
+input,textarea,select{width:100%}input[type=number]{width:110px}input[type=checkbox]{width:auto}input[type=range]{padding:0}
 textarea{min-height:90px;resize:vertical}
-label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
-a{color:var(--ac)}
+label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}
+a{color:var(--hi)}
 .mut{color:var(--mu);font-size:14px}.small{font-size:12px}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row select{flex:1;min-width:140px;width:auto}.row button{width:auto}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.seg,.tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.seg button,.tabs button{flex:1;background:var(--p2);border:1px solid var(--bd);color:var(--mu)}
-.seg button.on,.tabs button.on{background:var(--ac2);color:#fff;border-color:var(--ac2)}
-.tag,.chip{display:inline-block;font-size:12px;border:1px solid var(--bd);border-radius:20px;padding:2px 10px;margin:2px;background:var(--p2)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>div{min-width:0}.row select{flex:1;min-width:130px;width:auto}.row button{width:auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.seg,.tabs{display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap}
+.seg button,.tabs button{flex:1;background:var(--p2);border:1px solid var(--bd);color:var(--mu);box-shadow:none}
+.seg button.on,.tabs button.on{background:linear-gradient(135deg,var(--ac2),var(--ac));color:var(--on);border-color:transparent}
+.tag,.chip{display:inline-block;font-size:12px;border:1px solid var(--bd);border-radius:20px;padding:2px 11px;margin:2px;background:var(--p2)}
 .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 .head{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.toast{background:#2a1f1a;border:1px solid var(--ac2);border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:14px}
-.ch{white-space:pre-wrap;margin:8px 0}.ev{border-left:3px solid var(--ac2);padding-left:10px;margin:12px 0}
-.hero h2{font-size:22px;font-family:Georgia,serif}
-.bar{display:flex;align-items:center;gap:8px;font-size:13px;margin:4px 0}.bar span{width:84px;color:var(--mu)}.bar b{flex:1;height:8px;border-radius:6px;background:var(--p2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac2),var(--ac))}
+.warn{background:color-mix(in srgb,var(--ac2) 18%,var(--p));border:1px solid var(--ac2);border-radius:12px;padding:9px 12px;margin-bottom:11px;font-size:14px}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:5000;max-width:min(92vw,560px);display:none;background:var(--p);border:1px solid var(--ac);border-radius:14px;padding:11px 16px;box-shadow:0 10px 34px #000a;font-size:14px;cursor:pointer}
+.ch{white-space:pre-wrap;margin:8px 0}.ev{border-left:3px solid var(--ac);padding-left:11px;margin:13px 0}
+.hero h2{font-size:24px}
+.bar{display:flex;align-items:center;gap:8px;font-size:13px;margin:4px 0}.bar span{width:88px;color:var(--mu)}.bar b{flex:1;height:8px;border-radius:6px;background:var(--p2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac2),var(--ac))}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:14px;margin:8px 0}.kv span:nth-child(odd){color:var(--mu)}
+.q{border:1px solid var(--bd);border-radius:12px;padding:10px;margin:8px 0;background:var(--p2)}.q button{display:block;width:100%;text-align:left;margin:5px 0}
+.ok{outline:2px solid #34d399}.ko{outline:2px solid #f87171}
+::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:9px}
 </style></head><body>
 <header id="bar"></header>
-<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Agrandir">⤢</button></div></div><aside id="side"><p class="mut">Chargement…</p></aside></div>
+<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Zoom">⤢</button><button onclick="mo()" aria-label="Map options">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
+<div id="toast" onclick="this.style.display='none'"></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,GoogleAuthProvider,GithubAuthProvider,FacebookAuthProvider,TwitterAuthProvider,OAuthProvider,signInWithPopup,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,doc,setDoc,getDoc,updateDoc,onSnapshot,deleteField,runTransaction,writeBatch,Timestamp,arrayUnion,arrayRemove} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,setDoc,getDoc,updateDoc,onSnapshot,deleteField,deleteDoc,runTransaction,writeBatch,arrayUnion,arrayRemove,increment} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {feature} from "https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm";
 
 /* ===== CONFIG FIREBASE ===== */
 const FB={apiKey:"AIzaSyDb5Skq2cTDRbkiVcRZ4qtjWSH2Yjwp2Zc",authDomain:"cap-historiageneraror.firebaseapp.com",projectId:"cap-historiageneraror",appId:"1:881302470164:web:8b1ad2fa05f4037807b101"};
 /* =========================== */
 
+const $=s=>document.querySelector(s);
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ls={get:k=>{try{return localStorage.getItem(k)||""}catch{return ""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
+const J=(s,d)=>{try{return JSON.parse(s)}catch{return d}};
+
+/* ---------- Langues (FR, EN, ES, ZH, RU) ---------- */
+const TT=[
+["1 an", "1 year", "1 año", "1年", "1 год"],
+["{0} ans", "{0} years", "{0} años", "{0}年", "{0} лет"],
+["{0} mois", "{0} months", "{0} meses", "{0}个月", "{0} мес."],
+["av. J.-C.", "BC", "a. C.", "公元前", "до н. э."],
+["Alliés", "Allies", "Aliados", "盟友", "Союзники"],
+["Année de départ", "Start year", "Año de inicio", "起始年份", "Начальный год"],
+["Armée", "Army", "Ejército", "军队", "Армия"],
+["Capitale", "Capital", "Capital", "首都", "Столица"],
+["Choisis ta nation", "Choose your nation", "Elige tu nación", "选择你的国家", "Выбери нацию"],
+["Classe", "Class", "Curso", "年级", "Класс"],
+["Clé API", "API key", "Clave API", "API 密钥", "API-ключ"],
+["Code de la partie", "Game code", "Código de partida", "游戏代码", "Код игры"],
+["Continent", "Continent", "Continente", "大洲", "Континент"],
+["Créer un compte", "Create account", "Crear cuenta", "注册账号", "Создать аккаунт"],
+["Dates à retenir", "Dates to remember", "Fechas para recordar", "需记住的日期", "Даты для запоминания"],
+["Demander", "Ask", "Preguntar", "提问", "Спросить"],
+["Difficulté", "Difficulty", "Dificultad", "难度", "Сложность"],
+["Dirigeant", "Leader", "Líder", "领导人", "Правитель"],
+["Durée d'un tour", "Turn length", "Duración del turno", "每回合时长", "Длительность хода"],
+["E-mail", "Email", "Correo", "邮箱", "E-mail"],
+["Enregistrer", "Save", "Guardar", "保存", "Сохранить"],
+["Exclure", "Kick", "Expulsar", "移除", "Исключить"],
+["Fermer", "Close", "Cerrar", "关闭", "Закрыть"],
+["Fermer la partie aux nouveaux joueurs", "Close game to new players", "Cerrar la partida a nuevos jugadores", "禁止新玩家加入", "Закрыть игру для новых игроков"],
+["Fournisseur d'IA", "AI provider", "Proveedor de IA", "AI 提供商", "Поставщик ИИ"],
+["Frontières", "Borders", "Fronteras", "边界", "Границы"],
+["Féminine", "Female", "Femenina", "女声", "Женский"],
+["Garder", "Keep", "Conservar", "保留", "Оставить"],
+["J'ai vérifié", "I've verified", "Ya verifiqué", "我已验证", "Я подтвердил"],
+["Jouer", "Play", "Jugar", "游玩", "Играть"],
+["Joueurs max", "Max players", "Jugadores máx.", "最多玩家", "Макс. игроков"],
+["L'IA dessine…", "AI is drawing…", "La IA dibuja…", "AI 绘制中…", "ИИ рисует…"],
+["L'IA prépare l'époque…", "AI is preparing the era…", "La IA prepara la época…", "AI 正在准备时代…", "ИИ готовит эпоху…"],
+["L'IA rédige…", "AI is writing…", "La IA redacta…", "AI 撰写中…", "ИИ пишет…"],
+["L'IA simule…", "AI is simulating…", "La IA simula…", "AI 模拟中…", "ИИ моделирует…"],
+["L'IA écrit…", "AI is writing…", "La IA escribe…", "AI 撰写中…", "ИИ пишет…"],
+["Langue", "Language", "Idioma", "语言", "Язык"],
+["Le saviez-vous ?", "Did you know?", "¿Sabías que…?", "你知道吗？", "А вы знали?"],
+["Lire les récits à voix haute", "Read stories aloud", "Leer los relatos en voz alta", "朗读故事", "Читать рассказ вслух"],
+["Masculine", "Male", "Masculina", "男声", "Мужской"],
+["Mode d'affichage", "Display mode", "Modo de visualización", "显示模式", "Режим отображения"],
+["Modèle", "Model", "Modelo", "模型", "Модель"],
+["Mois", "Month", "Mes", "月份", "Месяц"],
+["Mot de passe oublié", "Forgot password", "Olvidé mi contraseña", "忘记密码", "Забыли пароль"],
+["Mot du jour", "Word of the day", "Palabra del día", "每日一词", "Слово дня"],
+["Narrateur vocal", "Voice narrator", "Narrador de voz", "语音旁白", "Голосовой рассказчик"],
+["Nations", "Nations", "Naciones", "国家数量", "Нации"],
+["Niveau de la mer", "Sea level", "Nivel del mar", "海平面", "Уровень моря"],
+["Nom de la partie", "Game name", "Nombre de la partida", "游戏名称", "Название игры"],
+["Nuit", "Night", "Noche", "夜晚", "Ночь"],
+["Océan", "Ocean", "Océano", "海洋", "Океан"],
+["Opacité des couleurs", "Color opacity", "Opacidad de colores", "颜色不透明度", "Прозрачность цветов"],
+["Ou par e-mail", "Or with email", "O con correo", "或使用邮箱", "Или по e-mail"],
+["PIB", "GDP", "PIB", "GDP", "ВВП"],
+["PIB / hab.", "GDP per capita", "PIB per cápita", "人均 GDP", "ВВП на душу"],
+["Paramètres", "Settings", "Ajustes", "参数", "Параметры"],
+["Parchemin", "Parchment", "Pergamino", "羊皮纸", "Пергамент"],
+["Partie complète.", "Game is full.", "Partida completa.", "游戏已满。", "Игра заполнена."],
+["Personnages", "Key figures", "Personajes", "重要人物", "Персонажи"],
+["Population", "Population", "Población", "人口", "Население"],
+["Propriétaire", "Owner", "Propietario", "所属国", "Владелец"],
+["Pseudo (seul nom visible par les autres)", "Nickname (only name others see)", "Apodo (único nombre visible)", "昵称（他人唯一可见的名字）", "Псевдоним (виден другим)"],
+["Quitter", "Leave", "Salir", "退出", "Выйти"],
+["Quiz", "Quiz", "Cuestionario", "测验", "Викторина"],
+["Rejoindre", "Join", "Unirse", "加入", "Присоединиться"],
+["Relief", "Terrain", "Relieve", "地形", "Рельеф"],
+["Renvoyer l'e-mail", "Resend email", "Reenviar correo", "重新发送邮件", "Отправить снова"],
+["Ressources", "Resources", "Recursos", "资源", "Ресурсы"],
+["Revenu", "Income", "Ingresos", "收入水平", "Доход"],
+["Rivaux", "Rivals", "Rivales", "对手", "Соперники"],
+["Régime", "Government", "Régimen", "政体", "Режим"],
+["Score", "Score", "Puntuación", "得分", "Счёт"],
+["Se connecter", "Sign in", "Entrar", "登录", "Войти"],
+["Se connecter avec Google", "Sign in with Google", "Iniciar sesión con Google", "使用 Google 登录", "Войти через Google"],
+["Stabilité", "Stability", "Estabilidad", "稳定度", "Стабильность"],
+["Ta question…", "Your question…", "Tu pregunta…", "你的问题…", "Ваш вопрос…"],
+["Technologie", "Technology", "Tecnología", "科技", "Технологии"],
+["Tes ordres", "Your orders", "Tus órdenes", "你的命令", "Твои приказы"],
+["Thème", "Theme", "Tema", "主题", "Тема"],
+["Tour", "Turn", "Turno", "回合", "Ход"],
+["Tu es prêt ✓", "You're ready ✓", "Estás listo ✓", "你已准备 ✓", "Ты готов ✓"],
+["Vitesse", "Speed", "Velocidad", "语速", "Скорость"],
+["Voix", "Voice", "Voz", "声音", "Голос"],
+["joueurs", "players", "jugadores", "玩家", "игроков"],
+["joueurs prêts", "players ready", "jugadores listos", "名玩家已准备", "игроков готово"],
+["obtenir une clé", "get a key", "obtener una clave", "获取密钥", "получить ключ"],
+["toi", "you", "tú", "你", "ты"],
+["Économie", "Economy", "Economía", "经济", "Экономика"],
+["Époques à étudier", "Eras to study", "Épocas a estudiar", "要学习的时代", "Эпохи для изучения"],
+["Îles et fragmentation", "Islands & fragmentation", "Islas y fragmentación", "岛屿与碎片化", "Острова и фрагментация"],
+["↩️ Pas prêt", "↩️ Not ready", "↩️ No listo", "↩️ 未准备", "↩️ Не готов"],
+["↻ Charger mes modèles", "↻ Load my models", "↻ Cargar mis modelos", "↻ 加载我的模型", "↻ Загрузить модели"],
+["⏩ Forcer le tour", "⏩ Force the turn", "⏩ Forzar el turno", "⏩ 强制结束回合", "⏩ Форсировать ход"],
+["▶ Ouvrir", "▶ Open", "▶ Abrir", "▶ 打开", "▶ Открыть"],
+["⚙️ Réglages", "⚙️ Settings", "⚙️ Ajustes", "⚙️ 设置", "⚙️ Настройки"],
+["✅ Bonne réponse !", "✅ Correct!", "✅ ¡Correcto!", "✅ 回答正确！", "✅ Верно!"],
+["✅ Je suis prêt", "✅ I'm ready", "✅ Estoy listo", "✅ 我准备好了", "✅ Я готов"],
+["✨ Générer la carte", "✨ Generate the map", "✨ Generar el mapa", "✨ 生成地图", "✨ Создать карту"],
+["✨ Générer le contexte", "✨ Generate context", "✨ Generar contexto", "✨ 生成背景", "✨ Создать контекст"],
+["✨ Monde inventé", "✨ Invented world", "✨ Mundo inventado", "✨ 虚构世界", "✨ Вымышленный мир"],
+["❌ Raté…", "❌ Wrong…", "❌ Fallaste…", "❌ 答错了…", "❌ Неверно…"],
+["➕ Créer", "➕ Create", "➕ Crear", "➕ 创建", "➕ Создать"],
+["🌍 Monde réel", "🌍 Real world", "🌍 Mundo real", "🌍 真实世界", "🌍 Реальный мир"],
+["🎓 Apprendre", "🎓 Learn", "🎓 Aprender", "🎓 学习", "🎓 Учиться"],
+["🎓 Mode éducatif", "🎓 Educational mode", "🎓 Modo educativo", "🎓 教育模式", "🎓 Режим обучения"],
+["🎓 Éducatif", "🎓 Educational", "🎓 Educativo", "🎓 教育", "🎓 Обучение"],
+["🎛️ Options de la carte", "🎛️ Map options", "🎛️ Opciones del mapa", "🎛️ 地图选项", "🎛️ Настройки карты"],
+["🎮 Jouer", "🎮 Play", "🎮 Jugar", "🎮 游玩", "🎮 Играть"],
+["🎮 Jouer {0}", "🎮 Play {0}", "🎮 Jugar con {0}", "🎮 扮演 {0}", "🎮 Играть за {0}"],
+["👥 Joueurs", "👥 Players", "👥 Jugadores", "👥 玩家", "👥 Игроки"],
+["💡 Suggérer des ordres", "💡 Suggest orders", "💡 Sugerir órdenes", "💡 建议命令", "💡 Предложить приказы"],
+["💾 Enregistrer", "💾 Save", "💾 Guardar", "💾 保存", "💾 Сохранить"],
+["📂 Mes parties", "📂 My games", "📂 Mis partidas", "📂 我的游戏", "📂 Мои игры"],
+["📋 Copier le lien", "📋 Copy link", "📋 Copiar enlace", "📋 复制链接", "📋 Копировать ссылку"],
+["📋 Fiche détaillée (IA)", "📋 Detailed profile (AI)", "📋 Ficha detallada (IA)", "📋 详细资料（AI）", "📋 Подробная справка (ИИ)"],
+["📖 Contexte", "📖 Context", "📖 Contexto", "📖 背景", "📖 Контекст"],
+["📚 Sources", "📚 Sources", "📚 Fuentes", "📚 资料来源", "📚 Источники"],
+["📜 Chronique", "📜 Chronicle", "📜 Crónica", "📜 编年史", "📜 Хроника"],
+["📜 Contexte historique", "📜 Historical context", "📜 Contexto histórico", "📜 历史背景", "📜 Исторический контекст"],
+["🔊 Écouter", "🔊 Listen", "🔊 Escuchar", "🔊 收听", "🔊 Слушать"],
+["🔑 Rejoindre", "🔑 Join", "🔑 Unirse", "🔑 加入", "🔑 Присоединиться"],
+["🗑️ Supprimer", "🗑️ Delete", "🗑️ Borrar", "🗑️ 删除", "🗑️ Удалить"],
+["🗺️ Carte", "🗺️ Map", "🗺️ Mapa", "🗺️ 地图", "🗺️ Карта"],
+["🚀 Commencer", "🚀 Start", "🚀 Empezar", "🚀 开始", "🚀 Начать"],
+["🚀 Créer la partie", "🚀 Create the game", "🚀 Crear la partida", "🚀 创建游戏", "🚀 Создать игру"],
+["🧠 Conseiller", "🧠 Advisor", "🧠 Consejero", "🧠 顾问", "🧠 Советник"],
+["🧪 Tester l'IA", "🧪 Test the AI", "🧪 Probar la IA", "🧪 测试 AI", "🧪 Проверить ИИ"],
+["facile", "easy", "fácil", "简单", "лёгкая"],
+["normal", "normal", "normal", "普通", "обычная"],
+["réaliste", "realistic", "realista", "写实", "реалистичная"],
+["difficile", "hard", "difícil", "困难", "сложная"],
+["Dirige une nation. Réécris l'histoire.", "Lead a nation. Rewrite history.", "Dirige una nación. Reescribe la historia.", "领导一个国家，改写历史。", "Возглавь нацию. Перепиши историю."],
+["Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, mode éducatif, parties sauvegardées.", "Multiplayer geopolitics powered by AI: real world map or invented worlds, historical scenarios, educational mode, saved games.", "Geopolítica multijugador con IA: mapa real o mundos inventados, escenarios históricos, modo educativo, partidas guardadas.", "由 AI 驱动的多人地缘政治游戏：真实世界地图或虚构世界、历史情景、教育模式、云端存档。", "Многопользовательская геополитика на ИИ: реальная карта или вымышленные миры, исторические сценарии, обучающий режим, сохранённые игры."],
+["Bienvenue sur Cap Historica.", "Welcome to Cap Historica.", "Bienvenido a Cap Historica.", "欢迎来到 Cap Historica。", "Добро пожаловать в Cap Historica."],
+["Contrôlé par {0}", "Controlled by {0}", "Controlado por {0}", "由 {0} 控制", "Под контролем: {0}"],
+["Décris ton monde (réel ou imaginaire)…", "Describe your world (real or imaginary)…", "Describe tu mundo (real o imaginario)…", "描述你的世界（真实或虚构）…", "Опиши свой мир (реальный или вымышленный)…"],
+["Génération du relief…", "Generating terrain…", "Generando relieve…", "正在生成地形…", "Создание рельефа…"],
+["✨ Décris ton monde, puis génère-le.", "✨ Describe your world, then generate it.", "✨ Describe tu mundo y genéralo.", "✨ 描述你的世界，然后生成。", "✨ Опиши мир и создай его."],
+["Partie de {0}", "{0}'s game", "Partida de {0}", "{0} 的游戏", "Игра {0}"],
+["Mot de passe (6 caractères min.)", "Password (min. 6 characters)", "Contraseña (mín. 6 caracteres)", "密码（至少6位）", "Пароль (мин. 6 символов)"],
+["Nations non jouées dirigées par l'IA", "Unplayed nations run by AI", "Naciones sin jugador dirigidas por IA", "无人操控的国家由 AI 管理", "Свободными нациями управляет ИИ"],
+["Que fait ton gouvernement pendant ce tour ?", "What does your government do this turn?", "¿Qué hace tu gobierno en este turno?", "你的政府本回合做什么？", "Что делает твоё правительство в этом ходу?"],
+["Le tour se résout automatiquement quand tous les joueurs sont prêts.", "The turn resolves automatically when all players are ready.", "El turno se resuelve solo cuando todos están listos.", "所有玩家准备好后，回合自动结算。", "Ход разрешается автоматически, когда все готовы."],
+["Clique sur la carte puis 🎮 Jouer, ou utilise la liste.", "Click the map then 🎮 Play, or use the list.", "Toca el mapa y luego 🎮 Jugar, o usa la lista.", "点击地图再选 🎮 游玩，或使用列表。", "Нажми на карту и «🎮 Играть» или выбери из списка."],
+["Limite de {0} parties atteinte : quitte ou supprime une partie.", "Limit of {0} games reached: leave or delete a game.", "Límite de {0} partidas alcanzado: sal de una o bórrala.", "已达到 {0} 个游戏上限：请退出或删除一个游戏。", "Достигнут лимит в {0} игры: выйди или удали одну."],
+["⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?", "⚠️ Inactive for {0} days. With no activity it will be deleted automatically after 14 days. Keep it?", "⚠️ Inactiva desde hace {0} días. Sin actividad se borrará automáticamente a los 14 días. ¿Conservarla?", "⚠️ 已 {0} 天无活动。无活动 14 天后将自动删除。要保留吗？", "⚠️ Неактивна {0} дн. Без активности будет удалена автоматически через 14 дней. Оставить?"],
+["📧 Vérifie ton adresse e-mail pour jouer (regarde aussi les spams).", "📧 Verify your email address to play (check spam too).", "📧 Verifica tu correo para jugar (mira también el spam).", "📧 请验证邮箱后再游戏（也请查看垃圾邮件）。", "📧 Подтверди e-mail, чтобы играть (проверь и спам)."],
+["Un seul compte par personne : une adresse e-mail (alias compris) ne peut servir qu'à un compte. Les autres joueurs ne voient que ton pseudo.", "One account per person: an email address (aliases included) can only be used for one account. Other players only see your nickname.", "Una cuenta por persona: un correo (alias incluidos) solo sirve para una cuenta. Los demás solo ven tu apodo.", "每人一个账号：同一邮箱（含别名）只能注册一个账号。其他玩家只能看到你的昵称。", "Один аккаунт на человека: e-mail (включая алиасы) — только для одного аккаунта. Другие игроки видят лишь псевдоним."],
+["Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte.", "No saved games. Create one or join your friends. Your games stay saved on your account.", "No hay partidas guardadas. Crea una o únete a tus amigos. Tus partidas se guardan en tu cuenta.", "没有已保存的游戏。创建一个或加入朋友的游戏。游戏会保存在你的账号中。", "Нет сохранённых игр. Создай игру или присоединись к друзьям. Игры сохраняются в твоём аккаунте."],
+["Choisis ta classe puis une ou plusieurs époques du programme. Tu avances dans le temps, tu découvres dates, personnages et vocabulaire, et tu t'entraînes avec des quiz.", "Choose your class then one or more eras of the curriculum. You move through time, discover dates, key figures and vocabulary, and practice with quizzes.", "Elige tu curso y una o varias épocas del programa. Avanzas en el tiempo, descubres fechas, personajes y vocabulario, y practicas con cuestionarios.", "选择年级和课程中的一个或多个时代。你会随时间推进，学习日期、人物和词汇，并通过测验练习。", "Выбери класс и одну или несколько эпох программы. Ты движешься во времени, узнаёшь даты, персонажей и слова и тренируешься на викторинах."],
+["Joue un premier tour : les dates, personnages et quiz de l'époque apparaîtront ici.", "Play a first turn: dates, key figures and quizzes for the era will appear here.", "Juega un primer turno: aquí aparecerán fechas, personajes y cuestionarios de la época.", "先玩一个回合：该时代的日期、人物和测验将显示在这里。", "Сыграй первый ход: здесь появятся даты, персонажи и викторины эпохи."],
+["Contenu généré par une IA à partir de ces types de sources : il peut contenir des erreurs. Vérifie toujours avec ton manuel et les liens de recherche ci-dessus.", "AI-generated content based on these kinds of sources: it may contain errors. Always check with your textbook and the search links above.", "Contenido generado por IA a partir de estos tipos de fuentes: puede contener errores. Comprueba siempre con tu libro y los enlaces de arriba.", "内容由 AI 依据此类资料生成，可能有误。请务必对照课本和上方的搜索链接核实。", "Контент создан ИИ на основе таких источников и может содержать ошибки. Всегда сверяйся с учебником и ссылками выше."],
+["Tu peux aussi tenter des actions hors programme : l'IA les compare à la vraie histoire.", "You can also try off-curriculum actions: the AI compares them with real history.", "Puedes probar acciones fuera del programa: la IA las compara con la historia real.", "你也可以尝试课程之外的行动：AI 会把它们与真实历史对比。", "Можно пробовать и действия вне программы: ИИ сравнит их с реальной историей."],
+["Vraie carte du monde (relief, satellite, rues, villes). Clique sur un pays pour voir son drapeau et sa fiche.", "Real world map (terrain, satellite, streets, cities). Click a country to see its flag and profile.", "Mapa real (relieve, satélite, calles, ciudades). Toca un país para ver su bandera y su ficha.", "真实世界地图（地形、卫星、街道、城市）。点击国家查看国旗和资料。", "Реальная карта (рельеф, спутник, улицы, города). Нажми на страну, чтобы увидеть флаг и справку."],
+["Un archipel de cités-États", "An archipelago of city-states", "Un archipiélago de ciudades-estado", "城邦群岛", "Архипелаг городов-государств"],
+["La Terre du Milieu", "Middle-earth", "La Tierra Media", "中土世界", "Средиземье"],
+["L'Europe si Rome n'était jamais tombée", "Europe if Rome had never fallen", "Europa si Roma nunca hubiera caído", "如果罗马从未灭亡的欧洲", "Европа, если бы Рим не пал"],
+["Un supercontinent futuriste en 2300", "A futuristic supercontinent in 2300", "Un supercontinente futurista en 2300", "2300 年的未来超大陆", "Футуристический суперконтинент 2300 года"],
+["Adresse e-mail invalide.", "Invalid email address."],
+["Ajoute ta clé d'IA dans ⚙️ Réglages.", "Add your AI key in ⚙️ Settings."],
+["Autorise les pop-ups pour ce site.", "Allow pop-ups for this site."],
+["Carte invalide : réessaie avec une description plus précise.", "Invalid map: try again with a more precise description."],
+["Ce mode de connexion n'est pas activé dans Firebase.", "This sign-in method isn't enabled."],
+["Ce tour a déjà été résolu par un autre joueur.", "This turn was already resolved by another player."],
+["Cet e-mail a déjà un compte : connecte-toi.", "This email already has an account: sign in."],
+["Cette adresse e-mail (ou un de ses alias) est déjà liée à un autre compte.", "This email (or an alias of it) is already linked to another account."],
+["Cette partie est fermée aux nouveaux joueurs.", "This game is closed to new players."],
+["Choisis d'abord un pseudo.", "Choose a nickname first."],
+["Choisis d'abord une nation.", "Choose a nation first."],
+["Clé refusée par le fournisseur (⚙️ Réglages).", "Key rejected by the provider (⚙️ Settings)."],
+["Code inconnu.", "Unknown code."],
+["Colle d'abord ta clé.", "Paste your key first."],
+["Connexion impossible : ce fournisseur bloque peut-être les requêtes depuis un navigateur, ou tu es hors ligne.", "Connection failed: this provider may block browser requests, or you are offline."],
+["Contexte (ou laisse l'IA l'écrire et redessiner les frontières de l'époque)", "Context (or let the AI write it and redraw the borders of the era)"],
+["Décris d'abord ton monde.", "Describe your world first."],
+["Domaine non autorisé dans Firebase (Authentication > Paramètres).", "Domain not authorized in Firebase (Authentication > Settings)."],
+["E-mail de réinitialisation envoyé.", "Password reset email sent."],
+["E-mail ou mot de passe incorrect.", "Incorrect email or password."],
+["E-mail renvoyé.", "Email sent again."],
+["Entre ton e-mail.", "Enter your email."],
+["Entre un code.", "Enter a code."],
+["Fonds de carte, villes et noms : bouton en haut à gauche de la carte. La carte se prolonge à l'infini dans toutes les directions.", "Base maps, cities and names: button at the top left of the map. The map continues endlessly in every direction."],
+["Génère d'abord un monde.", "Generate a world first."],
+["La partie a été supprimée.", "The game was deleted."],
+["Lien copié ✓", "Link copied ✓"],
+["Mondes déjà générés (sans appel IA)", "Worlds already generated (no AI call)"],
+["Mot de passe trop faible (6 caractères min.).", "Password too weak (min. 6 characters)."],
+["Ordres enregistrés ✓", "Orders saved ✓"],
+["Partie conservée ✓", "Game kept ✓"],
+["Pose une question ou demande des idées d'ordres.", "Ask a question or ask for ideas for orders."],
+["Programme officiel de ta classe (Éduscol)", "Official curriculum for your class (Éduscol)"],
+["Quitter cette partie ?", "Leave this game?"],
+["Quota atteint : attends une minute ou change de modèle.", "Quota reached: wait a minute or change model."],
+["Refusé : limite de parties atteinte ou règles Firebase pas à jour.", "Denied: game limit reached or Firebase rules not up to date."],
+["Renseigne d'abord ton pseudo et une clé d'IA.", "Set your nickname and an AI key first."],
+["Réponse IA illisible : change de modèle ou réessaie.", "Unreadable AI reply: change model or retry."],
+["Réponse vide de l'IA : reformule ou change de modèle.", "Empty AI reply: rephrase or change model."],
+["Supprimer définitivement cette partie pour tout le monde ?", "Permanently delete this game for everyone?"],
+["Tes clés restent dans ce navigateur et ne sont jamais envoyées aux autres joueurs. 🆓 = quota gratuit.", "Your keys stay in this browser and are never sent to other players. 🆓 = free quota."],
+["Ton manuel et ton cahier de cours (priorité)", "Your textbook and class notes (priority)"],
+["Trop d'essais, réessaie plus tard.", "Too many attempts, try again later."],
+["Tu joues déjà {0}.", "You already play {0}."],
+["Tu n'es plus dans cette partie.", "You are no longer in this game."],
+["Un autre compte est déjà utilisé sur cet appareil dans cette partie.", "Another account is already used on this device in this game."],
+["Un compte existe déjà avec cet e-mail.", "An account already exists with this email."],
+["Vérifie d'abord ton adresse e-mail.", "Verify your email address first."],
+["{0} est déjà prise.", "{0} is already taken."],
+["{0} modèles trouvés pour ta clé.", "{0} models found for your key."],
+["Quota atteint", "Quota reached"]
+];
+const LN=[["fr","Français","français","fr-FR"],["en","English","English","en-US"],["es","Español","español","es-ES"],["zh","中文","中文 (chinois simplifié)","zh-CN"],["ru","Русский","русский","ru-RU"]];
+let LI=Math.max(0,LN.findIndex(l=>l[0]===(ls.get("lang")||(navigator.language||"fr").slice(0,2))));
+const TM={};TT.forEach(r=>TM[r[0]]=r);
+const t=(s,...a)=>{const r=TM[s];let o=LI===0||!r?s:(r[LI]||r[1]||s);a.forEach((v,i)=>o=o.split("{"+i+"}").join(v));return o};
+const LANGN=()=>LN[LI][2];
+document.documentElement.lang=LN[LI][0];
+
 const DIFF={facile:"Monde clément : les ordres des joueurs réussissent souvent, les IA sont passives.",normal:"Équilibré et plausible.",réaliste:"Conséquences réalistes (logistique, économie, opinion, rivalités) ; les plans ambitieux échouent souvent.",difficile:"Impitoyable : IA agressives et opportunistes, crises, coups d'État et guerres fréquents."};
-const MO=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."],DAY=864e5,MAXG=4;
-const GL="https://generativelanguage.googleapis.com/v1beta/models";
+const DAY=864e5,MAXG=3,GL="https://generativelanguage.googleapis.com/v1beta/models";
 const PROV={
   gemini:{n:"Google Gemini · gratuit",free:1,k:"https://aistudio.google.com/apikey",def:["gemini-2.5-flash","gemini-2.5-flash-lite"]},
   openrouter:{n:"OpenRouter · modèles gratuits",free:0,k:"https://openrouter.ai/keys",base:"https://openrouter.ai/api/v1",def:["meta-llama/llama-3.3-70b-instruct:free","deepseek/deepseek-chat-v3-0324:free"]},
@@ -74,38 +310,58 @@ const PROV={
   anthropic:{n:"Claude (Anthropic) · payant",k:"https://console.anthropic.com/settings/keys",def:["claude-haiku-5-5","claude-sonnet-5-5"]},
   xai:{n:"Grok (xAI) · payant",k:"https://console.x.ai",base:"https://api.x.ai/v1",def:["grok-3-mini","grok-4"]}
 };
+/* Programme scolaire : [nom FR, nom EN, année de début] */
+const EDU=[
+ {id:"g",n:["Culture générale (hors école)","General knowledge (no school)"],e:[["Les grandes civilisations antiques","Ancient civilizations",-3000],["L'Antiquité classique","Classical antiquity",-500],["Le haut Moyen Âge","Early Middle Ages",476],["Le Moyen Âge central","High Middle Ages",1000],["La Renaissance","The Renaissance",1450],["Les Temps modernes","Early modern era",1650],["L'ère des révolutions","Age of revolutions",1789],["Le XIXe siècle","The 19th century",1850],["Le XXe siècle","The 20th century",1914],["Le monde contemporain","The contemporary world",1991]]},
+ {id:"cm",n:["Primaire (CM1-CM2)","Primary (grades 4-5)"],e:[["Préhistoire","Prehistory",-30000],["Les Gaulois et Rome","Gauls and Romans",-52],["Charlemagne","Charlemagne",800],["Louis XIV","Louis XIV",1661],["La Révolution française","French Revolution",1789],["Napoléon","Napoleon",1804],["La Première Guerre mondiale","World War I",1914]]},
+ {id:"6",n:["6e","Grade 6"],e:[["Le Néolithique","Neolithic",-8000],["Mésopotamie et Égypte","Mesopotamia and Egypt",-3000],["La Grèce classique","Classical Greece",-480],["Rome et son empire","Rome and its empire",-27],["Naissance du christianisme","Rise of Christianity",30]]},
+ {id:"5",n:["5e","Grade 7"],e:[["Byzance et l'Islam","Byzantium and Islam",632],["Charlemagne","Charlemagne",800],["La féodalité","Feudalism",1000],["Les Croisades","The Crusades",1095],["La guerre de Cent Ans","Hundred Years' War",1337],["Renaissance et Grandes Découvertes","Renaissance and Age of Discovery",1492]]},
+ {id:"4",n:["4e","Grade 8"],e:[["Louis XIV","Louis XIV",1661],["Les Lumières","The Enlightenment",1750],["La Révolution française","French Revolution",1789],["L'Empire napoléonien","Napoleonic Empire",1804],["L'industrialisation","Industrialization",1850],["La colonisation","Colonization",1880]]},
+ {id:"3",n:["3e","Grade 9"],e:[["La Première Guerre mondiale","World War I",1914],["L'entre-deux-guerres","Interwar period",1929],["La Seconde Guerre mondiale","World War II",1939],["La Guerre froide","Cold War",1947],["La décolonisation","Decolonization",1954],["Le monde depuis 1991","The world since 1991",1991]]},
+ {id:"2",n:["Seconde","Grade 10"],e:[["Athènes et la citoyenneté","Athens and citizenship",-450],["Rome, du mythe à l'histoire","Rome: myth and history",-27],["La Méditerranée médiévale","Medieval Mediterranean",1000],["L'humanisme","Humanism",1500],["Les révolutions atlantiques","Atlantic revolutions",1776],["Le Printemps des peuples","Springtime of Nations",1848]]},
+ {id:"1",n:["Première","Grade 11"],e:[["Révolution et Empire","Revolution and Empire",1789],["Monarchies et Républiques","Monarchies and Republics",1815],["La IIIe République et la colonisation","Third Republic and colonization",1870],["La Grande Guerre","The Great War",1914],["Les totalitarismes","Totalitarianism",1922]]},
+ {id:"t",n:["Terminale","Grade 12"],e:[["La Guerre froide","Cold War",1947],["La décolonisation","Decolonization",1950],["Un monde multipolaire","A multipolar world",1991],["La mondialisation","Globalization",2001],["Les conflits du XXIe siècle","21st-century conflicts",2011]]}
+];
+const eN=a=>a[LI===0?0:1];
+
 const app=initializeApp(FB),auth=getAuth(app),db=getFirestore(app);
-const $=s=>document.querySelector(s);
-const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const ls={get:k=>{try{return localStorage.getItem(k)||""}catch{return ""}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch{}}};
-const J=(s,d)=>{try{return JSON.parse(s)}catch{return d}};
-let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",msg="",cfgOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null,SEL="",MINE=[],LM=null,LG=null,CM=null,TR=null,OV=null,CL=null,EVL={},fitted=false,cgen=0,osig="",csig="";
+let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",cfgOpen=false,mapOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null,SEL="",MINE=[],LM=null,LGs=[],CM=null,TR=null,OVs=[],CLs=[],EVL={},fitted=false,cgen=0,osig="",csig="",lastLog=-1,tt=0;
 const FP={},FI=J(ls.get("fiches"),{}),RC={};
-let PSEUDO=ls.get("pseudo"),DEV=ls.get("dev");if(!DEV){DEV=Array.from(crypto.getRandomValues(new Uint8Array(12)),x=>x.toString(16).padStart(2,"0")).join("");ls.set("dev",DEV)}
+let PSEUDO=ls.get("pseudo"),DEV=ls.get("dev"),TH=ls.get("th")||"ocean";
+if(!DEV){DEV=Array.from(crypto.getRandomValues(new Uint8Array(12)),x=>x.toString(16).padStart(2,"0")).join("");ls.set("dev",DEV)}
+document.documentElement.dataset.th=TH;
 let AI=J(ls.get("ai"),null);
 if(!AI){AI={prov:"gemini",keys:{},models:{},lists:{}};if(ls.get("gk"))AI.keys.gemini=ls.get("gk");if(ls.get("gm"))AI.models.gemini=ls.get("gm")}
 AI.keys=AI.keys||{};AI.models=AI.models||{};AI.lists=AI.lists||{};if(!PROV[AI.prov])AI.prov="gemini";
 const saveAI=()=>ls.set("ai",JSON.stringify(AI)),mdl=()=>AI.models[AI.prov]||PROV[AI.prov].def[0];
-const LIB=J(ls.get("maps"),[]).filter(m=>m&&m.v===2&&m.t&&m.t[0]);
-const LF=window.LF={name:"",max:6,step:12,year:1936,month:1,diff:"normal",aiOthers:true,ctx:"",ai:false,md:"",mapObj:null,view:null,owners:null,jc:"",menu:""};
+const MO=Object.assign({op:45,bd:1,lb:1,grid:1,mode:"owner"},J(ls.get("mo"),{}));
+const NAR=Object.assign({on:false,g:"f",r:1},J(ls.get("nar"),{}));
+const LIB=J(ls.get("maps"),[]).filter(m=>m&&m.v>=2&&m.t&&m.t[0]);
+const LF=window.LF={name:"",max:6,step:12,year:1936,month:1,diff:"normal",aiOthers:true,ctx:"",ai:false,md:"",mapObj:null,view:null,owners:null,jc:"",menu:"",gn:12,sea:50,rel:50,frag:50,edu:null};
 const D=window.D={};
 const custom=()=>G?!!G.mapJson:LF.ai;
-const names=()=>custom()?(MAPDATA?MAPDATA.t.map(t=>t.n):[]):feats.map(f=>f.properties.n);
+const names=()=>custom()?(MAPDATA?MAPDATA.t.map(x=>x.n):[]):feats.map(f=>f.properties.n);
 const own=n=>own_[n]||n;
 const me=()=>G&&user&&G.players&&G.players[user.uid]||null;
-const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;const l=.45,a=.45*Math.min(l,1-l),f=k=>{const t=(k+h/30)%12;return l-a*Math.max(-1,Math.min(t-3,9-t,1))};return "#"+[f(0),f(8),f(4)].map(v=>Math.round(v*255).toString(16).padStart(2,"0")).join("")};
-const colorOf=n=>{if(custom()&&MAPDATA){const t=MAPDATA.t.find(x=>x.n===n);if(t)return t.c}return hue(n)};
+const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;const l=.45,a=.45*Math.min(l,1-l),f=k=>{const q=(k+h/30)%12;return l-a*Math.max(-1,Math.min(q-3,9-q,1))};return "#"+[f(0),f(8),f(4)].map(v=>Math.round(v*255).toString(16).padStart(2,"0")).join("")};
+const colorOf=n=>{if(custom()&&MAPDATA){const x=MAPDATA.t.find(q=>q.n===n);if(x)return x.c}return hue(n)};
 const nations=()=>[...new Set(names().map(own))].sort((a,b)=>a.localeCompare(b));
-const dateStr=g=>MO[(g.month||1)-1]+" "+g.year;
-const touch=()=>({lastActive:Date.now(),expireAt:Timestamp.fromMillis(Date.now()+14*DAY)});
-const say=m=>{msg=m;side()};
-window.side=()=>side();
+const mon=m=>new Date(2000,m-1,1).toLocaleString(LN[LI][3],{month:"short"});
+const yr=y=>y<0?Math.abs(y)+" "+t("av. J.-C."):""+y;
+const dateStr=g=>(g.step||12)<12?mon(g.month||1)+" "+yr(g.year):yr(g.year);
+const stepLbl=s=>s<12?t("{0} mois",s):s===12?t("1 an"):t("{0} ans",s/12);
+const touch=()=>({lastActive:Date.now()});
 const needVerify=()=>user&&user.email&&!user.emailVerified&&user.providerData.some(p=>p.providerId==="password");
+function toast(m,ms=6500){if(!m)return;const e=$("#toast");e.textContent=m;e.style.display="block";clearTimeout(tt);tt=setTimeout(()=>e.style.display="none",ms)}
+const say=m=>{if(m)toast(m);side()};
+window.side=()=>side();
+addEventListener("error",e=>toast("⚠️ "+(e.message||"Erreur"),9000));
+addEventListener("unhandledrejection",e=>toast("⚠️ "+(e.reason&&e.reason.message||e.reason||"Erreur"),9000));
 
 /* ---------- IA : Gemini, OpenRouter, Groq, OpenAI, Claude, Grok ---------- */
 const bad=async r=>{let m="";try{const j=await r.json();m=j.error?.message||j.error||j.message||""}catch{}return typeof m==="string"?m:JSON.stringify(m)};
 async function listModels(P=AI.prov){
-  const K=AI.keys[P];if(!K)throw Error("Colle d'abord ta clé.");let r;
+  const K=AI.keys[P];if(!K)throw Error(t("Colle d'abord ta clé."));let r;
   if(P==="gemini")r=await fetch(GL+"?pageSize=200",{headers:{"x-goog-api-key":K}});
   else if(P==="anthropic")r=await fetch("https://api.anthropic.com/v1/models?limit=100",{headers:{"x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}});
   else r=await fetch(PROV[P].base+"/models",{headers:{authorization:"Bearer "+K}});
@@ -121,27 +377,27 @@ async function listModels(P=AI.prov){
 const best=(P,l)=>P==="gemini"?l.filter(n=>/^gemini-[\d.]+-flash$/.test(n)).sort().pop()||l.find(n=>/flash/.test(n))||l[0]:l[0];
 async function call(p,json,M){
   const P=AI.prov,K=AI.keys[P];let r;
-  if(P==="gemini")r=await fetch(`${GL}/${encodeURIComponent(M)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":K},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9}:{temperature:.8}})});
-  else if(P==="anthropic")r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:M,max_tokens:4096,messages:[{role:"user",content:p}]})});
+  if(P==="gemini")r=await fetch(`${GL}/${encodeURIComponent(M)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":K},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9,maxOutputTokens:8192}:{temperature:.8,maxOutputTokens:2048}})});
+  else if(P==="anthropic")r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:M,max_tokens:8192,messages:[{role:"user",content:p}]})});
   else r=await fetch(PROV[P].base+"/chat/completions",{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+K},body:JSON.stringify({model:M,messages:[{role:"user",content:p}],temperature:.9})});
   if(!r.ok){const e=Error("api");e.status=r.status;e.m=await bad(r);throw e}
   const j=await r.json();
   return P==="gemini"?(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text||"").join(""):P==="anthropic"?(j.content||[]).map(x=>x.text||"").join(""):(j.choices?.[0]?.message?.content||"");
 }
 async function ask(p,json=true,retry=true){
-  const P=AI.prov;if(!AI.keys[P])throw Error("Ajoute ta clé "+PROV[P].n+" dans ⚙️ Réglages.");
-  let t;
-  try{t=await call(p,json,mdl())}catch(e){
-    if(e.message!=="api")throw Error("Connexion impossible : ce fournisseur bloque peut-être les requêtes depuis un navigateur, ou tu es hors ligne.");
+  const P=AI.prov;if(!AI.keys[P])throw Error(t("Ajoute ta clé d'IA dans ⚙️ Réglages."));
+  let tx;
+  try{tx=await call(p,json,mdl())}catch(e){
+    if(e.message!=="api")throw Error(t("Connexion impossible : ce fournisseur bloque peut-être les requêtes depuis un navigateur, ou tu es hors ligne."));
     if(retry&&(e.status===404||/not found|does not exist|decommission|deprecat|no longer/i.test(e.m))){
       const l=await listModels(P).catch(()=>[]),n=best(P,l);if(n&&n!==mdl()){AI.models[P]=n;saveAI();return ask(p,json,false)}
     }
-    throw Error(e.status===429?"Quota atteint, réessaie dans une minute ou change de modèle.":e.status===401||e.status===403?"Clé refusée par "+PROV[P].n.split(" ·")[0]+" (⚙️ Réglages).":"Erreur "+e.status+(e.m?" : "+e.m.slice(0,160):""));
+    throw Error(e.status===429?t("Quota atteint : attends une minute ou change de modèle."):e.status===401||e.status===403?t("Clé refusée par le fournisseur (⚙️ Réglages)."):"Erreur "+e.status+(e.m?" : "+e.m.slice(0,160):""));
   }
-  if(!t)throw Error("Réponse vide de l'IA (filtre de sécurité ?). Reformule.");
-  if(!json)return t;
-  const a=t.indexOf("{"),b=t.lastIndexOf("}");
-  try{return JSON.parse(t.slice(a,b+1))}catch{throw Error("Réponse IA illisible, réessaie (ou choisis un autre modèle).")}
+  if(!tx)throw Error(t("Réponse vide de l'IA : reformule ou change de modèle."));
+  if(!json)return tx;
+  const a=tx.indexOf("{"),b=tx.lastIndexOf("}");
+  try{return JSON.parse(tx.slice(a,b+1))}catch{if(retry)return ask(p,json,false);throw Error(t("Réponse IA illisible : change de modèle ou réessaie."))}
 }
 
 /* ---------- Monde réel : Natural Earth + tuiles ---------- */
@@ -149,7 +405,7 @@ const SRC=["https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geoj
 async function loadWorld(){
   if(feats.length)return;
   for(const u of SRC){try{const r=await fetch(u);if(!r.ok)continue;const j=await r.json();if(j.features&&j.features.length){feats=j.features;break}}catch{}}
-  if(!feats.length){const t=await (await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json")).json();feats=feature(t,t.objects.countries).features}
+  if(!feats.length){const x=await (await fetch("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json")).json();feats=feature(x,x.objects.countries).features}
   const g=(p,k)=>p[k]??p[k.toLowerCase()];
   feats=feats.filter(f=>{
     const p=f.properties||{},n=g(p,"NAME")||g(p,"name");if(!n||n==="Antarctica")return false;
@@ -158,112 +414,157 @@ async function loadWorld(){
     FP[n]=f.properties;return true;
   });
 }
-function lstyle(f){const n=f.properties.n,mine=me()&&me().nation&&own(n)===me().nation;return{color:mine?"#fff":"#0b1118",weight:mine?2.5:.7,fillColor:colorOf(own(n)),fillOpacity:SEL&&own(SEL)===own(n)?.72:.45}}
+const ramp=v=>{v=Math.max(0,Math.min(1,v||0));return `hsl(${Math.round(215-185*v)},70%,${Math.round(48-6*v)}%)`};
+function fillReal(n){
+  const o=own(n);if(o!==n||MO.mode==="owner")return colorOf(o);const P=FP[n];if(!P)return colorOf(o);
+  if(MO.mode==="continent")return hue(P.cont||n);
+  return ramp(MO.mode==="pop"?(P.pop?Math.log10(P.pop)/9.2:0):MO.mode==="gdp"?(P.gdp?Math.log10(P.gdp*1e6)/13.5:0):(5-(+String(P.inc)[0]||5))/4);
+}
+function lstyle(f){const n=f.properties.n,mine=me()&&me().nation&&own(n)===me().nation;return{color:mine?"#fff":"#0b1118",weight:mine?2.5:MO.bd?.7:0,fillColor:fillReal(n),fillOpacity:SEL&&own(SEL)===own(n)?Math.min(.9,MO.op/100+.25):MO.op/100}}
 const curView=()=>{const v=G?J(G.viewJson||"",null):LF.view;return v&&Number.isFinite(+v.lat)&&Number.isFinite(+v.lng)?v:null};
 function fitWorld(){
-  const b=L.latLngBounds([[-58,-170],[80,180]]);LM.invalidateSize();const z=LM.getBoundsZoom(b,false);
+  const b=L.latLngBounds([[-60,-180],[82,180]]);LM.invalidateSize();const z=LM.getBoundsZoom(b,false);
   LM.setMinZoom(Math.max(0,z-1));LM.setView([20,5],z,{animate:false});
 }
+function wrapView(){
+  const z=LM.getZoom(),c=LM.getCenter(),pc=LM.getPixelBounds().getCenter(),Hh=256*Math.pow(2,z);let lat=c.lat,lng=c.lng,ch=false;
+  if(lng>180||lng<-180){lng=(((lng+180)%360)+360)%360-180;ch=true}
+  if(pc.y<0||pc.y>Hh){lat=LM.unproject(L.point(pc.x,((pc.y%Hh)+Hh)%Hh),z).lat;ch=true}
+  if(ch)LM.setView([lat,lng],z,{animate:false});
+}
+let RND=null;
 function drawLeaf(){
   if(!LM){
-    LM=L.map("lmap",{minZoom:1,maxZoom:14,zoomSnap:.5,worldCopyJump:true,maxBounds:[[-85,-9999],[85,9999]],maxBoundsViscosity:.6,preferCanvas:true}).setView([20,5],2);
+    const CRSW=L.extend({},L.CRS.EPSG3857,{wrapLat:[-85.0511,85.0511]});RND=L.canvas({padding:.5});
+    LM=L.map("lmap",{crs:CRSW,minZoom:1,maxZoom:14,zoomSnap:.5,preferCanvas:true,worldCopyJump:false}).setView([20,5],2);
     const tl=(u,o)=>L.tileLayer(u,{maxZoom:19,...o}),at="© OpenStreetMap · © CARTO",es="Tiles © Esri";
     const base={"🌑 Sombre":tl("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:at}),"🗺️ Clair":tl("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:at}),"🛣️ Rues":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18}),"⛰️ Relief":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18}),"🛰️ Satellite":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18})};
     const cities=L.layerGroup(),labels=tl("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",{subdomains:"abcd",pane:"shadowPane"});
-    base["🌑 Sombre"].addTo(LM);L.control.layers(base,{"🏙️ Villes (grandes villes)":cities,"🔤 Noms (sur satellite)":labels},{position:"topleft"}).addTo(LM);
+    base["🌑 Sombre"].addTo(LM);L.control.layers(base,{"🏙️ Villes":cities,"🔤 Noms":labels},{position:"topleft"}).addTo(LM);
     let cl=false;LM.on("overlayadd",async e=>{if(e.layer!==cities||cl)return;cl=true;
-      for(const u of["https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_10m_populated_places_simple.geojson","https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_populated_places_simple.geojson"]){
-        try{const j=await (await fetch(u)).json();(j.features||[]).filter(f=>(f.properties.pop_max||f.properties.POP_MAX||0)>=7e5).forEach(f=>{const p=f.properties,c=f.geometry.coordinates;L.circleMarker([c[1],c[0]],{radius:3,color:"#fff",weight:1,fillColor:"#e0914f",fillOpacity:1}).bindTooltip((p.name||p.NAME)+" · "+Math.round((p.pop_max||p.POP_MAX)/1e5)/10+" M").addTo(cities)});break}catch{}}});
-    LM.on("click",()=>{SEL="";showSel();colorMap();side()});
+      for(const u of["ne_10m_populated_places_simple","ne_110m_populated_places_simple"]){
+        try{const j=await (await fetch("https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/"+u+".geojson")).json();(j.features||[]).filter(f=>(f.properties.pop_max||f.properties.POP_MAX||0)>=7e5).forEach(f=>{const p=f.properties,c=f.geometry.coordinates;[-360,0,360].forEach(o=>L.circleMarker([c[1],c[0]+o],{radius:3,color:"#fff",weight:1,fillColor:"#e0914f",fillOpacity:1}).bindTooltip((p.name||p.NAME)+" · "+Math.round((p.pop_max||p.POP_MAX)/1e5)/10+" M").addTo(cities))});break}catch{}}});
+    LM.on("click",()=>{SEL="";showSel();colorMap();side()});LM.on("moveend",wrapView);
   }
   LM.invalidateSize();
-  if(LG){LG.remove();LG=null}
+  LGs.forEach(g=>g.remove());LGs=[];
   if(!feats.length)return;
-  LG=L.geoJSON(feats,{renderer:L.canvas({padding:.5}),style:lstyle,onEachFeature:(f,l)=>{l.bindTooltip(f.properties.n,{sticky:true});l.on("click",e=>{L.DomEvent.stopPropagation(e);select(f.properties.n)})}}).addTo(LM);
+  [-360,0,360].forEach(off=>LGs.push(L.geoJSON(feats,{renderer:RND,coordsToLatLng:c=>L.latLng(c[1],c[0]+off),style:lstyle,onEachFeature:(f,l)=>{l.bindTooltip(f.properties.n,{sticky:true});l.on("click",e=>{L.DomEvent.stopPropagation(e);select(f.properties.n)})}}).addTo(LM)));
   if(!fitted){fitWorld();fitted=true}
   const v=curView();if(v)LM.setView([+v.lat,+v.lng],Math.max(2,Math.min(8,+v.z||3)));
 }
 
-/* ---------- Carte inventée : relief procédural (bruit fractal) ---------- */
-const TW=1000,TH=600,SC=1;
-function noise(seed){
+/* ---------- Monde inventé : relief procédural torique (bruit fractal, biomes, rivières) ---------- */
+const TW=1000,TZ=600;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let q=Math.imul(s^s>>>15,1|s);q=q+Math.imul(q^q>>>7,61|q)^q;return((q^q>>>14)>>>0)/4294967296}}
+function pnoise(seed){
   const H=(x,y)=>{let h=Math.imul(x,374761393)^Math.imul(y,668265263)^Math.imul(seed,1274126177);h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967296};
-  const vn=(x,y)=>{const xi=Math.floor(x),yi=Math.floor(y);let xf=x-xi,yf=y-yi;xf=xf*xf*(3-2*xf);yf=yf*yf*(3-2*yf);return(H(xi,yi)*(1-xf)+H(xi+1,yi)*xf)*(1-yf)+(H(xi,yi+1)*(1-xf)+H(xi+1,yi+1)*xf)*yf};
-  return(x,y,o)=>{let s=0,a=.5,f=1;for(let i=0;i<o;i++){s+=a*vn(x*f,y*f);f*=2;a*=.5}return s};
+  return(u,v,kx,ky,o)=>{let s=0,a=.5,f=1;for(let i=0;i<o;i++){const nx=kx*f,ny=ky*f,x=u*nx,y=v*ny,xi=Math.floor(x),yi=Math.floor(y);let xf=x-xi,yf=y-yi;xf=xf*xf*(3-2*xf);yf=yf*yf*(3-2*yf);const x0=xi%nx,x1=(xi+1)%nx,y0=yi%ny,y1=(yi+1)%ny;s+=a*((H(x0,y0)*(1-xf)+H(x1,y0)*xf)*(1-yf)+(H(x0,y1)*(1-xf)+H(x1,y1)*xf)*yf);f*=2;a*=.5}return s};
 }
 const hex=c=>{const n=parseInt(String(c).slice(1),16)||0;return[n>>16&255,n>>8&255,n&255]};
 function terrain(M){
-  const fb=noise(M.seed|0),N=M.t,k=N.length,W=TW,H=TH,cx=N.map(t=>t.x),cy=N.map(t=>t.y),cr=N.map(t=>t.r),col=N.map(t=>hex(t.c));
-  const el=new Float32Array(W*H),ids=new Uint8Array(W*H).fill(255);
+  const P=M.p||{},th=.5+((P.sea??50)-50)/450,rel=(P.rel??50)/50,frag=(P.frag??50)/50,bw=.5*(.5+frag),fb=pnoise(M.seed|0),N=M.t,k=N.length,W=TW,H=TZ;
+  const cx=N.map(q=>q.x),cy=N.map(q=>q.y),cr=N.map(q=>q.r),col=N.map(q=>hex(q.c)),FT=(M.f||[]).filter(f=>f&&Number.isFinite(f.x)&&Number.isFinite(f.y)&&f.r>0);
+  const tor=(a,b,L)=>{const d=Math.abs(a-b);return d>L/2?L-d:d},ix=(x,y)=>((y+H)%H)*W+((x+W)%W);
+  const el=new Float32Array(W*H),lo=new Float32Array(W*H),ms=new Float32Array(W*H),tm=new Float32Array(W*H),ids=new Uint8Array(W*H).fill(255),rv=new Uint8Array(W*H);
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
-    const u=x/SC,v=y/SC,wp=1+.3*(fb(u*.02+50,v*.02+50,1)-.48);let m=0,bs=1e9,bi=0;
-    for(let i=0;i<k;i++){const d=Math.hypot(u-cx[i],v-cy[i])/cr[i],g=Math.exp(-d*d*1.1);if(g>m)m=g;const w=d*wp;if(w<bs){bs=w;bi=i}}
-    const e=.5*fb(u*.006,v*.006,5)+.75*m+.18*(fb(u*.035+9,v*.035+9,3)-.48);
-    el[y*W+x]=e;if(e>.5)ids[y*W+x]=bi;
+    const u=x/W,v=y/H,wp=1+.3*(fb(u,v,20,12,1)-.48);let m=0,bs=1e9,bi=0,ad=0,md=0,td=0;
+    for(let i=0;i<k;i++){const d=Math.hypot(tor(x,cx[i],W),tor(y,cy[i],H))/cr[i],g=Math.exp(-d*d*1.1);if(g>m)m=g;const w=d*wp;if(w<bs){bs=w;bi=i}}
+    if(FT.length){const nz=fb(u,v,18,11,2);for(const f of FT){const d=Math.hypot(tor(x,f.x,W),tor(y,f.y,H))/f.r;if(d>2.2)continue;const g=Math.exp(-d*d*1.4);
+      if(f.k==="mountain")ad+=.42*g*(.35+nz);else if(f.k==="lake"||f.k==="sea")ad-=.6*g;else if(f.k==="desert")md-=.6*g;else if(f.k==="forest")md+=.5*g;else if(f.k==="jungle"){md+=.5*g;td+=.3*g}else if(f.k==="ice")td-=.8*g}}
+    const i=y*W+x,l=bw*fb(u,v,6,4,5)+.75*m+ad,e=l+.18*(fb(u,v,35,21,3)-.48);
+    lo[i]=l;el[i]=e;ms[i]=fb(u,v,9,5,3)+md;tm[i]=1-Math.abs(v-.5)*2.2+td;if(e>th)ids[i]=bi;
+  }
+  const R=rng((M.seed|0)+7);
+  for(let n=0,tries=0;n<22&&tries<400;tries++){
+    let x=Math.floor(R()*W),y=Math.floor(R()*H),i=ix(x,y);if(ids[i]===255||lo[i]-th<.22)continue;n++;
+    for(let s=0;s<800;s++){let bx=x,by=y,bl=lo[ix(x,y)];
+      for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const q=lo[ix(x+dx,y+dy)];if(q<bl){bl=q;bx=x+dx;by=y+dy}}
+      if(bx===x&&by===y)break;x=(bx+W)%W;y=(by+H)%H;rv[ix(x,y)]=1;rv[ix(x+1,y)]=1;if(el[ix(x,y)]<th)break}
   }
   const img=new ImageData(W,H),px=new Uint32Array(img.data.buffer),cs=N.map(()=>[0,0,0]);
-  const c=[0,0,0],mx=(a,b,t)=>{c[0]=a[0]+(b[0]-a[0])*t;c[1]=a[1]+(b[1]-a[1])*t;c[2]=a[2]+(b[2]-a[2])*t},mc=(b,t)=>{c[0]+=(b[0]-c[0])*t;c[1]+=(b[1]-c[1])*t;c[2]+=(b[2]-c[2])*t},ml=f=>{c[0]*=f;c[1]*=f;c[2]*=f};
-  const G1=[84,140,72],G2=[140,172,94],T1=[184,166,110],R1=[132,122,112],S1=[242,242,246],S0=[62,148,176],S2=[10,38,76],DK=[18,28,40],cl=v=>v<0?0:v>255?255:v|0;
+  const c=[0,0,0],mx=(a,b,q)=>{c[0]=a[0]+(b[0]-a[0])*q;c[1]=a[1]+(b[1]-a[1])*q;c[2]=a[2]+(b[2]-a[2])*q},mc=(b,q)=>{q=q<0?0:q>1?1:q;c[0]+=(b[0]-c[0])*q;c[1]+=(b[1]-c[1])*q;c[2]+=(b[2]-c[2])*q},ml=f=>{c[0]*=f;c[1]*=f;c[2]*=f};
+  const GR=[96,150,76],DE=[218,194,130],FO=[52,110,62],JU=[30,92,54],TU=[196,206,194],SN=[244,246,250],RK=[132,122,112],S0=[62,148,176],S2=[10,38,76],DK=[18,28,40],RI=[64,128,196],SH=[150,214,232],cl=q=>q<0?0:q>255?255:q|0;
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     const i=y*W+x,e=el[i],id=ids[i];
-    if(id===255)mx(S0,S2,Math.min(1,(.5-e)/.3));
+    if(id===255){mx(S0,S2,Math.min(1,(th-e)/.3));if(th-e<.035)mc(SH,.4*(1-(th-e)/.035))}
     else{
-      const h=e-.5;if(h<.1)mx(G1,G2,h/.1);else if(h<.25)mx(G2,T1,(h-.1)/.15);else if(h<.4)mx(T1,R1,(h-.25)/.15);else mx(R1,S1,Math.min(1,(h-.4)/.2));
-      mc(col[id],.34);
-      if(x>2&&y>2&&x<W-3&&y<H-3)ml(1+Math.max(-.3,Math.min(.3,(el[i-1]-el[i+1]+el[i-W]-el[i+W])*6)));
-      if(x<W-2&&y<H-2){const a=ids[i+2],b=ids[i+2*W];
-        if((a!==id&&a!==255)||(b!==id&&b!==255))ml(.45);
-        else if(a===255||b===255||(x>1&&ids[i-2]===255)||(y>1&&ids[i-2*W]===255))mc(DK,.6)}
-      cs[id][0]+=x/SC;cs[id][1]+=y/SC;cs[id][2]++;
+      const h=(e-th)*(.7+.6*rel),tp=tm[i]-h*.9,mo=ms[i];
+      c[0]=GR[0];c[1]=GR[1];c[2]=GR[2];
+      mc(DE,(.42-mo)*3);mc(tp>.72?JU:FO,(mo-.5)*3);mc(TU,(.35-tp)*3);mc(SN,(.12-tp)*5);
+      if(h>.16)mc(RK,(h-.16)/.2);if(h>.34)mc(SN,(h-.34)/.14);
+      mc(col[id],.26);
+      ml(1+Math.max(-.32,Math.min(.32,(el[ix(x-1,y)]-el[ix(x+1,y)]+el[ix(x,y-1)]-el[ix(x,y+1)])*(5+6*rel))));
+      const a=ids[ix(x+2,y)],b=ids[ix(x,y+2)];
+      if((a!==id&&a!==255)||(b!==id&&b!==255))ml(.45);
+      else if(a===255||b===255||ids[ix(x-2,y)]===255||ids[ix(x,y-2)]===255)mc(DK,.6);
+      if(rv[i])mc(RI,.85);
+      cs[id][0]+=x;cs[id][1]+=y;cs[id][2]++;
     }
     px[i]=(255<<24)|(cl(c[2])<<16)|(cl(c[1])<<8)|cl(c[0]);
   }
   const cv=document.createElement("canvas");cv.width=W;cv.height=H;cv.getContext("2d").putImageData(img,0,0);
-  return{url:cv.toDataURL("image/png"),ids,W,H,cent:cs.map((s,i)=>s[2]>150?[s[0]/s[2],s[1]/s[2]]:[cx[i],cy[i]])};
+  const cent=cs.map((s,i)=>s[2]>150?[s[0]/s[2],s[1]/s[2]]:[cx[i],cy[i]]),cities=[];
+  N.forEach((nt,i)=>{(nt.cities||[]).slice(0,3).forEach(cn=>{for(let q=0;q<60;q++){const a=R()*6.283,d=R()*cr[i]*.8,x=Math.floor((cent[i][0]+Math.cos(a)*d+W)%W),y=Math.floor((cent[i][1]+Math.sin(a)*d+H)%H);if(ids[y*W+x]===i){cities.push({n:cn,x,y});break}}})});
+  return{url:cv.toDataURL("image/png"),ids,W,H,cent,cities};
 }
-const ll=(x,y)=>[600-y,x];
+const llx=(x,y,i=0,j=0)=>[600-y+600*j,x+1000*i];
+const wl=(v,L)=>((v%L)+L)%L;
 async function drawCustom(){
-  if(!CM){CM=L.map("cmap",{crs:L.CRS.Simple,minZoom:-3,maxZoom:3,zoomSnap:.25,attributionControl:false});CM.on("click",e=>{const T=TR;if(!T)return;const x=Math.floor(e.latlng.lng*SC),y=Math.floor((600-e.latlng.lat)*SC),id=x>=0&&y>=0&&x<T.W&&y<T.H?T.ids[y*T.W+x]:255;SEL=id===255?"":MAPDATA.t[id].n;showSel();colorMap();side()})}
-  if(CL){CL.remove();CL=null}if(OV){OV.remove();OV=null}TR=null;osig="";
+  if(!CM){
+    CM=L.map("cmap",{crs:L.CRS.Simple,minZoom:-3,maxZoom:3,zoomSnap:.25,attributionControl:false});
+    CM.on("click",e=>{const T=TR;if(!T)return;const x=Math.floor(wl(e.latlng.lng,1000)),y=Math.floor(wl(600-e.latlng.lat,600)),id=T.ids[y*T.W+x];SEL=id===255?"":MAPDATA.t[id].n;showSel();colorMap();side()});
+    CM.on("moveend",()=>{const c=CM.getCenter();if(c.lng<0||c.lng>=1000||c.lat<0||c.lat>=600)CM.setView([wl(c.lat,600),wl(c.lng,1000)],CM.getZoom(),{animate:false})});
+  }
+  CLs.forEach(l=>l.remove());CLs=[];OVs.forEach(l=>l.remove());OVs=[];TR=null;osig="";
   const mg=$("#cmsg");
-  if(!MAPDATA||!MAPDATA.t[0]||MAPDATA.v!==2){mg.style.display="flex";mg.textContent="✨ Décris ta carte, puis génère-la.";return}
-  const my=++cgen;mg.style.display="flex";mg.textContent="Génération du relief…";await new Promise(r=>setTimeout(r,40));
+  if(!MAPDATA||!MAPDATA.t[0]||!(MAPDATA.v>=2)){mg.style.display="flex";mg.textContent=t("✨ Décris ton monde, puis génère-le.");return}
+  const my=++cgen;mg.style.display="flex";mg.textContent=t("Génération du relief…");await new Promise(r=>setTimeout(r,40));
   const T=RC[MAPDATA.id]||(RC[MAPDATA.id]=terrain(MAPDATA));if(my!==cgen)return;TR=T;
-  CL=L.layerGroup().addTo(CM);L.imageOverlay(T.url,[[0,0],[600,1000]]).addTo(CL);
-  MAPDATA.t.forEach((t,i)=>{const p=T.cent[i];L.marker(ll(p[0],p[1]),{interactive:false,icon:L.divIcon({className:"cl",html:`<span>${t.cap?"⭐ ":""}${esc(t.n)}</span>`,iconSize:[0,0]})}).addTo(CL)});
-  OV=L.imageOverlay("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",[[0,0],[600,1000]],{zIndex:5}).addTo(CM);
-  CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:false});CM.setMinZoom(CM.getZoom()-1);
+  const g=L.layerGroup().addTo(CM);CLs.push(g);
+  const blank="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+  for(let i=-1;i<=1;i++)for(let j=-1;j<=1;j++){
+    const bd=[[600*j,1000*i],[600*(j+1),1000*(i+1)]];L.imageOverlay(T.url,bd).addTo(g);OVs.push(L.imageOverlay(blank,bd,{zIndex:5}).addTo(CM));
+    MAPDATA.t.forEach((q,n)=>{const p=T.cent[n];L.marker(llx(p[0],p[1],i,j),{interactive:false,icon:L.divIcon({className:"cl",html:`<span>${esc(q.n)}</span>`,iconSize:[0,0]})}).addTo(g)});
+    T.cities.forEach(c=>L.marker(llx(c.x,c.y,i,j),{icon:L.divIcon({className:"",html:'<div class="ct"></div>',iconSize:[0,0]})}).bindTooltip(esc(c.n)).addTo(g));
+    (MAPDATA.f||[]).filter(f=>f.n).forEach(f=>L.marker(llx(f.x,f.y,i,j),{interactive:false,icon:L.divIcon({className:"cl",html:`<span><i>${esc(f.n)}</i></span>`,iconSize:[0,0]})}).addTo(g));
+  }
+  CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:false});CM.setMinZoom(CM.getZoom());
   mg.style.display="none";paintOv();drawEv();
 }
 function paintOv(){
-  if(!TR||!OV||!MAPDATA)return;
-  const m=me()&&me().nation,sg=JSON.stringify(own_)+"|"+SEL+"|"+m;if(sg===osig)return;osig=sg;
-  const T=TR,img=new ImageData(T.W,T.H),px=new Uint32Array(img.data.buffer),pk=(r,g,b,a)=>(a<<24)|(b<<16)|(g<<8)|r;
-  const tint=MAPDATA.t.map(t=>{const o=own(t.n);if(SEL&&own(SEL)===o)return pk(255,255,255,90);if(m&&o===m)return pk(255,215,0,70);if(o===t.n)return 0;const c=hex(colorOf(o));return pk(c[0],c[1],c[2],150)});
+  if(!TR||!OVs.length||!MAPDATA)return;
+  const m=me()&&me().nation,sg=JSON.stringify(own_)+"|"+SEL+"|"+m+"|"+MO.mode+"|"+MO.op;if(sg===osig)return;osig=sg;
+  const T=TR,img=new ImageData(T.W,T.H),px=new Uint32Array(img.data.buffer),pk=(r,g,b,a)=>(a<<24)|(b<<16)|(g<<8)|r,al=Math.round(MO.op*2.2);
+  const hs=q=>{const m=/hsl\((\d+),(\d+)%,(\d+)%\)/.exec(q);if(!m)return hex(q);const h=+m[1],s=+m[2]/100,l=+m[3]/100,a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1))))};return[f(0),f(8),f(4)]};
+  const tint=MAPDATA.t.map(q=>{const o=own(q.n);if(SEL&&own(SEL)===o)return pk(255,255,255,100);if(m&&o===m)return pk(255,215,0,80);
+    if(MO.mode!=="owner"&&o===q.n){const v=MO.mode==="pop"?Math.log10((q.pop||1)*1e6)/9.5:(q[MO.mode]||0)/100,c=hs(ramp(v));return pk(c[0],c[1],c[2],Math.max(80,al))}
+    if(o===q.n)return 0;const c=hex(colorOf(o));return pk(c[0],c[1],c[2],150)});
   for(let i=0;i<px.length;i++){const id=T.ids[i];if(id!==255&&tint[id])px[i]=tint[id]}
-  const cv=document.createElement("canvas");cv.width=T.W;cv.height=T.H;cv.getContext("2d").putImageData(img,0,0);OV.setUrl(cv.toDataURL("image/png"));
+  const cv=document.createElement("canvas");cv.width=T.W;cv.height=T.H;cv.getContext("2d").putImageData(img,0,0);const u=cv.toDataURL("image/png");OVs.forEach(o=>o.setUrl(u));
 }
 function drawEv(){
   const mp=custom()?CM:LM;if(!mp)return;
   const sg=(G&&G.log?G.log.length:0)+"|"+custom()+"|"+(G?code:"");if(sg===csig&&EVL.g&&EVL.m===mp)return;csig=sg;
   if(EVL.g)EVL.g.remove();EVL={g:L.layerGroup().addTo(mp),m:mp};
   const ev=G&&G.log&&G.log.length?G.log[G.log.length-1].evenements||[]:[];
-  ev.forEach(e=>{const p=custom()?(Number.isFinite(e.x)&&Number.isFinite(e.y)?ll(e.x,e.y):null):(Number.isFinite(e.lat)&&Number.isFinite(e.lng)?[e.lat,e.lng]:null);if(!p)return;
+  ev.forEach(e=>{const p=custom()?(Number.isFinite(e.x)&&Number.isFinite(e.y)?llx(e.x,e.y):null):(Number.isFinite(e.lat)&&Number.isFinite(e.lng)?[e.lat,e.lng]:null);if(!p)return;
     L.marker(p,{icon:L.divIcon({className:"mk",html:esc(e.ic||"📍"),iconSize:[24,24]})}).bindTooltip(esc((e.nation?e.nation+" : ":"")+e.texte)).addTo(EVL.g)});
 }
-function colorMap(){if(custom())paintOv();else if(LG)LG.setStyle(lstyle)}
+function colorMap(){if(custom())paintOv();else LGs.forEach(g=>g.setStyle(lstyle))}
 function drawMap(){
   if(!user)return;
   const cu=custom();$("#lmap").style.display=cu?"none":"block";$("#cmap").style.display=cu?"block":"none";
   if(cu)drawCustom();else drawLeaf();showSel();drawEv();
 }
 window.eb=()=>{$("#mapbox").classList.toggle("big");setTimeout(()=>{if(custom()&&CM&&TR){CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:false})}else if(LM)fitWorld()},60)};
+window.mo=()=>{mapOpen=!mapOpen;side()};
 addEventListener("resize",()=>{clearTimeout(window._rt);window._rt=setTimeout(()=>{if(LM)LM.invalidateSize();if(CM)CM.invalidateSize()},250)});
 
 /* ---------- Drapeaux et fiches pays ---------- */
 function gflag(n,c){
   let h=0;for(const ch of n)h=(h*31+ch.charCodeAt(0))>>>0;
-  const c2=`hsl(${h%360},55%,45%)`,c3=`hsl(${(h*7)%360},60%,88%)`,a=c||c2;
+  const c2=hue(n+"x"),c3=`hsl(${(h*7)%360},60%,88%)`,a=c||c2;
   const b=[`<rect width="48" height="11" fill="${a}"/><rect y="11" width="48" height="10" fill="${c3}"/><rect y="21" width="48" height="11" fill="${c2}"/>`,
   `<rect width="16" height="32" fill="${a}"/><rect x="16" width="16" height="32" fill="${c3}"/><rect x="32" width="16" height="32" fill="${c2}"/>`,
   `<rect width="48" height="32" fill="${a}"/><rect x="14" width="8" height="32" fill="${c3}"/><rect y="12" width="48" height="8" fill="${c3}"/>`,
@@ -272,161 +573,220 @@ function gflag(n,c){
   return `<svg class="fl" viewBox="0 0 48 32">${b}</svg>`;
 }
 function flagOf(n){
-  const o=own(n),t=custom()&&MAPDATA?MAPDATA.t.find(x=>x.n===o):null,P=FP[n];
+  const o=own(n),q=custom()&&MAPDATA?MAPDATA.t.find(x=>x.n===o):null,P=FP[n];
   if(!custom()&&o===n&&P&&P.iso){const e=String.fromCodePoint(...[...P.iso.toUpperCase()].map(c=>127397+c.charCodeAt(0)));return `<img class="fl" alt="" src="https://flagcdn.com/w80/${esc(P.iso.toLowerCase())}.png" onerror="this.outerHTML='${e}'">`}
-  return gflag(o,t&&t.c);
+  return gflag(o,q&&q.c);
 }
 function showSel(){
   const e=$("#sel");if(!SEL){e.style.display="none";return}
   const o=own(SEL);e.style.display="flex";e.innerHTML=flagOf(SEL)+`<div><b>${esc(SEL)}</b>${o!==SEL?`<div class="mut small">→ ${esc(o)}</div>`:""}</div>`;
 }
 function select(n){SEL=n;showSel();colorMap();side()}
-const fk=o=>(G?G.year:LF.year)+"|"+o+"|"+((G?G.context:LF.ctx)||"").length;
+const fk=o=>(G?G.year:LF.year)+"|"+o+"|"+((G?G.context:LF.ctx)||"").length+"|"+LI;
 function card(){
   if(!SEL)return"";
-  const n=SEL,o=own(n),P=FP[n],t=custom()&&MAPDATA?MAPDATA.t.find(x=>x.n===o):null,a=t||FI[fk(o)],m=me();
+  const n=SEL,o=own(n),P=FP[n],q=custom()&&MAPDATA?MAPDATA.t.find(x=>x.n===o):null,a=q||FI[fk(o)],m=me();
   let kv=[],bars="";
   const fm=v=>v>=1e9?(v/1e9).toFixed(2)+" Md":v>=1e6?(v/1e6).toFixed(1)+" M":Math.round(v/1e3)+" k",cl=v=>String(v||"").replace(/^\d+\.\s*/,"");
-  if(P&&!custom()&&o===n)kv=[["Population",P.pop?fm(P.pop):""],["PIB",P.gdp?(P.gdp/1e3).toFixed(P.gdp>1e5?0:1)+" Md$":""],["PIB / hab.",P.pop&&P.gdp?Math.round(P.gdp*1e6/P.pop).toLocaleString("fr-FR")+" $":""],["Continent",P.cont+(P.sub?" · "+P.sub:"")],["Économie",cl(P.eco)],["Revenu",cl(P.inc)]];
+  if(P&&!custom()&&o===n)kv=[[t("Population"),P.pop?fm(P.pop):""],[t("PIB"),P.gdp?(P.gdp/1e3).toFixed(P.gdp>1e5?0:1)+" Md$":""],[t("PIB / hab."),P.pop&&P.gdp?Math.round(P.gdp*1e6/P.pop).toLocaleString(LN[LI][3])+" $":""],[t("Continent"),P.cont+(P.sub?" · "+P.sub:"")],[t("Économie"),cl(P.eco)],[t("Revenu"),cl(P.inc)]];
   const lst=v=>[].concat(v||[]).join(", ");
   if(a){
-    kv.push(["Régime",a.gov],["Capitale",a.cap],["Dirigeant",a.leader]);
-    if(t)kv.push(["Population",a.pop+" M"],["PIB",a.gdp+" Md$"]);
-    kv.push(["Ressources",lst(a.res)],["Alliés",lst(a.allies)],["Rivaux",lst(a.rivals)]);
+    kv.push([t("Régime"),a.gov],[t("Capitale"),a.cap],[t("Dirigeant"),a.leader]);
+    if(q)kv.push([t("Population"),a.pop+" M"],[t("PIB"),a.gdp+" Md$"]);
+    kv.push([t("Ressources"),lst(a.res)],[t("Alliés"),lst(a.allies)],[t("Rivaux"),lst(a.rivals)]);
     const bar=(l,v)=>Number.isFinite(+v)?`<div class="bar"><span>${l}</span><b><i style="width:${Math.max(0,Math.min(100,+v))}%"></i></b></div>`:"";
-    bars=bar("Armée",a.army)+bar("Économie",a.eco)+bar("Technologie",a.tech)+bar("Stabilité",a.stab);
+    bars=bar(t("Armée"),a.army)+bar(t("Économie"),a.eco)+bar(t("Technologie"),a.tech)+bar(t("Stabilité"),a.stab);
   }
   kv=kv.filter(([,v])=>v!=null&&v!==""&&!String(v).startsWith("undefined"));
   const free=!Object.values((G&&G.players)||{}).some(p=>p.nation===o),canPlay=G&&m&&!m.nation&&free;
-  return `<div class="card" id="cc"><div class="cc">${flagOf(n)}<div><h2>${esc(n)}</h2>${o!==n?`<div class="mut">Contrôlé par ${esc(o)}</div>`:""}</div></div>
+  return `<div class="card" id="cc"><div class="cc">${flagOf(n)}<div><h2>${esc(n)}</h2>${o!==n?`<div class="mut">${t("Contrôlé par {0}",esc(o))}</div>`:""}</div></div>
   ${a&&a.desc?`<p class="mut">${esc(a.desc)}</p>`:""}<div class="kv">${kv.map(([k,v])=>`<span>${k}</span><span>${esc(v)}</span>`).join("")}</div>${bars}
-  <div class="row">${canPlay?`<button data-n="${esc(o)}" onclick="pickSel(this.dataset.n)">🎮 Jouer ${esc(o)}</button>`:""}${!custom()&&!a?`<button class="ghost" onclick="ficheAI()" ${busy?"disabled":""}>${busy==="fi"?"L'IA rédige…":"📋 Fiche détaillée (IA)"}</button>`:""}<button class="ghost" onclick="selClear()">Fermer</button></div></div>`;
+  <div class="row">${canPlay?`<button data-n="${esc(o)}" onclick="pickSel(this.dataset.n)">${t("🎮 Jouer {0}",esc(o))}</button>`:""}${!custom()&&!a?`<button class="ghost" onclick="ficheAI()" ${busy?"disabled":""}>${busy==="fi"?t("L'IA rédige…"):t("📋 Fiche détaillée (IA)")}</button>`:""}<button class="ghost" onclick="selClear()">${t("Fermer")}</button></div></div>`;
 }
 window.selClear=()=>{SEL="";showSel();colorMap();side()};
 window.ficheAI=async()=>{
-  const o=own(SEL);if(!o||busy)return;busy="fi";msg="";side();
+  const o=own(SEL);if(!o||busy)return;busy="fi";side();
   try{
     const y=G?G.year:+LF.year||1936,c=G?G.context:LF.ctx;
-    const r=await ask(`Fiche réaliste de « ${o} » en l'an ${y}. Contexte du jeu : ${c||"monde réel"}.
+    const r=await ask(`Fiche réaliste de « ${o} » en l'an ${y}. Contexte du jeu : ${c||"monde réel"}. Écris les textes en ${LANGN()}.
 Réponds UNIQUEMENT en JSON : {"gov":"régime politique","cap":"capitale","leader":"dirigeant à cette date","gdp":<milliards de dollars>,"army":<0-100>,"eco":<0-100>,"tech":<0-100>,"stab":<0-100>,"res":["3 ressources clés"],"allies":["3 alliés max"],"rivals":["3 rivaux max"],"desc":"une phrase"}. Les notes de 0 à 100 sont relatives aux autres nations de l'époque.`);
     FI[fk(o)]=r;const ks=Object.keys(FI);while(ks.length>120)delete FI[ks.shift()];ls.set("fiches",JSON.stringify(FI));
-  }catch(e){msg=e.message}
+  }catch(e){toast("⚠️ "+e.message,9000)}
   busy="";side();
 };
 
+/* ---------- Narrateur vocal (voix du navigateur, gratuit) ---------- */
+const VM=/male|homme|thomas|daniel|jorge|diego|pablo|yuri|pavel|maxim|mikhail|kangkang|yunyang|yunjian|david|mark|james|oliver|google uk english male/i,VF=/female|femme|amelie|amélie|audrey|marie|aurelie|samantha|karen|paulina|monica|helena|milena|tatyana|katya|xiaoxiao|yaoyao|huihui|tingting|sin-ji|zira|hazel|google français|google español|google русский|google 普通话/i;
+function speak(txt){
+  if(!("speechSynthesis"in window)||!txt)return;speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(String(txt).slice(0,2500)),lc=LN[LI][3].slice(0,2),vs=speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith(lc));
+  const v=vs.find(x=>NAR.g==="m"?VM.test(x.name)&&!VF.test(x.name):VF.test(x.name))||vs[0];
+  u.lang=LN[LI][3];if(v)u.voice=v;u.rate=NAR.r;u.pitch=NAR.g==="m"?.8:1.1;speechSynthesis.speak(u);
+}
+window.speakLog=i=>{const l=(G.log||[])[i];if(l)speak(l.titre+". "+l.recit)};
+window.speakTest=()=>speak(t("Bienvenue sur Cap Historica."));
+window.stopSpeak=()=>{if("speechSynthesis"in window)speechSynthesis.cancel()};
+if("speechSynthesis"in window)speechSynthesis.onvoiceschanged=()=>{};
+
 /* ---------- Interface ---------- */
-function bar(){$("#bar").innerHTML=`<div class="logo">🌍 <b>Monde des Nations</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:"")}
+const LOGO=`<svg width="26" height="26" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/><path d="M16 4l3.5 12L16 28l-3.5-12z" fill="var(--ac)"/><path d="M4 16l12-3.5L28 16l-12 3.5z" fill="var(--hi)" opacity=".8"/></svg>`;
+function bar(){$("#bar").innerHTML=`<div class="logo">${LOGO}<b>Cap Historica</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:`<div><select onchange="setLang(this.value)" style="width:auto">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div>`)}
 function loginCard(){
-  return `<div class="card hero"><h2>Dirige une nation. Réécris l'histoire.</h2><p class="mut">Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, parties sauvegardées.</p>
-  <div class="grid2">${[["google","Google"],["microsoft","Microsoft"],["github","GitHub"],["apple","Apple"],["facebook","Facebook"],["twitter","X (Twitter)"]].map(([k,l])=>`<button class="ghost" onclick="loginWith('${k}')">${l}</button>`).join("")}</div>
-  <h2 style="margin-top:14px">Ou par e-mail</h2>
-  <input type="email" placeholder="E-mail" value="${esc(D.em||"")}" oninput="D.em=this.value"><input type="password" placeholder="Mot de passe (6 caractères min.)" value="${esc(D.pw||"")}" oninput="D.pw=this.value" style="margin-top:6px">
-  <div class="row"><button onclick="emailAuth('in')">Se connecter</button><button class="ghost" onclick="emailAuth('up')">Créer un compte</button><button class="ghost" onclick="emailAuth('reset')">Mot de passe oublié</button></div>
-  <p class="mut small">Un seul compte par personne : une adresse e-mail ne peut servir qu'à un compte, et un même appareil ne peut pas occuper deux comptes dans une partie. Les autres joueurs ne voient que ton pseudo.</p></div>`;
+  return `<div class="card hero"><h2>${t("Dirige une nation. Réécris l'histoire.")}</h2><p class="mut">${t("Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, mode éducatif, parties sauvegardées.")}</p>
+  <button class="big" onclick="loginG()">${t("Se connecter avec Google")}</button>
+  <h2 style="margin-top:16px">${t("Ou par e-mail")}</h2>
+  <input type="email" placeholder="${t("E-mail")}" value="${esc(D.em||"")}" oninput="D.em=this.value"><input type="password" placeholder="${t("Mot de passe (6 caractères min.)")}" value="${esc(D.pw||"")}" oninput="D.pw=this.value" style="margin-top:6px">
+  <div class="row"><button onclick="emailAuth('in')">${t("Se connecter")}</button><button class="ghost" onclick="emailAuth('up')">${t("Créer un compte")}</button><button class="ghost" onclick="emailAuth('reset')">${t("Mot de passe oublié")}</button></div>
+  <p class="mut small">${t("Un seul compte par personne : une adresse e-mail (alias compris) ne peut servir qu'à un compte. Les autres joueurs ne voient que ton pseudo.")}</p></div>`;
 }
 function settings(){
-  const P=AI.prov,fr=id=>PROV[P].free||/:free$/.test(id),L=[...new Set([mdl(),...(AI.lists[P]||[]),...PROV[P].def])];
-  return `<div class="card"><h2>⚙️ Réglages</h2>
-  <label>Pseudo (le seul nom visible par les autres joueurs)</label><input id="ps" maxlength="20" value="${esc(PSEUDO)}">
-  <label>Fournisseur d'IA</label><select id="pv" onchange="chProv(this.value)">${Object.entries(PROV).map(([k,v])=>`<option value="${k}" ${k===P?"selected":""}>${v.n}</option>`).join("")}</select>
-  <label>Clé API <a href="${PROV[P].k}" target="_blank" rel="noopener">(obtenir une clé)</a></label><input id="ky" type="password" autocomplete="off" value="${esc(AI.keys[P]||"")}">
-  <label>Modèle</label><div class="row"><select id="md">${L.map(o=>`<option value="${esc(o)}" ${o===mdl()?"selected":""}>${fr(o)?"🆓 ":""}${esc(o)}</option>`).join("")}</select><button class="ghost" onclick="loadModels()" ${busy?"disabled":""}>↻ Charger mes modèles</button></div>
-  <p class="mut small">Tes clés restent dans ce navigateur et ne sont jamais envoyées à d'autres joueurs. Les modèles 🆓 ont un quota gratuit.</p>
-  <p><button onclick="saveCfg()">Enregistrer</button></p></div>`;
+  const P=AI.prov,fr=id=>PROV[P].free||/:free$/.test(id),Ls=[...new Set([mdl(),...(AI.lists[P]||[]),...PROV[P].def])];
+  return `<div class="card"><h2>${t("⚙️ Réglages")}</h2>
+  <div class="row"><div style="flex:1"><label>${t("Langue")}</label><select onchange="setLang(this.value)">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div><div style="flex:1"><label>${t("Thème")}</label><select onchange="setTheme(this.value)">${[["ocean",t("Océan")],["parch",t("Parchemin")],["night",t("Nuit")]].map(([k,l])=>`<option value="${k}" ${k===TH?"selected":""}>${l}</option>`).join("")}</select></div></div>
+  <label>${t("Pseudo (seul nom visible par les autres)")}</label><input id="ps" maxlength="20" value="${esc(PSEUDO)}">
+  <label>${t("Fournisseur d'IA")}</label><select id="pv" onchange="chProv(this.value)">${Object.entries(PROV).map(([k,v])=>`<option value="${k}" ${k===P?"selected":""}>${v.n}</option>`).join("")}</select>
+  <label>${t("Clé API")} <a href="${PROV[P].k}" target="_blank" rel="noopener">(${t("obtenir une clé")})</a></label><input id="ky" type="password" autocomplete="off" value="${esc(AI.keys[P]||"")}">
+  <label>${t("Modèle")}</label><div class="row"><select id="md">${Ls.map(o=>`<option value="${esc(o)}" ${o===mdl()?"selected":""}>${fr(o)?"🆓 ":""}${esc(o)}</option>`).join("")}</select><button class="ghost" onclick="loadModels()" ${busy?"disabled":""}>${t("↻ Charger mes modèles")}</button></div>
+  <div class="row"><button class="ghost" onclick="testAI()" ${busy?"disabled":""}>${busy==="t"?"…":t("🧪 Tester l'IA")}</button></div>
+  <p class="mut small">${t("Tes clés restent dans ce navigateur et ne sont jamais envoyées aux autres joueurs. 🆓 = quota gratuit.")}</p>
+  <h2 style="margin-top:12px">${t("Narrateur vocal")}</h2>
+  <label><input type="checkbox" ${NAR.on?"checked":""} onchange="setNar('on',this.checked)"> ${t("Lire les récits à voix haute")}</label>
+  <div class="row"><div style="flex:1"><label>${t("Voix")}</label><select onchange="setNar('g',this.value)"><option value="f" ${NAR.g==="f"?"selected":""}>${t("Féminine")}</option><option value="m" ${NAR.g==="m"?"selected":""}>${t("Masculine")}</option></select></div><div style="flex:1"><label>${t("Vitesse")} (×${NAR.r})</label><input type="range" min="0.6" max="1.6" step="0.1" value="${NAR.r}" onchange="setNar('r',+this.value);side()"></div><button class="ghost" onclick="speakTest()">🔊</button></div>
+  <p><button onclick="saveCfg()">${t("Enregistrer")}</button></p></div>`;
+}
+function mapCard(){
+  const cu=custom(),modes=cu?[["owner","Propriétaire"],["army","Armée"],["eco","Économie"],["tech","Technologie"],["stab","Stabilité"],["pop","Population"]]:[["owner","Propriétaire"],["continent","Continent"],["pop","Population"],["gdp","PIB"],["income","Revenu"]];
+  return `<div class="card"><h2>${t("🎛️ Options de la carte")}</h2>
+  <label>${t("Mode d'affichage")}</label><select onchange="setMO('mode',this.value)">${modes.map(([k,l])=>`<option value="${k}" ${MO.mode===k?"selected":""}>${t(l)}</option>`).join("")}</select>
+  <label>${t("Opacité des couleurs")} (${MO.op}%)</label><input type="range" min="10" max="90" value="${MO.op}" onchange="setMO('op',+this.value)">
+  <label><input type="checkbox" ${MO.bd?"checked":""} onchange="setMO('bd',this.checked?1:0)"> ${t("Frontières")}</label>
+  <p class="mut small">${t("Fonds de carte, villes et noms : bouton en haut à gauche de la carte. La carte se prolonge à l'infini dans toutes les directions.")}</p>
+  <button class="ghost" onclick="mo()">${t("Fermer")}</button></div>`;
 }
 function readCfg(){const p=$("#ps"),v=$("#pv"),k=$("#ky"),m=$("#md");if(p)PSEUDO=p.value.replace(/[<>]/g,"").trim().slice(0,20);if(v&&PROV[v.value])AI.prov=v.value;if(k)AI.keys[AI.prov]=k.value.trim();if(m&&m.value)AI.models[AI.prov]=m.value}
+function stepSel(cur,fn){return `<select onchange="${fn}">${[1,3,6,12,60,120,300].map(v=>`<option value="${v}" ${v==cur?"selected":""}>${stepLbl(v)}</option>`).join("")}</select>`}
 function lobby(){
-  const T=LF.menu||(MINE.length?"mine":"new"),tabs=[["mine",`📂 Mes parties (${MINE.length}/${MAXG})`],["new","➕ Créer"],["join","🔑 Rejoindre"]].map(([k,l])=>`<button class="${T===k?"on":""}" onclick="mt('${k}')">${l}</button>`).join("");
+  const T=LF.menu||(MINE.length?"mine":"new"),tabs=[["mine",t("📂 Mes parties")+` (${MINE.length}/${MAXG})`],["new",t("➕ Créer")],["edu",t("🎓 Éducatif")],["join",t("🔑 Rejoindre")]].map(([k,l])=>`<button class="${T===k?"on":""}" onclick="mt('${k}')">${l}</button>`).join("");
   let b="";
   if(T==="mine")b=MINE.length?MINE.map(g=>{const idle=Math.floor((Date.now()-(g.lastActive||g.created||Date.now()))/DAY),host=g.host===user.uid;
-    return `<div class="card"><b>${esc(g.name||"Partie")}</b><div class="mut">${dateStr(g)} · ${Object.keys(g.players||{}).length}/${g.maxPlayers||8} joueurs · code ${esc(g.c)}${host?" · 👑 hôte":""}</div>${idle>=7?`<div class="toast">⚠️ Inactive depuis ${idle} jours. Sans activité elle sera supprimée automatiquement 14 jours après la dernière action. Veux-tu la garder ?</div>`:""}
-    <div class="row"><button data-c="${esc(g.c)}" onclick="join(this.dataset.c)">▶ Ouvrir</button>${idle>=7?`<button class="ghost" data-c="${esc(g.c)}" onclick="keepG(this.dataset.c)">Garder</button>`:""}${host?`<button class="ghost" data-c="${esc(g.c)}" onclick="delG(this.dataset.c)">🗑️ Supprimer</button>`:`<button class="ghost" data-c="${esc(g.c)}" onclick="leaveG(this.dataset.c)">Quitter</button>`}</div></div>`}).join(""):`<div class="card"><p class="mut">Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte, même si tu changes d'appareil.</p></div>`;
-  else if(T==="join")b=`<div class="card"><h2>🔑 Rejoindre une partie</h2><div class="row"><input placeholder="Code de la partie" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">Rejoindre</button></div></div>`;
-  else b=`<div class="card"><h2>🎛️ Paramètres</h2>
-  <label>Nom de la partie</label><input maxlength="40" placeholder="Partie de ${esc(PSEUDO)}" value="${esc(LF.name)}" oninput="LF.name=this.value">
-  <div class="row"><div><label>Joueurs max</label><input type="number" min="2" max="12" value="${esc(LF.max)}" oninput="LF.max=this.value"></div><div style="flex:1"><label>Durée d'un tour</label><select onchange="LF.step=+this.value">${[[1,"1 mois"],[3,"3 mois"],[6,"6 mois"],[12,"1 an"]].map(([v,l])=>`<option value="${v}" ${v==LF.step?"selected":""}>${l}</option>`).join("")}</select></div></div>
-  <div class="row"><div><label>Année de départ</label><input type="number" value="${esc(LF.year)}" oninput="LF.year=this.value"></div><div style="flex:1"><label>Mois</label><select onchange="LF.month=+this.value">${MO.map((m,i)=>`<option value="${i+1}" ${i+1==LF.month?"selected":""}>${m}</option>`).join("")}</select></div></div>
-  <label>Difficulté</label><div class="seg">${Object.keys(DIFF).map(k=>`<button class="${k===LF.diff?"on":""}" onclick="LF.diff='${k}';side()">${k}</button>`).join("")}</div><p class="mut small">${esc(DIFF[LF.diff])}</p>
-  <label><input type="checkbox" ${LF.aiOthers?"checked":""} onchange="LF.aiOthers=this.checked"> Les nations non jouées sont dirigées par l'IA (sinon elles restent passives)</label></div>
-  <div class="card"><h2>🗺️ Carte</h2><div class="seg"><button class="${LF.ai?"":"on"}" onclick="mk(0)">🌍 Monde réel</button><button class="${LF.ai?"on":""}" onclick="mk(1)">✨ Monde inventé</button></div>
-  ${LF.ai?`<textarea placeholder="Décris ton monde (réel ou imaginaire)…" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
-  <div>${["Un archipel de cités-États","La Terre du Milieu","L'Europe si Rome n'était jamais tombée","Un supercontinent futuriste en 2300"].map(i=>`<span class="tag" style="cursor:pointer" data-v="${esc(i)}" onclick="LF.md=this.dataset.v;side()">${esc(i)}</span>`).join("")}</div>
-  <p><button onclick="genMap()" ${busy?"disabled":""}>${busy==="map"?"L'IA dessine…":"✨ Générer la carte"}</button></p>
-  ${LIB.length?`<label>Mondes déjà générés (sans appel IA)</label><select onchange="useMap(this.value)"><option value="">— choisir —</option>${LIB.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("")}</select>`:""}`
-  :`<p class="mut">Vraie carte du monde (relief, satellite, rues, villes). Clique sur un pays pour voir son drapeau et sa fiche.</p>`}</div>
-  <div class="card"><h2>📜 Contexte historique</h2><textarea placeholder="Contexte (ou laisse l'IA l'écrire et redessiner les frontières de l'époque)" oninput="LF.ctx=this.value">${esc(LF.ctx)}</textarea>
-  <p><button class="ghost" onclick="scen()" ${busy?"disabled":""}>${busy==="scen"?"L'IA écrit…":"✨ Générer le contexte"}</button></p></div>
-  <button class="big" onclick="create()" ${busy?"disabled":""}>🚀 Créer la partie</button>`;
+    return `<div class="card"><b>${esc(g.name||"…")}</b>${g.edu?" 🎓":""}<div class="mut">${esc(dateStr(g))} · ${Object.keys(g.players||{}).length}/${g.maxPlayers||8} ${t("joueurs")} · ${esc(g.c)}${host?" · 👑":""}</div>${idle>=7?`<div class="warn">${t("⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?",idle)}</div>`:""}
+    <div class="row"><button data-c="${esc(g.c)}" onclick="join(this.dataset.c)">${t("▶ Ouvrir")}</button>${idle>=7?`<button class="ghost" data-c="${esc(g.c)}" onclick="keepG(this.dataset.c)">${t("Garder")}</button>`:""}${host?`<button class="ghost" data-c="${esc(g.c)}" onclick="delG(this.dataset.c)">${t("🗑️ Supprimer")}</button>`:`<button class="ghost" data-c="${esc(g.c)}" onclick="leaveG(this.dataset.c)">${t("Quitter")}</button>`}</div></div>`}).join(""):`<div class="card"><p class="mut">${t("Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte.")}</p></div>`;
+  else if(T==="join")b=`<div class="card"><h2>${t("🔑 Rejoindre")}</h2><div class="row"><input placeholder="${t("Code de la partie")}" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">${t("Rejoindre")}</button></div></div>`;
+  else if(T==="edu"){
+    const cl=LF.edu?EDU.find(x=>x.id===LF.edu.lvl):null;
+    b=`<div class="card"><h2>${t("🎓 Mode éducatif")}</h2><p class="mut">${t("Choisis ta classe puis une ou plusieurs époques du programme. Tu avances dans le temps, tu découvres dates, personnages et vocabulaire, et tu t'entraînes avec des quiz.")}</p>
+    <label>${t("Classe")}</label><select onchange="eduLvl(this.value)"><option value="">—</option>${EDU.map(c=>`<option value="${c.id}" ${cl&&cl.id===c.id?"selected":""}>${esc(eN(c.n))}</option>`).join("")}</select>
+    ${cl?`<label>${t("Époques à étudier")}</label>${cl.e.map((e,i)=>`<label style="color:var(--tx);font-size:15px"><input type="checkbox" ${LF.edu.eps.includes(i)?"checked":""} onchange="eduEp(${i},this.checked)"> ${esc(eN(e))} <span class="mut">(${yr(e[2])})</span></label>`).join("")}
+    <div class="row"><div><label>${t("Durée d'un tour")}</label>${stepSel(LF.step,"LF.step=+this.value")}</div><div style="flex:1"><label>${t("Nom de la partie")}</label><input maxlength="40" value="${esc(LF.name)}" oninput="LF.name=this.value"></div></div>
+    <p><button class="big" onclick="create(1)" ${busy||!LF.edu.eps.length?"disabled":""}>${busy==="scen"?t("L'IA prépare l'époque…"):t("🚀 Commencer")}</button></p>`:""}</div>`;
+  }else b=`<div class="card"><h2>${t("Paramètres")}</h2>
+  <label>${t("Nom de la partie")}</label><input maxlength="40" placeholder="${esc(PSEUDO)}" value="${esc(LF.name)}" oninput="LF.name=this.value">
+  <div class="row"><div><label>${t("Joueurs max")}</label><input type="number" min="2" max="12" value="${esc(LF.max)}" oninput="LF.max=this.value"></div><div style="flex:1"><label>${t("Durée d'un tour")}</label>${stepSel(LF.step,"LF.step=+this.value")}</div></div>
+  <div class="row"><div><label>${t("Année de départ")}</label><input type="number" value="${esc(LF.year)}" oninput="LF.year=this.value"></div><div style="flex:1"><label>${t("Mois")}</label><select onchange="LF.month=+this.value">${[...Array(12)].map((_,i)=>`<option value="${i+1}" ${i+1==LF.month?"selected":""}>${mon(i+1)}</option>`).join("")}</select></div></div>
+  <label>${t("Difficulté")}</label><div class="seg">${Object.keys(DIFF).map(k=>`<button class="${k===LF.diff?"on":""}" onclick="LF.diff='${k}';side()">${t(k)}</button>`).join("")}</div>
+  <label><input type="checkbox" ${LF.aiOthers?"checked":""} onchange="LF.aiOthers=this.checked"> ${t("Nations non jouées dirigées par l'IA")}</label></div>
+  <div class="card"><h2>${t("🗺️ Carte")}</h2><div class="seg"><button class="${LF.ai?"":"on"}" onclick="mk(0)">${t("🌍 Monde réel")}</button><button class="${LF.ai?"on":""}" onclick="mk(1)">${t("✨ Monde inventé")}</button></div>
+  ${LF.ai?`<textarea placeholder="${t("Décris ton monde (réel ou imaginaire)…")}" oninput="LF.md=this.value">${esc(LF.md)}</textarea>
+  <div>${["Un archipel de cités-États","La Terre du Milieu","L'Europe si Rome n'était jamais tombée","Un supercontinent futuriste en 2300"].map(i=>`<span class="tag" style="cursor:pointer" data-v="${esc(t(i))}" onclick="LF.md=this.dataset.v;side()">${esc(t(i))}</span>`).join("")}</div>
+  <div class="row"><div style="flex:1"><label>${t("Nations")} (${LF.gn})</label><input type="range" min="6" max="18" value="${LF.gn}" onchange="LF.gn=+this.value;side()"></div><div style="flex:1"><label>${t("Niveau de la mer")} (${LF.sea})</label><input type="range" min="0" max="100" value="${LF.sea}" onchange="LF.sea=+this.value;side()"></div></div>
+  <div class="row"><div style="flex:1"><label>${t("Relief")} (${LF.rel})</label><input type="range" min="0" max="100" value="${LF.rel}" onchange="LF.rel=+this.value;side()"></div><div style="flex:1"><label>${t("Îles et fragmentation")} (${LF.frag})</label><input type="range" min="0" max="100" value="${LF.frag}" onchange="LF.frag=+this.value;side()"></div></div>
+  <p><button onclick="genMap()" ${busy?"disabled":""}>${busy==="map"?t("L'IA dessine…"):t("✨ Générer la carte")}</button></p>
+  ${LIB.length?`<label>${t("Mondes déjà générés (sans appel IA)")}</label><select onchange="useMap(this.value)"><option value="">—</option>${LIB.map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("")}</select>`:""}`
+  :`<p class="mut">${t("Vraie carte du monde (relief, satellite, rues, villes). Clique sur un pays pour voir son drapeau et sa fiche.")}</p>`}</div>
+  <div class="card"><h2>${t("📜 Contexte historique")}</h2><textarea placeholder="${t("Contexte (ou laisse l'IA l'écrire et redessiner les frontières de l'époque)")}" oninput="LF.ctx=this.value">${esc(LF.ctx)}</textarea>
+  <p><button class="ghost" onclick="scen()" ${busy?"disabled":""}>${busy==="scen"?t("L'IA écrit…"):t("✨ Générer le contexte")}</button></p></div>
+  <button class="big" onclick="create()" ${busy?"disabled":""}>${t("🚀 Créer la partie")}</button>`;
   return `<div class="tabs">${tabs}</div>${b}`;
+}
+function learn(){
+  const log=G.log||[],last=[...log].reverse().find(l=>l.edu),ed=last&&last.edu,sc=me()&&me().sc||0;
+  const lk=q=>{const e=encodeURIComponent(q),l=LN[LI][0];return `<a href="https://${l}.wikipedia.org/wiki/Special:Search?search=${e}" target="_blank" rel="noopener">Wikipédia</a> · <a href="https://www.britannica.com/search?query=${e}" target="_blank" rel="noopener">Britannica</a>`};
+  const dates=log.flatMap(l=>(l.edu&&l.edu.dates)||[]).filter(x=>Number.isFinite(+x.a)).sort((a,b)=>a.a-b.a);
+  const cur=G.edu.eps.filter(e=>e.y<=G.year).pop()||G.edu.eps[0];
+  const head=`<div class="card"><h2>${t("🎓 Apprendre")} · ${esc(cur.n)}</h2><p class="mut">${esc(eN(EDU.find(c=>c.id===G.edu.lvl).n))} · ${t("Score")} : <b>${sc}</b> ⭐</p></div>`;
+  if(!ed)return head+`<div class="card"><p class="mut">${t("Joue un premier tour : les dates, personnages et quiz de l'époque apparaîtront ici.")}</p></div>`;
+  return head+`<div class="card"><h2>${t("Personnages")}</h2>${(ed.persos||[]).map(p=>`<p><b>${esc(p.n)}</b> — ${esc(p.r)} <span class="mut small">${lk(p.n)}</span></p>`).join("")}${ed.mot?`<h2>${t("Mot du jour")}</h2><p><b>${esc(ed.mot.t)}</b> : ${esc(ed.mot.d)} <span class="mut small">${lk(ed.mot.t)}</span></p>`:""}${ed.plus?`<h2>${t("Le saviez-vous ?")}</h2><p>${esc(ed.plus)}</p>`:""}<button class="ghost" onclick="speakLog(${log.indexOf(last)})">${t("🔊 Écouter")}</button></div>
+  <div class="card"><h2>${t("Quiz")}</h2>${(ed.quiz||[]).map((q,qi)=>{const k=G.turn+"-"+qi,a=D.qa&&D.qa[k];return `<div class="q"><b>${esc(q.q)}</b>${(q.o||[]).map((o,oi)=>`<button class="ghost ${a!==undefined?(oi===q.r?"ok":oi===a?"ko":""):""}" ${a!==undefined?"disabled":""} onclick="ans(${qi},${oi},${q.r})">${esc(o)}</button>`).join("")}${a!==undefined?`<p class="mut">${a===q.r?t("✅ Bonne réponse !"):t("❌ Raté…")} ${esc(q.e||"")}</p>`:""}</div>`}).join("")}</div>
+  <div class="card"><h2>${t("Dates à retenir")}</h2>${dates.map(x=>`<div><b>${yr(+x.a)}</b> — ${esc(x.t)} <span class="mut small">${lk(x.t)}</span></div>`).join("")||"—"}</div>
+  <div class="card"><h2>${t("📚 Sources")}</h2>${((ed.src||[]).map(x=>`<div class="mut">• ${esc(x)}</div>`).join(""))}<div class="mut" style="margin-top:6px">• ${t("Ton manuel et ton cahier de cours (priorité)")}</div><div class="mut">• ${t("Programme officiel de ta classe (Éduscol)")}</div><p class="warn small">${t("Contenu généré par une IA à partir de ces types de sources : il peut contenir des erreurs. Vérifie toujours avec ton manuel et les liens de recherche ci-dessus.")}</p></div>`;
 }
 function game(){
   if(D.turn!==G.turn){D.d=undefined;D.turn=G.turn}
   const P=Object.entries(G.players||{}),m=me(),host=G.host===user.uid,od=(G.orders&&G.orders[user.uid])||"",pl=P.filter(([,p])=>p.nation),nr=pl.filter(([,p])=>p.rt===G.turn).length;
   const idle=Math.floor((Date.now()-(G.lastActive||G.created||Date.now()))/DAY);let b="";
   if(TAB==="play"){
-    b=!m?`<div class="card"><p>Tu n'es plus dans cette partie.</p><button onclick="join('${esc(code)}')">Revenir</button></div>`
-    :!m.nation?`<div class="card"><h2>Choisis ta nation</h2><p class="mut">Clique sur la carte puis 🎮 Jouer, ou utilise la liste.</p><div class="row"><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select><button onclick="pickSel(document.getElementById('nsel').value)">Jouer</button></div></div>`
-    :`<div class="card"><h2>Tes ordres — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value" placeholder="Que fait ton gouvernement pendant ce tour ?">${esc(D.d??od)}</textarea>
-    <p class="mut">${m.rt===G.turn?"✅ Tu es prêt":"⏳ Pas encore prêt"} · ${nr}/${pl.length} joueurs prêts</p>
-    <div class="row">${m.rt===G.turn?`<button class="ghost" onclick="rdy(0)">↩️ Pas prêt</button>`:`<button onclick="rdy(1)" ${busy?"disabled":""}>✅ Je suis prêt</button>`}<button class="ghost" onclick="saveO()">💾 Enregistrer</button>${host?`<button class="ghost" onclick="force()" ${busy?"disabled":""}>${busy==="turn"?"L'IA simule…":"⏩ Forcer le tour"}</button>`:""}</div>
-    <p class="mut small">Le tour se résout automatiquement quand tous les joueurs sont prêts.</p></div>`;
+    b=!m?`<div class="card"><p>${t("Tu n'es plus dans cette partie.")}</p></div>`
+    :!m.nation?`<div class="card"><h2>${t("Choisis ta nation")}</h2><p class="mut">${t("Clique sur la carte puis 🎮 Jouer, ou utilise la liste.")}</p><div class="row"><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select><button onclick="pickSel(document.getElementById('nsel').value)">${t("Jouer")}</button></div></div>`
+    :`<div class="card"><h2>${t("Tes ordres")} — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value" placeholder="${G.edu?t("Tu peux aussi tenter des actions hors programme : l'IA les compare à la vraie histoire."):t("Que fait ton gouvernement pendant ce tour ?")}">${esc(D.d??od)}</textarea>
+    <p class="mut">${m.rt===G.turn?"✅":"⏳"} ${nr}/${pl.length} ${t("joueurs prêts")}</p>
+    <div class="row">${m.rt===G.turn?`<button class="ghost" onclick="rdy(0)">${t("↩️ Pas prêt")}</button>`:`<button onclick="rdy(1)" ${busy?"disabled":""}>${busy==="turn"?t("L'IA simule…"):t("✅ Je suis prêt")}</button>`}<button class="ghost" onclick="saveO()">${t("💾 Enregistrer")}</button>${host?`<button class="ghost" onclick="force()" ${busy?"disabled":""}>${busy==="turn"?t("L'IA simule…"):t("⏩ Forcer le tour")}</button>`:""}</div>
+    <p class="mut small">${t("Le tour se résout automatiquement quand tous les joueurs sont prêts.")}</p></div>`;
   }else if(TAB==="adv"){
-    b=!m||!m.nation?`<div class="card"><p class="mut">Choisis d'abord une nation.</p></div>`
-    :`<div class="card"><h2>🧠 Ton conseiller</h2>${CH.slice(-6).map(c=>`<div class="ch"><b>${esc(c.r)} :</b> ${esc(c.t)}</div>`).join("")||`<p class="mut">Pose une question ou demande des idées d'ordres.</p>`}
-    <input placeholder="Ta question…" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":"Demander"}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>💡 Suggérer des ordres</button></div></div>`;
-  }else if(TAB==="log"){
-    b=`<div class="card"><h2>📖 Contexte</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>📜 Chronique</h2>${(G.log||[]).slice().reverse().map(l=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)})</span><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">Rien pour l'instant.</p>`}</div>`;
+    b=!m||!m.nation?`<div class="card"><p class="mut">${t("Choisis d'abord une nation.")}</p></div>`
+    :`<div class="card"><h2>${t("🧠 Conseiller")}</h2>${CH.slice(-6).map(c=>`<div class="ch"><b>${esc(c.r)} :</b> ${esc(c.t)}</div>`).join("")||`<p class="mut">${t("Pose une question ou demande des idées d'ordres.")}</p>`}
+    <input placeholder="${t("Ta question…")}" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":t("Demander")}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>${t("💡 Suggérer des ordres")}</button></div></div>`;
+  }else if(TAB==="learn")b=learn();
+  else if(TAB==="log"){
+    b=`<div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2>${(G.log||[]).map((l,i)=>[l,i]).reverse().map(([l,i])=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)})</span> <button class="ghost" style="padding:2px 9px" onclick="speakLog(${i})">🔊</button><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">—</p>`}</div>`;
   }else{
-    b=`<div class="card"><h2>👥 Joueurs (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${id===user.uid?" (toi)":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">Exclure</button>`:""}</div>`).join("")}</div>
-    <div class="card"><h2>🔗 Inviter</h2><p class="mut">Code : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">📋 Copier le lien</button><button class="ghost" onclick="leaveG()">Quitter</button>${host?`<button class="ghost" onclick="delG()">🗑️ Supprimer</button>`:""}</div></div>
-    ${host?`<div class="card"><h2>🎛️ Paramètres de la partie</h2><label>Nom</label><input maxlength="40" value="${esc(G.name||"")}" onchange="setParam('name',this.value)">
-    <div class="row"><div><label>Joueurs max</label><input type="number" min="2" max="12" value="${esc(G.maxPlayers||8)}" onchange="setParam('maxPlayers',this.value)"></div><div style="flex:1"><label>Durée d'un tour</label><select onchange="setParam('step',this.value)">${[[1,"1 mois"],[3,"3 mois"],[6,"6 mois"],[12,"1 an"]].map(([v,l])=>`<option value="${v}" ${v==(G.step||12)?"selected":""}>${l}</option>`).join("")}</select></div></div>
-    <label>Difficulté</label><select onchange="setParam('diff',this.value)">${Object.keys(DIFF).map(k=>`<option ${k===G.diff?"selected":""}>${k}</option>`).join("")}</select>
-    <label><input type="checkbox" ${G.aiOthers!==false?"checked":""} onchange="setParam('aiOthers',this.checked)"> Nations non jouées dirigées par l'IA</label>
-    <label><input type="checkbox" ${G.locked?"checked":""} onchange="setParam('locked',this.checked)"> Fermer la partie aux nouveaux joueurs</label></div>`:""}`;
+    b=`<div class="card"><h2>${t("👥 Joueurs")} (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${G.edu?` · ${p.sc||0} ⭐`:""}${id===user.uid?" ("+t("toi")+")":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">${t("Exclure")}</button>`:""}</div>`).join("")}</div>
+    <div class="card"><h2>🔗</h2><p class="mut">${t("Code de la partie")} : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">${t("📋 Copier le lien")}</button><button class="ghost" onclick="leaveG()">${t("Quitter")}</button>${host?`<button class="ghost" onclick="delG()">${t("🗑️ Supprimer")}</button>`:""}</div></div>
+    ${host?`<div class="card"><h2>${t("Paramètres")}</h2><label>${t("Nom de la partie")}</label><input maxlength="40" value="${esc(G.name||"")}" onchange="setParam('name',this.value)">
+    <div class="row"><div><label>${t("Joueurs max")}</label><input type="number" min="2" max="12" value="${esc(G.maxPlayers||8)}" onchange="setParam('maxPlayers',this.value)"></div><div style="flex:1"><label>${t("Durée d'un tour")}</label>${stepSel(G.step||12,"setParam('step',this.value)")}</div></div>
+    <label>${t("Difficulté")}</label><select onchange="setParam('diff',this.value)">${Object.keys(DIFF).map(k=>`<option value="${k}" ${k===G.diff?"selected":""}>${t(k)}</option>`).join("")}</select>
+    <label><input type="checkbox" ${G.aiOthers!==false?"checked":""} onchange="setParam('aiOthers',this.checked)"> ${t("Nations non jouées dirigées par l'IA")}</label>
+    <label><input type="checkbox" ${G.locked?"checked":""} onchange="setParam('locked',this.checked)"> ${t("Fermer la partie aux nouveaux joueurs")}</label></div>`:""}`;
   }
-  return `${idle>=7?`<div class="toast">⚠️ Cette partie est inactive depuis ${idle} jours. Sans activité elle sera supprimée automatiquement 14 jours après la dernière action. <button class="ghost" onclick="keepG(code)">Garder la partie</button></div>`:""}
-  <div class="card head"><b>${esc(G.name||"Partie")}</b><span>· ${esc(dateStr(G))} · Tour ${esc(G.turn)}</span><span class="tag">${esc(G.diff)}</span><span class="tag">⏱ ${G.step===12||!G.step?"1 an":G.step+" mois"}/tour</span></div>
-  <div class="tabs">${[["play","🎮 Jouer"],["adv","🧠 Conseiller"],["log","📜 Chronique"],["ppl","👥 Joueurs"]].map(([k,l])=>`<button class="${TAB===k?"on":""}" onclick="tab('${k}')">${l}</button>`).join("")}</div>`+b;
+  const TB=[["play",t("🎮 Jouer")],["adv",t("🧠 Conseiller")],...(G.edu?[["learn",t("🎓 Apprendre")]]:[]),["log",t("📜 Chronique")],["ppl",t("👥 Joueurs")]];
+  return `${idle>=7?`<div class="warn">${t("⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?",idle)} <button class="ghost" onclick="keepG()">${t("Garder")}</button></div>`:""}
+  <div class="card head"><b>${esc(G.name||"…")}</b>${G.edu?" 🎓":""}<span>· ${esc(dateStr(G))} · ${t("Tour")} ${esc(G.turn)}</span><span class="tag">${t(G.diff)}</span><span class="tag">⏱ ${stepLbl(G.step||12)}</span></div>
+  <div class="tabs">${TB.map(([k,l])=>`<button class="${TAB===k?"on":""}" onclick="tab('${k}')">${l}</button>`).join("")}</div>`+b;
 }
 function side(){
   bar();const s=$("#side");$("#mapbox").style.display=user?"block":"none";
-  if(!ready){s.innerHTML=`<p class="mut">Chargement…</p>`;return}
-  const t=msg?`<div class="toast">${esc(msg)}</div>`:"";
-  if(!user){s.innerHTML=loginCard()+t;return}
-  const vb=needVerify()?`<div class="toast">📧 Vérifie ton adresse e-mail pour jouer (regarde aussi les spams). <div class="row"><button class="ghost" onclick="resend()">Renvoyer l'e-mail</button><button class="ghost" onclick="reloadU()">J'ai vérifié</button></div></div>`:"";
-  s.innerHTML=((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+t+card()+(G?game():lobby());
+  if(!ready){s.innerHTML=`<p class="mut">…</p>`;return}
+  if(!user){s.innerHTML=loginCard();return}
+  const vb=needVerify()?`<div class="warn">${t("📧 Vérifie ton adresse e-mail pour jouer (regarde aussi les spams).")}<div class="row"><button class="ghost" onclick="resend()">${t("Renvoyer l'e-mail")}</button><button class="ghost" onclick="reloadU()">${t("J'ai vérifié")}</button></div></div>`:"";
+  s.innerHTML=((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+(mapOpen?mapCard():"")+card()+(G?game():lobby());
 }
 
-/* ---------- Connexion ---------- */
-const authErr=e=>{const c=e.code||"";say(({"auth/operation-not-allowed":"Ce mode de connexion n'est pas activé dans Firebase.","auth/account-exists-with-different-credential":"Un compte existe déjà avec cet e-mail via un autre mode de connexion : utilise celui-là.","auth/email-already-in-use":"Cet e-mail a déjà un compte : connecte-toi.","auth/invalid-credential":"E-mail ou mot de passe incorrect.","auth/wrong-password":"E-mail ou mot de passe incorrect.","auth/user-not-found":"E-mail ou mot de passe incorrect.","auth/weak-password":"Mot de passe trop faible (6 caractères min.).","auth/invalid-email":"Adresse e-mail invalide.","auth/too-many-requests":"Trop d'essais, réessaie plus tard.","auth/popup-blocked":"Autorise les pop-ups pour ce site.","auth/popup-closed-by-user":"","auth/cancelled-popup-request":"","auth/unauthorized-domain":"Domaine non autorisé dans Firebase (Authentication > Paramètres)."})[c]??"Connexion impossible : "+c)};
-const PR={google:()=>new GoogleAuthProvider(),github:()=>new GithubAuthProvider(),facebook:()=>new FacebookAuthProvider(),twitter:()=>new TwitterAuthProvider(),microsoft:()=>new OAuthProvider("microsoft.com"),apple:()=>new OAuthProvider("apple.com")};
-window.loginWith=k=>signInWithPopup(auth,PR[k]()).catch(authErr);
+/* ---------- Connexion : Google et e-mail uniquement ---------- */
+const authErr=e=>{const c=e.code||"";say(({"auth/operation-not-allowed":t("Ce mode de connexion n'est pas activé dans Firebase."),"auth/account-exists-with-different-credential":t("Un compte existe déjà avec cet e-mail."),"auth/email-already-in-use":t("Cet e-mail a déjà un compte : connecte-toi."),"auth/invalid-credential":t("E-mail ou mot de passe incorrect."),"auth/wrong-password":t("E-mail ou mot de passe incorrect."),"auth/user-not-found":t("E-mail ou mot de passe incorrect."),"auth/weak-password":t("Mot de passe trop faible (6 caractères min.)."),"auth/invalid-email":t("Adresse e-mail invalide."),"auth/too-many-requests":t("Trop d'essais, réessaie plus tard."),"auth/popup-blocked":t("Autorise les pop-ups pour ce site."),"auth/popup-closed-by-user":"","auth/cancelled-popup-request":"","auth/unauthorized-domain":t("Domaine non autorisé dans Firebase (Authentication > Paramètres).")})[c]??"⚠️ "+c)};
+window.loginG=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(authErr);
 window.emailAuth=async m=>{
-  const e=(D.em||"").trim(),p=D.pw||"";if(!e)return say("Entre ton e-mail.");
+  const e=(D.em||"").trim(),p=D.pw||"";if(!e)return say(t("Entre ton e-mail."));
   try{
-    if(m==="reset"){await sendPasswordResetEmail(auth,e);return say("E-mail de réinitialisation envoyé.")}
-    if(p.length<6)return say("Mot de passe : 6 caractères minimum.");
+    if(m==="reset"){await sendPasswordResetEmail(auth,e);return say(t("E-mail de réinitialisation envoyé."))}
+    if(p.length<6)return say(t("Mot de passe trop faible (6 caractères min.)."));
     if(m==="up"){const c=await createUserWithEmailAndPassword(auth,e,p);await sendEmailVerification(c.user)}else await signInWithEmailAndPassword(auth,e,p);
   }catch(x){authErr(x)}
 };
-window.resend=async()=>{try{await sendEmailVerification(user);say("E-mail renvoyé.")}catch(e){authErr(e)}};
-window.reloadU=async()=>{try{await user.reload();user=auth.currentUser;say("")}catch(e){authErr(e)}};
+window.resend=async()=>{try{await sendEmailVerification(user);say(t("E-mail renvoyé."))}catch(e){authErr(e)}};
+window.reloadU=async()=>{try{await user.reload();user=auth.currentUser;side()}catch(e){authErr(e)}};
 window.out=()=>{stop();MINE=[];signOut(auth)};
 window.cfg=()=>{cfgOpen=!cfgOpen;side()};
+window.setLang=l=>{ls.set("lang",l);location.reload()};
+window.setTheme=v=>{TH=v;ls.set("th",v);document.documentElement.dataset.th=v;const c={ocean:"#07131f",parch:"#efe4cc",night:"#0f0d1a"}[v];document.querySelector('meta[name=theme-color]').content=c;side()};
+window.setNar=(k,v)=>{NAR[k]=v;ls.set("nar",JSON.stringify(NAR));if(k==="on"&&!v)stopSpeak()};
+window.setMO=(k,v)=>{MO[k]=v;ls.set("mo",JSON.stringify(MO));osig="";colorMap();side()};
 window.chProv=p=>{readCfg();AI.prov=p;side()};
-window.tab=t=>{TAB=t;msg="";side()};
-window.mt=t=>{LF.menu=t;msg="";side()};
+window.tab=x=>{TAB=x;side()};
+window.mt=x=>{LF.menu=x;side()};
 window.loadModels=async()=>{
-  readCfg();if(!AI.keys[AI.prov])return say("Colle d'abord ta clé.");
+  readCfg();if(!AI.keys[AI.prov])return say(t("Colle d'abord ta clé."));
   busy="mod";side();
-  try{const l=await listModels();AI.lists[AI.prov]=l;if(!l.includes(mdl())&&l.length)AI.models[AI.prov]=best(AI.prov,l);saveAI();cfgOpen=true;msg=l.length+" modèles trouvés pour ta clé."}
-  catch(e){msg=e.message}
+  try{const l=await listModels();AI.lists[AI.prov]=l;if(!l.includes(mdl())&&l.length)AI.models[AI.prov]=best(AI.prov,l);saveAI();cfgOpen=true;toast(t("{0} modèles trouvés pour ta clé.",l.length))}
+  catch(e){toast("⚠️ "+e.message,9000)}
+  busy="";side();
+};
+window.testAI=async()=>{
+  readCfg();saveAI();busy="t";side();
+  try{await ask('Réponds uniquement avec ce JSON : {"ok":true}');toast("✅ "+PROV[AI.prov].n.split(" ·")[0]+" · "+mdl()+" : OK",8000)}catch(e){toast("❌ "+e.message,12000)}
   busy="";side();
 };
 window.saveCfg=async()=>{
-  readCfg();if(!PSEUDO)return say("Choisis un pseudo.");
-  ls.set("pseudo",PSEUDO);saveAI();cfgOpen=false;msg="";
+  readCfg();if(!PSEUDO)return say(t("Choisis d'abord un pseudo."));
+  ls.set("pseudo",PSEUDO);saveAI();cfgOpen=false;
   if(G&&me())try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.name`]:PSEUDO})}catch{}
   side();if(!G&&location.hash.length>1)join(location.hash.slice(1));
 };
@@ -435,172 +795,212 @@ window.saveCfg=async()=>{
 window.mk=a=>{LF.ai=!!a;MAPDATA=a?LF.mapObj:null;drawMap();side()};
 window.useMap=id=>{const m=LIB.find(x=>x.id===id);if(m){LF.mapObj=m;LF.md=m.md||LF.md;MAPDATA=m;SEL="";drawMap();side()}};
 window.genMap=async()=>{
-  if(!LF.md.trim())return say("Décris d'abord ton monde.");
-  busy="map";msg="";side();
+  if(!LF.md.trim())return say(t("Décris d'abord ton monde."));
+  busy="map";side();
   try{
-    const r=await ask(`Conçois la carte politique et les nations jouables d'un jeu de géopolitique d'après cette demande (monde réel ou fictif) : « ${LF.md.slice(0,300)} ».
-Canevas 1000x600. Donne 10 à 16 nations crédibles et variées (noms, régimes, capitales cohérents avec l'univers). Chacune a un centre (x de 80 à 920, y de 70 à 530), un rayon r (de 50 à 140) qui fixe sa taille, une couleur et des attributs de jeu. Les nations voisines se touchent (distance entre centres inférieure à la somme des rayons) pour former des continents ; sépare les continents par de la mer ; respecte la géographie de la demande. Les notes (army, eco, tech, stab) vont de 0 à 100 et doivent différer d'une nation à l'autre : des puissances, des nations moyennes, des petits États fragiles.
-Réponds UNIQUEMENT en JSON : {"name":"nom de la carte","context":"contexte historique ou univers en 4 à 6 phrases en français","t":[{"n":"Nom court (24 caractères max)","x":300,"y":200,"r":90,"c":"#aabbcc","gov":"régime","cap":"capitale","pop":12.5,"gdp":300,"army":60,"eco":55,"tech":70,"stab":40,"res":["fer","blé"],"desc":"une phrase sur la nation"}]}. pop en millions d'habitants, gdp en milliards de dollars.`);
-    const used=new Set,num=(v,lo,hi,d)=>{v=+v;return Number.isFinite(v)?Math.max(lo,Math.min(hi,v)):d};let t=[];
+    const r=await ask(`Conçois la carte politique et les nations jouables d'un jeu de géopolitique d'après cette demande (monde réel ou fictif) : « ${LF.md.slice(0,300)} ». Écris tous les textes en ${LANGN()}.
+Canevas 1000x600 (la carte se prolonge de façon cyclique sur les bords). Donne ${LF.gn} nations crédibles et variées (noms, régimes, capitales cohérents avec l'univers). Chacune a un centre (x de 80 à 920, y de 70 à 530), un rayon r (de 50 à 140) qui fixe sa taille, une couleur, 3 villes et des attributs de jeu. Les nations voisines se touchent (distance entre centres inférieure à la somme des rayons) pour former des continents ; sépare les continents par de la mer ; respecte la géographie de la demande. Les notes (army, eco, tech, stab) vont de 0 à 100 et doivent différer d'une nation à l'autre : des puissances, des nations moyennes, des petits États fragiles.
+Ajoute 8 à 14 accidents géographiques nommés dans "f" : k = mountain | desert | forest | jungle | ice | lake | sea, avec x, y, r (30 à 90) et n (nom évocateur). Place les montagnes et les déserts de façon réaliste, la glace en haut et en bas de la carte.
+Réponds UNIQUEMENT en JSON : {"name":"nom de la carte","context":"contexte historique ou univers en 4 à 6 phrases","t":[{"n":"Nom court (24 caractères max)","x":300,"y":200,"r":90,"c":"#aabbcc","gov":"régime","cap":"capitale","cities":["ville1","ville2","ville3"],"pop":12.5,"gdp":300,"army":60,"eco":55,"tech":70,"stab":40,"res":["fer","blé"],"desc":"une phrase sur la nation"}],"f":[{"k":"mountain","x":400,"y":250,"r":60,"n":"Monts Aurelian"}]}. pop en millions d'habitants, gdp en milliards de dollars.`);
+    const used=new Set,num=(v,lo,hi,d)=>{v=+v;return Number.isFinite(v)?Math.max(lo,Math.min(hi,v)):d};let tt_=[];
     for(const x of Array.isArray(r.t)?r.t:[]){
       const n=String(x.n||"").replace(/[\/]/g,"").trim().slice(0,24),X=+x.x,Y=+x.y,Rr=+x.r;
       if(!n||used.has(n)||![X,Y,Rr].every(Number.isFinite))continue;used.add(n);
-      t.push({n,x:X,y:Y,r:Math.max(40,Math.min(150,Rr)),c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n),gov:String(x.gov||"").slice(0,40),cap:String(x.cap||"").slice(0,30),pop:Math.round(num(x.pop,.01,2000,10)*10)/10,gdp:Math.round(num(x.gdp,.1,30000,100)*10)/10,army:Math.round(num(x.army,0,100,50)),eco:Math.round(num(x.eco,0,100,50)),tech:Math.round(num(x.tech,0,100,50)),stab:Math.round(num(x.stab,0,100,50)),res:(Array.isArray(x.res)?x.res:[]).map(v=>String(v).slice(0,24)).slice(0,3),desc:String(x.desc||"").slice(0,160)});
+      tt_.push({n,x:X,y:Y,r:Math.max(40,Math.min(150,Rr)),c:/^#[0-9a-f]{6}$/i.test(x.c)?x.c:hue(n),gov:String(x.gov||"").slice(0,40),cap:String(x.cap||"").slice(0,30),cities:(Array.isArray(x.cities)?x.cities:[]).map(v=>String(v).slice(0,24)).slice(0,3),pop:Math.round(num(x.pop,.01,2000,10)*10)/10,gdp:Math.round(num(x.gdp,.1,30000,100)*10)/10,army:Math.round(num(x.army,0,100,50)),eco:Math.round(num(x.eco,0,100,50)),tech:Math.round(num(x.tech,0,100,50)),stab:Math.round(num(x.stab,0,100,50)),res:(Array.isArray(x.res)?x.res:[]).map(v=>String(v).slice(0,24)).slice(0,3),desc:String(x.desc||"").slice(0,160)});
     }
-    t=t.slice(0,18);if(t.length<4)throw Error("Carte invalide, réessaie avec une description plus précise.");
-    const x0=Math.min(...t.map(p=>p.x-p.r)),x1=Math.max(...t.map(p=>p.x+p.r)),y0=Math.min(...t.map(p=>p.y-p.r)),y1=Math.max(...t.map(p=>p.y+p.r));
+    tt_=tt_.slice(0,18);if(tt_.length<4)throw Error(t("Carte invalide : réessaie avec une description plus précise."));
+    const x0=Math.min(...tt_.map(p=>p.x-p.r)),x1=Math.max(...tt_.map(p=>p.x+p.r)),y0=Math.min(...tt_.map(p=>p.y-p.r)),y1=Math.max(...tt_.map(p=>p.y+p.r));
     const k=Math.max(.5,Math.min(1.8,Math.min(930/(x1-x0),540/(y1-y0))));
-    t=t.map(p=>({...p,x:Math.round((p.x-(x0+x1)/2)*k+500),y:Math.round((p.y-(y0+y1)/2)*k+300),r:Math.round(p.r*k)}));
-    const m={v:2,id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),seed:Math.floor(Math.random()*1e9),t};
+    const mx=(x0+x1)/2,my=(y0+y1)/2;
+    tt_=tt_.map(p=>({...p,x:Math.round((p.x-mx)*k+500),y:Math.round((p.y-my)*k+300),r:Math.round(p.r*k)}));
+    const FK=["mountain","desert","forest","jungle","ice","lake","sea"],f=(Array.isArray(r.f)?r.f:[]).filter(q=>q&&FK.includes(q.k)&&[q.x,q.y,q.r].every(v=>Number.isFinite(+v))).slice(0,16).map(q=>({k:q.k,x:Math.round((+q.x-mx)*k+500),y:Math.round((+q.y-my)*k+300),r:Math.round(Math.max(20,Math.min(120,+q.r*k))),n:String(q.n||"").slice(0,28)}));
+    const m={v:3,id:"m"+Date.now(),name:String(r.name||"Carte").slice(0,40),md:LF.md.slice(0,300),seed:Math.floor(Math.random()*1e9),p:{sea:LF.sea,rel:LF.rel,frag:LF.frag},t:tt_,f};
     LIB.push(m);while(LIB.length>8)LIB.shift();ls.set("maps",JSON.stringify(LIB));
     SEL="";LF.mapObj=m;if(r.context)LF.ctx=String(r.context).slice(0,1500);MAPDATA=m;drawMap();
-  }catch(e){msg=e.message}
+  }catch(e){toast("⚠️ "+e.message,9000)}
   busy="";side();
 };
-window.scen=async()=>{
-  busy="scen";msg="";side();
-  try{
-    const y=+LF.year||1936,n=names();
-    const r=await ask(`Jeu de géopolitique ${custom()?"sur une carte inventée ("+(MAPDATA?MAPDATA.name:"")+")":"sur la carte du monde moderne"}. Année ${y}. Thème : "${LF.ctx||LF.md||"monde réel"}".
+async function doScen(theme,y){
+  const n=names();
+  const r=await ask(`Jeu de géopolitique ${custom()?"sur une carte inventée ("+(MAPDATA?MAPDATA.name:"")+")":"sur la carte du monde moderne"}. Année ${y}. Thème : "${theme||LF.md||"monde réel"}". Écris les textes en ${LANGN()}.
 Noms de territoires valides (exactement) : ${n.join("; ")}.
-Réponds en JSON : {"context":"contexte historique de 5 à 8 phrases en français (puissances, alliances, tensions)","owners":{"<nom valide>":"<nom en français de l'État qui le contrôle en ${y}>"},"view":{"lat":0,"lng":0,"z":3}}. view est la zone du monde à montrer pour ce scénario (z de 2 à 6, ignoré pour une carte inventée). owners ne liste que les territoires dont le contrôleur diffère de leur nom (empires, colonies, URSS…), 150 entrées maximum.`);
-    const o={};for(const [k,v] of Object.entries(r.owners||{}))if(n.includes(k)&&typeof v==="string"&&v.trim()&&v!==k)o[k]=v.trim().slice(0,40);
-    LF.owners=o;LF.ctx=String(r.context||LF.ctx);
-    const v=r.view;if(!custom()&&v&&Number.isFinite(+v.lat)&&Number.isFinite(+v.lng)){LF.view={lat:+v.lat,lng:+v.lng,z:Math.max(2,Math.min(8,+v.z||3))};if(LM)LM.flyTo([LF.view.lat,LF.view.lng],LF.view.z)}
-  }catch(e){msg=e.message}
-  busy="";side();
-};
+Réponds en JSON : {"context":"contexte historique de 5 à 8 phrases (puissances, alliances, tensions)","owners":{"<nom valide>":"<nom de l'État qui le contrôle en ${y}>"},"view":{"lat":0,"lng":0,"z":3}}. view est la zone du monde à montrer pour ce scénario (z de 2 à 6, ignoré pour une carte inventée). owners ne liste que les territoires dont le contrôleur diffère de leur nom (empires, colonies, URSS…), 150 entrées maximum.`);
+  const o={};for(const [k,v] of Object.entries(r.owners||{}))if(n.includes(k)&&typeof v==="string"&&v.trim()&&v!==k)o[k]=v.trim().slice(0,40);
+  LF.owners=o;LF.ctx=String(r.context||LF.ctx);
+  const v=r.view;if(!custom()&&v&&Number.isFinite(+v.lat)&&Number.isFinite(+v.lng)){LF.view={lat:+v.lat,lng:+v.lng,z:Math.max(2,Math.min(8,+v.z||3))};if(LM)LM.flyTo([LF.view.lat,LF.view.lng],LF.view.z)}
+}
+window.scen=async()=>{busy="scen";side();try{await doScen(LF.ctx,+LF.year||1936)}catch(e){toast("⚠️ "+e.message,9000)}busy="";side()};
+window.eduLvl=id=>{LF.edu=id?{lvl:id,eps:[0]}:null;side()};
+window.eduEp=(i,on)=>{const s=new Set(LF.edu.eps);on?s.add(i):s.delete(i);LF.edu.eps=[...s].sort((a,b)=>a-b);side()};
 
 /* ---------- Parties : sauvegarde, quotas, multijoueur ---------- */
 async function loadMine(){
   if(!user)return;
   try{
     const s=await getDoc(doc(db,"users",user.uid)),codes=s.exists()?(s.data().games||[]):[],out=[];
-    for(const c of codes){try{const g=await getDoc(doc(db,"games",c));if(g.exists()&&(g.data().players||{})[user.uid])out.push({c,...g.data()})}catch{}}
+    for(const c of codes){try{
+      const g=await getDoc(doc(db,"games",c));if(!g.exists()||!(g.data().players||{})[user.uid])continue;
+      const d=g.data();
+      if(Date.now()-(d.lastActive||d.created||Date.now())>14*DAY){try{await deleteDoc(doc(db,"games",c));continue}catch{}}
+      out.push({c,...d});
+    }catch{}}
     MINE=out;
     if(out.length!==codes.length)await setDoc(doc(db,"users",user.uid),{games:out.map(x=>x.c),seen:Date.now()},{merge:true});
-  }catch(e){msg="Impossible de charger tes parties : "+(e.code||e.message)}
+  }catch(e){toast("⚠️ "+(e.code||e.message))}
 }
-const gate=k=>{if(!PSEUDO||(k&&!AI.keys[AI.prov])){cfgOpen=true;say(k?"Renseigne d'abord ton pseudo et une clé d'IA.":"Choisis d'abord un pseudo.");return false}if(needVerify()){say("Vérifie d'abord ton adresse e-mail.");return false}return true};
-window.create=async()=>{
+const gate=k=>{if(!PSEUDO||(k&&!AI.keys[AI.prov])){cfgOpen=true;say(k?t("Renseigne d'abord ton pseudo et une clé d'IA."):t("Choisis d'abord un pseudo."));return false}if(needVerify()){say(t("Vérifie d'abord ton adresse e-mail."));return false}return true};
+window.create=async edu=>{
   if(!gate(1))return;
-  if(LF.ai&&!MAPDATA)return say("Génère d'abord un monde.");
-  if(MINE.length>=MAXG)return say(`Limite de ${MAXG} parties atteinte : quitte ou supprime une partie.`);
+  if(!edu&&LF.ai&&!MAPDATA)return say(t("Génère d'abord un monde."));
+  if(MINE.length>=MAXG)return say(t("Limite de {0} parties atteinte : quitte ou supprime une partie.",MAXG));
+  let eduD=null,year=Math.trunc(+LF.year)||1936,month=+LF.month||1,name=LF.name,ctx=LF.ctx;
+  if(edu){
+    const cl=EDU.find(x=>x.id===LF.edu.lvl),eps=LF.edu.eps.map(i=>({n:eN(cl.e[i]),y:cl.e[i][2]}));
+    eduD={lvl:cl.id,eps};year=eps[0].y;month=1;LF.ai=false;MAPDATA=null;LF.view=null;LF.owners=null;
+    busy="scen";side();
+    try{await doScen(eps[0].n+" ("+eN(cl.n)+")",year);ctx=LF.ctx}catch(e){busy="";side();return toast("⚠️ "+e.message,9000)}
+    busy="";name=name||eN(cl.n)+" · "+eps[0].n;
+  }
   const c=Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>"ABCDEFGHJKMNPQRSTUVWXYZ23456789"[x%31]).join("");
   try{
     const b=writeBatch(db);
     b.set(doc(db,"users",user.uid),{games:arrayUnion(c),seen:Date.now()},{merge:true});
-    b.set(doc(db,"games",c),{host:user.uid,name:(LF.name||"Partie de "+PSEUDO).slice(0,40),maxPlayers:Math.max(2,Math.min(12,Math.trunc(+LF.max)||6)),step:+LF.step||12,aiOthers:LF.aiOthers!==false,locked:false,diff:LF.diff,year:Math.trunc(+LF.year)||1936,month:+LF.month||1,turn:1,context:(LF.ctx||"Monde réel.").slice(0,2000),ownersJson:JSON.stringify(LF.owners||{}),mapJson:LF.ai?JSON.stringify(MAPDATA):"",viewJson:LF.view?JSON.stringify(LF.view):"",log:[],orders:{},players:{[user.uid]:{name:PSEUDO,nation:"",dev:DEV,rt:0}},created:Date.now(),...touch()});
+    b.set(doc(db,"games",c),{sv:3,host:user.uid,name:(name||t("Partie de {0}",PSEUDO)).slice(0,40),maxPlayers:edu?12:Math.max(2,Math.min(12,Math.trunc(+LF.max)||6)),step:+LF.step||12,aiOthers:LF.aiOthers!==false,locked:false,diff:edu?"normal":LF.diff,year,month,turn:1,context:(ctx||"Monde réel.").slice(0,2000),ownersJson:JSON.stringify(LF.owners||{}),mapJson:!edu&&LF.ai?JSON.stringify(MAPDATA):"",viewJson:LF.view?JSON.stringify(LF.view):"",edu:eduD||null,lang:LI,log:[],orders:{},players:{[user.uid]:{name:PSEUDO,nation:"",dev:DEV,rt:0,sc:0}},created:Date.now(),...touch()});
     await b.commit();LF.owners=null;TAB="play";await loadMine();watch(c);
-  }catch(e){say(e.code==="permission-denied"?"Refusé : limite de parties atteinte ou règles Firebase pas à jour.":"Création impossible : "+(e.code||e.message))}
+  }catch(e){say(e.code==="permission-denied"?t("Refusé : limite de parties atteinte ou règles Firebase pas à jour."):"⚠️ "+(e.code||e.message))}
 };
 window.join=async c=>{
-  c=(c||"").trim().toUpperCase();if(!gate(0))return;if(!c)return say("Entre un code.");
+  c=(c||"").trim().toUpperCase();if(!gate(0))return;if(!c)return say(t("Entre un code."));
   try{
-    const ref=doc(db,"games",c),s=await getDoc(ref);if(!s.exists())return say("Code inconnu.");
+    const ref=doc(db,"games",c),s=await getDoc(ref);if(!s.exists())return say(t("Code inconnu."));
     const g=s.data(),P=g.players||{},has=!!P[user.uid];
     if(!has){
-      if(g.locked)return say("Cette partie est fermée aux nouveaux joueurs.");
-      if(Object.keys(P).length>=(g.maxPlayers||8))return say("Partie complète.");
-      if(Object.entries(P).some(([id,p])=>id!==user.uid&&p.dev&&p.dev===DEV))return say("Un autre compte est déjà utilisé sur cet appareil dans cette partie.");
-      if(MINE.length>=MAXG&&!MINE.some(x=>x.c===c))return say(`Limite de ${MAXG} parties atteinte : quitte ou supprime une partie.`);
+      if(g.locked)return say(t("Cette partie est fermée aux nouveaux joueurs."));
+      if(Object.keys(P).length>=(g.maxPlayers||8))return say(t("Partie complète."));
+      if(!g.edu&&Object.entries(P).some(([id,p])=>id!==user.uid&&p.dev&&p.dev===DEV))return say(t("Un autre compte est déjà utilisé sur cet appareil dans cette partie."));
+      if(MINE.length>=MAXG&&!MINE.some(x=>x.c===c))return say(t("Limite de {0} parties atteinte : quitte ou supprime une partie.",MAXG));
     }
     const b=writeBatch(db);
-    b.update(ref,{[`players.${user.uid}.name`]:PSEUDO,[`players.${user.uid}.dev`]:DEV,...(has?{}:{[`players.${user.uid}.nation`]:"",[`players.${user.uid}.rt`]:0}),...touch()});
+    b.update(ref,{[`players.${user.uid}.name`]:PSEUDO,[`players.${user.uid}.dev`]:DEV,...(has?{}:{[`players.${user.uid}.nation`]:"",[`players.${user.uid}.rt`]:0,[`players.${user.uid}.sc`]:0}),...touch()});
     b.set(doc(db,"users",user.uid),{games:arrayUnion(c),seen:Date.now()},{merge:true});
     await b.commit();await loadMine();TAB="play";watch(c);
-  }catch(e){say(e.code==="permission-denied"?"Refusé : limite de parties atteinte ou règles Firebase pas à jour.":"Impossible de rejoindre : "+(e.code||e.message))}
+  }catch(e){say(e.code==="permission-denied"?t("Refusé : limite de parties atteinte ou règles Firebase pas à jour."):"⚠️ "+(e.code||e.message))}
 };
-function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;SEL="";MAPDATA=LF.ai?LF.mapObj:null;csig="";history.replaceState(null,"",location.pathname);drawMap()}
+function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;SEL="";lastLog=-1;MAPDATA=LF.ai?LF.mapObj:null;csig="";history.replaceState(null,"",location.pathname);drawMap()}
 function watch(c){
-  stop();code=c;msg="";history.replaceState(null,"","#"+c);
+  stop();code=c;history.replaceState(null,"","#"+c);
   unsub=onSnapshot(doc(db,"games",c),s=>{
-    if(!s.exists()){stop();loadMine();return say("La partie a été supprimée.")}
+    if(!s.exists()){stop();loadMine();return say(t("La partie a été supprimée."))}
     G=s.data();own_=J(G.ownersJson||"{}",{});
-    if(!(G.players||{})[user.uid]){stop();loadMine();return say("Tu n'es plus dans cette partie.")}
+    if(!(G.players||{})[user.uid]){stop();loadMine();return say(t("Tu n'es plus dans cette partie."))}
     const mj=G.mapJson||"";
     if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else{colorMap();drawEv()}
+    const n=(G.log||[]).length;if(lastLog>=0&&n>lastLog&&NAR.on)speakLog(n-1);lastLog=n;
     const a=document.activeElement;if(!a||!["TEXTAREA","INPUT","SELECT"].includes(a.tagName))side();
-  },e=>{stop();say("Connexion à la partie perdue : "+e.code)});
+  },e=>{stop();say("⚠️ "+e.code)});
 }
-window.copyLink=async()=>{const l=location.origin+location.pathname+"#"+code;try{await navigator.clipboard.writeText(l);say("Lien copié ✓")}catch{say("Copie ce lien : "+l)}};
-window.keepG=async c=>{try{await updateDoc(doc(db,"games",c||code),touch());await loadMine();say("Partie conservée ✓")}catch(e){say("Échec : "+(e.code||e.message))}};
+window.copyLink=async()=>{const l=location.origin+location.pathname+"#"+code;try{await navigator.clipboard.writeText(l);say(t("Lien copié ✓"))}catch{say(l)}};
+window.keepG=async c=>{try{await updateDoc(doc(db,"games",c||code),touch());await loadMine();say(t("Partie conservée ✓"))}catch(e){say("⚠️ "+(e.code||e.message))}};
 window.leaveG=async c=>{
-  c=c||code;if(!confirm("Quitter cette partie ?"))return;
+  c=c||code;if(!confirm(t("Quitter cette partie ?")))return;
   try{const b=writeBatch(db);b.update(doc(db,"games",c),{[`players.${user.uid}`]:deleteField()});b.set(doc(db,"users",user.uid),{games:arrayRemove(c)},{merge:true});await b.commit()}catch{}
   if(c===code)stop();await loadMine();side();
 };
 window.delG=async c=>{
-  c=c||code;if(!confirm("Supprimer définitivement cette partie pour tout le monde ?"))return;
-  try{const b=writeBatch(db);b.delete(doc(db,"games",c));b.set(doc(db,"users",user.uid),{games:arrayRemove(c)},{merge:true});await b.commit()}catch(e){return say("Suppression impossible : "+(e.code||e.message))}
+  c=c||code;if(!confirm(t("Supprimer définitivement cette partie pour tout le monde ?")))return;
+  try{const b=writeBatch(db);b.delete(doc(db,"games",c));b.set(doc(db,"users",user.uid),{games:arrayRemove(c)},{merge:true});await b.commit()}catch(e){return say("⚠️ "+(e.code||e.message))}
   if(c===code)stop();await loadMine();side();
 };
 window.setParam=async(k,v)=>{
   if(!G||G.host!==user.uid)return;
-  const val=k==="step"||k==="maxPlayers"?Math.max(1,Math.min(12,+v||1)):k==="locked"||k==="aiOthers"?!!v:String(v).slice(0,40);
-  try{await updateDoc(doc(db,"games",code),{[k]:val,...touch()})}catch(e){say("Échec : "+e.code)}
+  const val=k==="step"?Math.max(1,+v||12):k==="maxPlayers"?Math.max(2,Math.min(12,+v||6)):k==="locked"||k==="aiOthers"?!!v:String(v).slice(0,40);
+  try{await updateDoc(doc(db,"games",code),{[k]:val,...touch()})}catch(e){say("⚠️ "+e.code)}
 };
-window.kick=async id=>{if(!G||G.host!==user.uid||id===user.uid)return;try{await updateDoc(doc(db,"games",code),{[`players.${id}`]:deleteField(),[`orders.${id}`]:deleteField(),...touch()})}catch(e){say("Échec : "+e.code)}};
+window.kick=async id=>{if(!G||G.host!==user.uid||id===user.uid)return;try{await updateDoc(doc(db,"games",code),{[`players.${id}`]:deleteField(),[`orders.${id}`]:deleteField(),...touch()})}catch(e){say("⚠️ "+e.code)}};
 async function pick(n){
   if(!G||!me())return;
-  if(me().nation)return say("Tu joues déjà "+me().nation+".");
-  if(Object.values(G.players).some(p=>p.nation===n))return say(n+" est déjà prise.");
-  try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.nation`]:n,...touch()});say("")}catch(e){say("Choix impossible : "+e.code)}
+  if(me().nation)return say(t("Tu joues déjà {0}.",me().nation));
+  if(Object.values(G.players).some(p=>p.nation===n))return say(t("{0} est déjà prise.",n));
+  try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.nation`]:n,...touch()});side()}catch(e){say("⚠️ "+e.code)}
 }
 window.pickSel=n=>n&&pick(n);
 const orderTxt=()=>String(D.d??((G.orders||{})[user.uid]||"")).slice(0,1500);
-window.saveO=async()=>{try{await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:orderTxt(),...touch()});D.d=undefined;say("Ordres enregistrés ✓")}catch(e){say("Échec : "+e.code)}};
+window.saveO=async()=>{try{await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:orderTxt(),...touch()});D.d=undefined;say(t("Ordres enregistrés ✓"))}catch(e){say("⚠️ "+e.code)}};
 window.rdy=async v=>{
   const m=me();if(!m||!m.nation||busy)return;
   try{
     await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:orderTxt(),[`players.${user.uid}.rt`]:v?G.turn:0,...touch()});D.d=undefined;
     if(v&&Object.entries(G.players).filter(([,p])=>p.nation).every(([id,p])=>id===user.uid||p.rt===G.turn))return resolve();
-    say(v?"Tu es prêt ✓":"")
-  }catch(e){say("Échec : "+e.code)}
+    if(v)toast(t("Tu es prêt ✓"));side();
+  }catch(e){say("⚠️ "+e.code)}
 };
 window.force=()=>{if(G&&G.host===user.uid)resolve()};
 const hist=()=>(G.log||[]).slice(-3).map(l=>`${l.date||l.year}: ${l.recit}`).join("\n")||"(début de partie)";
 window.advise=async s=>{
   const m=me(),q=s?"Propose-moi 3 ordres concrets et réalistes pour ce tour.":(D.q||"").trim();
   if(!m||!m.nation||!q)return;
-  CH.push({r:"Toi",t:s?"Suggère-moi des ordres.":q});D.q="";busy="adv";msg="";side();
-  try{CH.push({r:"Conseiller",t:await ask(`Tu es le conseiller de ${m.nation} dans un jeu de géopolitique. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff}. Événements récents :\n${hist()}\nContrôleurs modifiés : ${G.ownersJson}.\nQuestion du dirigeant : ${q}\nRéponds en français en moins de 120 mots, concret et fidèle à l'époque. Ne révèle rien des ordres des autres joueurs.`,false)})}
-  catch(e){CH.push({r:"⚠️",t:e.message})}
+  CH.push({r:"Toi",t:s?"Suggère-moi des ordres.":q});D.q="";busy="adv";side();
+  try{CH.push({r:t("🧠 Conseiller"),t:await ask(`Tu es le conseiller de ${m.nation} dans un jeu de géopolitique. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff}. Événements récents :\n${hist()}\nContrôleurs modifiés : ${G.ownersJson}.\n${G.edu?"Mode éducatif (niveau "+G.edu.lvl+") : explique simplement et cite dates et personnages.\n":""}Question du dirigeant : ${q}\nRéponds en ${LANGN()} en moins de 120 mots, concret et fidèle à l'époque. Ne révèle rien des ordres des autres joueurs.`,false)})}
+  catch(e){CH.push({r:"⚠️",t:e.message});toast("⚠️ "+e.message,9000)}
   busy="";side();
 };
+window.ans=async(qi,oi,r)=>{
+  D.qa=D.qa||{};const k=G.turn+"-"+qi;if(D.qa[k]!==undefined)return;D.qa[k]=oi;side();
+  if(oi===r)try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.sc`]:increment(1)})}catch{}
+};
 async function resolve(){
-  if(busy)return;busy="turn";msg="";side();
+  if(busy)return;busy="turn";side();
   try{
     const step=G.step||12,cu=custom(),o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
-    const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}.
+    const m0=(G.month||1)-1+step,ny=G.year+Math.floor(m0/12);
+    let eduP="";
+    if(G.edu){const cur=G.edu.eps.filter(e=>e.y<=ny).pop()||G.edu.eps[0],sw=G.edu.eps.some(e=>e.y>G.year&&e.y<=ny);
+      eduP=`\nMODE ÉDUCATIF — niveau « ${G.edu.lvl} ». Époques du programme : ${G.edu.eps.map(e=>e.n+" ("+e.y+")").join(", ")}. Époque en cours : ${cur.n}.${sw?" Nous entrons dans une nouvelle époque : mets à jour les frontières (changements) pour son début.":""} Ajoute aussi "edu":{"dates":[{"a":année entière,"t":"événement daté"}],"persos":[{"n":"nom","r":"rôle en une phrase"}],"mot":{"t":"terme","d":"définition simple"},"plus":"anecdote ou fait hors programme","quiz":[{"q":"question","o":["réponse A","réponse B","réponse C"],"r":0,"e":"explication courte"}]} avec 3 dates, 3 personnages, 1 mot, 1 anecdote et 2 questions de quiz. Ajoute "src":["2 à 4 références fiables réelles sur lesquelles s'appuie ce contenu : programme officiel de la classe (Éduscol / ministère), manuel scolaire de la classe, Encyclopædia Britannica, BnF-Gallica, Larousse…"]. Appuie-toi sur les programmes scolaires, les manuels et des sources reconnues ; n'invente ni date, ni personnage, ni citation, et dis « incertain » quand les historiens divergent. Les joueurs peuvent donner des ordres hors programme : accepte-les s'ils sont plausibles et explique leurs conséquences en les comparant à l'histoire réelle. Vocabulaire et difficulté adaptés à la classe.`}
+    const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}. Écris tous les textes en ${LANGN()}.
 Contrôleurs actuels qui diffèrent du nom d'origine : ${G.ownersJson}.
 Noms de territoires valides (exactement) : ${n.join("; ")}.
-${cu&&MAPDATA?"Attributs des nations : "+JSON.stringify(MAPDATA.t.map(t=>({n:t.n,gov:t.gov,pop:t.pop,gdp:t.gdp,army:t.army,eco:t.eco,tech:t.tech,stab:t.stab})))+"\n":""}Historique récent :\n${hist()}
+${cu&&MAPDATA?"Attributs des nations : "+JSON.stringify(MAPDATA.t.map(q=>({n:q.n,gov:q.gov,pop:q.pop,gdp:q.gdp,army:q.army,eco:q.eco,tech:q.tech,stab:q.stab})))+"\n":""}Historique récent :\n${hist()}
 Ordres des joueurs :\n${ords}
 ${G.aiOthers===false?"Les nations non jouées restent passives et n'agissent pas.":"Toutes les autres nations sont dirigées par toi, de façon cohérente et plausible selon l'époque."}
-Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases en français","evenements":[{"nation":"","texte":"court","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}]}. 3 à 8 événements localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).`);
+Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases","evenements":[{"nation":"","texte":"court","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}]${G.edu?',"edu":{}':""}}. 3 à 8 événements localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).${eduP}`);
     const w={...own_};
     (Array.isArray(r.changements)?r.changements:[]).forEach(c=>{if(!c||!n.includes(c.pays))return;const v=typeof c.proprietaire==="string"?c.proprietaire.trim().slice(0,40):"";if(!v||v===c.pays)delete w[c.pays];else w[c.pays]=v});
-    const nu=v=>Number.isFinite(+v)&&v!==null&&v!==""?+v:undefined;
-    const evs=(Array.isArray(r.evenements)?r.evenements:[]).slice(0,8).map(e=>{const q={nation:String(e.nation||"").slice(0,40),texte:String(e.texte||"").slice(0,200),ic:String(e.ic||"📍").slice(0,4)};
+    const nu=v=>v!==null&&v!==""&&Number.isFinite(+v)?+v:undefined,S=(v,l)=>String(v??"").slice(0,l);
+    const evs=(Array.isArray(r.evenements)?r.evenements:[]).slice(0,8).map(e=>{const q={nation:S(e.nation,40),texte:S(e.texte,200),ic:S(e.ic||"📍",4)};
       if(cu){const x=nu(e.x),y=nu(e.y);if(x!==undefined&&y!==undefined){q.x=Math.max(0,Math.min(1000,x));q.y=Math.max(0,Math.min(600,y))}}
       else{const a=nu(e.lat),b=nu(e.lng);if(a!==undefined&&b!==undefined&&Math.abs(a)<=85&&Math.abs(b)<=180){q.lat=a;q.lng=b}}return q});
+    let edu;
+    if(G.edu&&r.edu){const E=r.edu,A=Array.isArray;edu={dates:(A(E.dates)?E.dates:[]).slice(0,4).filter(x=>x&&nu(x.a)!==undefined).map(x=>({a:Math.round(+x.a),t:S(x.t,160)})),persos:(A(E.persos)?E.persos:[]).slice(0,4).map(x=>({n:S(x&&x.n,60),r:S(x&&x.r,160)})),mot:E.mot&&E.mot.t?{t:S(E.mot.t,60),d:S(E.mot.d,200)}:null,plus:S(E.plus,300),src:(A(E.src)?E.src:[]).slice(0,5).map(v=>S(v,160)),quiz:(A(E.quiz)?E.quiz:[]).slice(0,3).filter(x=>x&&A(x.o)&&x.o.length>=2).map(x=>({q:S(x.q,200),o:x.o.slice(0,4).map(v=>S(v,100)),r:Math.max(0,Math.min(x.o.length-1,Math.round(+x.r)||0)),e:S(x.e,200)}))}}
     const ref=doc(db,"games",code),turn=G.turn;
-    await runTransaction(db,async t=>{
-      const s=await t.get(ref);if(!s.exists()||s.data().turn!==turn)throw Error("Ce tour a déjà été résolu par un autre joueur.");
-      const d=s.data(),m0=(d.month||1)-1+(d.step||12),ny=d.year+Math.floor(m0/12),nm=m0%12+1;
-      t.update(ref,{year:ny,month:nm,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),...touch(),log:[...(d.log||[]),{titre:String(r.titre||"Nouveau tour").slice(0,120),recit:String(r.recit||"").slice(0,1500),year:d.year,date:dateStr(d),evenements:evs}].slice(-30)});
+    await runTransaction(db,async tx=>{
+      const s=await tx.get(ref);if(!s.exists()||s.data().turn!==turn)throw Error(t("Ce tour a déjà été résolu par un autre joueur."));
+      const d=s.data(),mm=(d.month||1)-1+(d.step||12),yy=d.year+Math.floor(mm/12),entry={titre:S(r.titre||"…",120),recit:S(r.recit,1500),year:d.year,date:dateStr(d),evenements:evs};if(edu)entry.edu=edu;
+      tx.update(ref,{year:yy,month:mm%12+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),...touch(),log:[...(d.log||[]),entry].slice(-30)});
     });
-    D.d=undefined;TAB="log";
-  }catch(e){msg=e.message||"Erreur"}
+    D.d=undefined;TAB=G.edu?"learn":"log";
+  }catch(e){toast("⚠️ "+(e.message||"Erreur"),10000)}
   busy="";side();
 }
 window.resolve=resolve;
 
-$("#sel").onclick=()=>{const c=$("#cc");if(c)scrollTo({top:c.getBoundingClientRect().top+scrollY-(innerWidth<960?$("#mapbox").offsetHeight+64:70),behavior:"smooth"})};
+/* ---------- Anti doubles comptes : registre d'e-mails normalisés ---------- */
+const normEmail=e=>{let [l,d]=String(e).toLowerCase().split("@");l=(l||"").split("+")[0];if(d==="gmail.com"||d==="googlemail.com"){l=l.replace(/\./g,"");d="gmail.com"}return l+"@"+d};
+const sha=async s=>Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s))),b=>b.toString(16).padStart(2,"0")).join("");
+async function claimEmail(){
+  if(!user.email)return true;
+  try{await getDoc(doc(db,"emails","_probe"))}catch{return true}
+  try{
+    const ref=doc(db,"emails",await sha(normEmail(user.email))),s=await getDoc(ref);
+    if(s.exists())return s.data().uid===user.uid;
+    await setDoc(ref,{uid:user.uid});return true;
+  }catch(e){return false}
+}
+
+$("#sel").onclick=()=>{const c=$("#cc");if(c)scrollTo({top:c.getBoundingClientRect().top+scrollY-(innerWidth<960?$("#mapbox").offsetHeight+70:76),behavior:"smooth"})};
 onAuthStateChanged(auth,async u=>{
   user=u;ready=true;side();
   if(!u){stop();return}
+  if(!(await claimEmail())){toast(t("Cette adresse e-mail (ou un de ses alias) est déjà liée à un autre compte."),12000);await signOut(auth);return}
   await Promise.all([loadWorld().catch(()=>{}),loadMine()]);
   drawMap();side();
   if(location.hash.length>1&&PSEUDO)join(location.hash.slice(1));
