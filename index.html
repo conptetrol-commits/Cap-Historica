@@ -61,10 +61,12 @@ a{color:var(--hi)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:14px;margin:8px 0}.kv span:nth-child(odd){color:var(--mu)}
 .q{border:1px solid var(--bd);border-radius:12px;padding:10px;margin:8px 0;background:var(--p2)}.q button{display:block;width:100%;text-align:left;margin:5px 0}
 .ok{outline:2px solid #34d399}.ko{outline:2px solid #f87171}
+#mapbox.fs{position:fixed!important;inset:0;top:0!important;z-index:3000;border-radius:0;border:0}
+#mapbox.fs #lmap,#mapbox.fs #cmap{aspect-ratio:auto;height:100vh;height:100dvh}
 ::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:9px}
 </style></head><body>
 <header id="bar"></header>
-<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Zoom">⤢</button><button onclick="mo()" aria-label="Map options">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
+<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Fullscreen" title="F">⤢</button><button onclick="mo()" aria-label="Map options" title="O">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
 <div id="toast" onclick="this.style.display='none'"></div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -291,7 +293,19 @@ const TT=[
 ["Vérifie d'abord ton adresse e-mail.", "Verify your email address first."],
 ["{0} est déjà prise.", "{0} is already taken."],
 ["{0} modèles trouvés pour ta clé.", "{0} models found for your key."],
-["Quota atteint", "Quota reached"]
+["Quota atteint", "Quota reached"],
+["Voix du système", "System voice", "Voz del sistema", "系统语音", "Голос системы"],
+["Timbre", "Pitch", "Tono", "音调", "Тембр"],
+["Aucune voix trouvée pour cette langue sur cet appareil.", "No voice found for this language on this device."],
+["L'IA est occupée, nouvel essai…", "The AI is busy, retrying…"],
+["Délai dépassé : l'IA ne répond pas.", "Timed out: the AI is not responding."],
+["Un autre joueur résout déjà ce tour.", "Another player is already resolving this turn."],
+["💾 Exporter", "💾 Export", "💾 Exportar", "💾 导出", "💾 Экспорт"],
+["📥 Importer", "📥 Import", "📥 Importar", "📥 导入", "📥 Импорт"],
+["Fichier invalide.", "Invalid file."],
+["Partie importée ✓", "Game imported ✓"],
+["Ma nation", "My nation", "Mi nación", "我的国家", "Моя нация"],
+["Diplomatie", "Diplomacy", "Diplomacia", "外交", "Дипломатия"]
 ];
 const LN=[["fr","Français","français","fr-FR"],["en","English","English","en-US"],["es","Español","español","es-ES"],["zh","中文","中文 (chinois simplifié)","zh-CN"],["ru","Русский","русский","ru-RU"]];
 let LI=Math.max(0,LN.findIndex(l=>l[0]===(ls.get("lang")||(navigator.language||"fr").slice(0,2))));
@@ -312,7 +326,7 @@ const PROV={
 };
 /* Programme scolaire : [nom FR, nom EN, année de début] */
 const EDU=[
- {id:"g",n:["Culture générale (hors école)","General knowledge (no school)"],e:[["Les grandes civilisations antiques","Ancient civilizations",-3000],["L'Antiquité classique","Classical antiquity",-500],["Le haut Moyen Âge","Early Middle Ages",476],["Le Moyen Âge central","High Middle Ages",1000],["La Renaissance","The Renaissance",1450],["Les Temps modernes","Early modern era",1650],["L'ère des révolutions","Age of revolutions",1789],["Le XIXe siècle","The 19th century",1850],["Le XXe siècle","The 20th century",1914],["Le monde contemporain","The contemporary world",1991]]},
+ {id:"g",n:["Culture générale (hors cursus)","General knowledge (outside school)"],e:[["La Préhistoire", "Prehistory", -30000], ["La naissance de l'agriculture", "Birth of agriculture", -10000], ["Sumer et l'Égypte des pharaons", "Sumer and pharaonic Egypt", -3000], ["L'âge du bronze et les premiers empires", "Bronze Age and first empires", -1500], ["L'Empire perse", "The Persian Empire", -550], ["Athènes et la Grèce classique", "Athens and Classical Greece", -480], ["Alexandre le Grand", "Alexander the Great", -336], ["Rome et la Chine des Han", "Rome and Han China", -221], ["L'Empire romain", "The Roman Empire", -27], ["La chute de Rome", "The fall of Rome", 476], ["La Chine des Tang", "Tang China", 618], ["Byzance et l'essor de l'Islam", "Byzantium and the rise of Islam", 632], ["Les Vikings", "The Vikings", 793], ["Charlemagne", "Charlemagne", 800], ["L'âge d'or islamique", "Islamic Golden Age", 850], ["Le Moyen Âge central", "High Middle Ages", 1000], ["Les Croisades", "The Crusades", 1095], ["Le Japon des samouraïs", "Samurai Japan", 1185], ["L'Empire mongol", "The Mongol Empire", 1206], ["L'Empire du Mali", "Mali Empire", 1235], ["La Peste noire", "The Black Death", 1347], ["Aztèques et Incas", "Aztecs and Incas", 1428], ["La Renaissance", "The Renaissance", 1450], ["Les Grandes Découvertes", "Age of Discovery", 1492], ["La Réforme protestante", "The Reformation", 1517], ["Ottomans et Moghols", "Ottomans and Mughals", 1556], ["L'Europe des Lumières", "The Enlightenment", 1715], ["La révolution industrielle", "Industrial Revolution", 1760], ["Les révolutions atlantiques", "Atlantic revolutions", 1776], ["L'Empire napoléonien", "Napoleonic Empire", 1804], ["L'âge des empires coloniaux", "Age of colonial empires", 1850], ["La Première Guerre mondiale", "World War I", 1914], ["La Seconde Guerre mondiale", "World War II", 1939], ["La Guerre froide", "Cold War", 1947], ["L'ère numérique", "The digital age", 1991], ["Un futur proche (fiction)", "A near future (fiction)", 2030]]},
  {id:"cm",n:["Primaire (CM1-CM2)","Primary (grades 4-5)"],e:[["Préhistoire","Prehistory",-30000],["Les Gaulois et Rome","Gauls and Romans",-52],["Charlemagne","Charlemagne",800],["Louis XIV","Louis XIV",1661],["La Révolution française","French Revolution",1789],["Napoléon","Napoleon",1804],["La Première Guerre mondiale","World War I",1914]]},
  {id:"6",n:["6e","Grade 6"],e:[["Le Néolithique","Neolithic",-8000],["Mésopotamie et Égypte","Mesopotamia and Egypt",-3000],["La Grèce classique","Classical Greece",-480],["Rome et son empire","Rome and its empire",-27],["Naissance du christianisme","Rise of Christianity",30]]},
  {id:"5",n:["5e","Grade 7"],e:[["Byzance et l'Islam","Byzantium and Islam",632],["Charlemagne","Charlemagne",800],["La féodalité","Feudalism",1000],["Les Croisades","The Crusades",1095],["La guerre de Cent Ans","Hundred Years' War",1337],["Renaissance et Grandes Découvertes","Renaissance and Age of Discovery",1492]]},
@@ -325,7 +339,7 @@ const EDU=[
 const eN=a=>a[LI===0?0:1];
 
 const app=initializeApp(FB),auth=getAuth(app),db=getFirestore(app);
-let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",cfgOpen=false,mapOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null,SEL="",MINE=[],LM=null,LGs=[],CM=null,TR=null,OVs=[],CLs=[],EVL={},fitted=false,cgen=0,osig="",csig="",lastLog=-1,tt=0;
+let user=null,ready=false,G=null,code="",feats=[],own_={},unsub=null,busy="",cfgOpen=false,mapOpen=false,CH=[],TAB="play",MAPDATA=null,curMJ=null,SEL="",MINE=[],LM=null,LGs=[],CM=null,TR=null,OVs=[],CLs=[],EVL={},fitted=false,cgen=0,osig="",csig="",lastLog=-1,tt=0,psig="";
 const FP={},FI=J(ls.get("fiches"),{}),RC={};
 let PSEUDO=ls.get("pseudo"),DEV=ls.get("dev"),TH=ls.get("th")||"ocean";
 if(!DEV){DEV=Array.from(crypto.getRandomValues(new Uint8Array(12)),x=>x.toString(16).padStart(2,"0")).join("");ls.set("dev",DEV)}
@@ -335,7 +349,7 @@ if(!AI){AI={prov:"gemini",keys:{},models:{},lists:{}};if(ls.get("gk"))AI.keys.ge
 AI.keys=AI.keys||{};AI.models=AI.models||{};AI.lists=AI.lists||{};if(!PROV[AI.prov])AI.prov="gemini";
 const saveAI=()=>ls.set("ai",JSON.stringify(AI)),mdl=()=>AI.models[AI.prov]||PROV[AI.prov].def[0];
 const MO=Object.assign({op:45,bd:1,lb:1,grid:1,mode:"owner"},J(ls.get("mo"),{}));
-const NAR=Object.assign({on:false,g:"f",r:1},J(ls.get("nar"),{}));
+const NAR=Object.assign({on:false,g:"f",r:1,p:1,v:""},J(ls.get("nar"),{}));
 const LIB=J(ls.get("maps"),[]).filter(m=>m&&m.v>=2&&m.t&&m.t[0]);
 const LF=window.LF={name:"",max:6,step:12,year:1936,month:1,diff:"normal",aiOthers:true,ctx:"",ai:false,md:"",mapObj:null,view:null,owners:null,jc:"",menu:"",gn:12,sea:50,rel:50,frag:50,edu:null};
 const D=window.D={};
@@ -377,17 +391,24 @@ async function listModels(P=AI.prov){
 const best=(P,l)=>P==="gemini"?l.filter(n=>/^gemini-[\d.]+-flash$/.test(n)).sort().pop()||l.find(n=>/flash/.test(n))||l[0]:l[0];
 async function call(p,json,M){
   const P=AI.prov,K=AI.keys[P];let r;
-  if(P==="gemini")r=await fetch(`${GL}/${encodeURIComponent(M)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":K},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9,maxOutputTokens:8192}:{temperature:.8,maxOutputTokens:2048}})});
-  else if(P==="anthropic")r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:M,max_tokens:8192,messages:[{role:"user",content:p}]})});
-  else r=await fetch(PROV[P].base+"/chat/completions",{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+K},body:JSON.stringify({model:M,messages:[{role:"user",content:p}],temperature:.9})});
+  if(P==="gemini")r=await fx(`${GL}/${encodeURIComponent(M)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":K},body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:json?{responseMimeType:"application/json",temperature:.9,maxOutputTokens:8192}:{temperature:.8,maxOutputTokens:2048}})});
+  else if(P==="anthropic")r=await fx("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":K,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:M,max_tokens:8192,messages:[{role:"user",content:p}]})});
+  else r=await fx(PROV[P].base+"/chat/completions",{method:"POST",headers:{"content-type":"application/json",authorization:"Bearer "+K},body:JSON.stringify({model:M,messages:[{role:"user",content:p}],temperature:.9})});
   if(!r.ok){const e=Error("api");e.status=r.status;e.m=await bad(r);throw e}
   const j=await r.json();
   return P==="gemini"?(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text||"").join(""):P==="anthropic"?(j.content||[]).map(x=>x.text||"").join(""):(j.choices?.[0]?.message?.content||"");
 }
+const fx=async(u,o,ms=60000)=>{const c=new AbortController(),id=setTimeout(()=>c.abort(),ms);try{return await fetch(u,{...o,signal:c.signal})}catch(e){if(e.name==="AbortError"){const x=Error(t("Délai dépassé : l'IA ne répond pas."));x.user=1;throw x}throw e}finally{clearTimeout(id)}};
+async function callRetry(p,json){
+  for(let a=0;;a++){
+    try{return await call(p,json,mdl())}catch(e){
+      if(e.message==="api"&&[429,500,502,503,504].includes(e.status)&&a<2){toast(t("L'IA est occupée, nouvel essai…"),3000);await new Promise(r=>setTimeout(r,(e.status===429?6000:2500)*(a+1)));continue}
+      throw e}}}
 async function ask(p,json=true,retry=true){
   const P=AI.prov;if(!AI.keys[P])throw Error(t("Ajoute ta clé d'IA dans ⚙️ Réglages."));
   let tx;
-  try{tx=await call(p,json,mdl())}catch(e){
+  try{tx=await callRetry(p,json)}catch(e){
+    if(e.user)throw e;
     if(e.message!=="api")throw Error(t("Connexion impossible : ce fournisseur bloque peut-être les requêtes depuis un navigateur, ou tu es hors ligne."));
     if(retry&&(e.status===404||/not found|does not exist|decommission|deprecat|no longer/i.test(e.m))){
       const l=await listModels(P).catch(()=>[]),n=best(P,l);if(n&&n!==mdl()){AI.models[P]=n;saveAI();return ask(p,json,false)}
@@ -557,9 +578,13 @@ function drawMap(){
   const cu=custom();$("#lmap").style.display=cu?"none":"block";$("#cmap").style.display=cu?"block":"none";
   if(cu)drawCustom();else drawLeaf();showSel();drawEv();
 }
-window.eb=()=>{$("#mapbox").classList.toggle("big");setTimeout(()=>{if(custom()&&CM&&TR){CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:false})}else if(LM)fitWorld()},60)};
-window.mo=()=>{mapOpen=!mapOpen;side()};
-addEventListener("resize",()=>{clearTimeout(window._rt);window._rt=setTimeout(()=>{if(LM)LM.invalidateSize();if(CM)CM.invalidateSize()},250)});
+const refit=()=>{if(LM)LM.invalidateSize();if(CM){CM.invalidateSize();if(TR){const mz=CM.getBoundsZoom([[0,0],[600,1000]],false);CM.setMinZoom(mz);if(CM.getZoom()<mz)CM.fitBounds([[0,0],[600,1000]],{animate:false})}}};
+window.eb=()=>{const b=$("#mapbox"),on=!b.classList.contains("fs");b.classList.toggle("fs",on);document.body.style.overflow=on?"hidden":"";
+  if(on&&b.requestFullscreen&&!document.fullscreenElement)b.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});
+  setTimeout(refit,80)};
+document.addEventListener("fullscreenchange",()=>{const b=$("#mapbox");if(!document.fullscreenElement&&b.classList.contains("fs")){b.classList.remove("fs");document.body.style.overflow="";setTimeout(refit,80)}});
+window.mo=()=>{if($("#mapbox").classList.contains("fs"))eb();mapOpen=!mapOpen;side()};
+{let rt=0;new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(refit,150)}).observe($("#mapbox"))}
 
 /* ---------- Drapeaux et fiches pays ---------- */
 function gflag(n,c){
@@ -615,18 +640,34 @@ Réponds UNIQUEMENT en JSON : {"gov":"régime politique","cap":"capitale","leade
   busy="";side();
 };
 
-/* ---------- Narrateur vocal (voix du navigateur, gratuit) ---------- */
+/* ---------- Narrateur vocal (voix du navigateur, file anti-coupure) ---------- */
 const VM=/male|homme|thomas|daniel|jorge|diego|pablo|yuri|pavel|maxim|mikhail|kangkang|yunyang|yunjian|david|mark|james|oliver|google uk english male/i,VF=/female|femme|amelie|amélie|audrey|marie|aurelie|samantha|karen|paulina|monica|helena|milena|tatyana|katya|xiaoxiao|yaoyao|huihui|tingting|sin-ji|zira|hazel|google français|google español|google русский|google 普通话/i;
-function speak(txt){
-  if(!("speechSynthesis"in window)||!txt)return;speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(String(txt).slice(0,2500)),lc=LN[LI][3].slice(0,2),vs=speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith(lc));
-  const v=vs.find(x=>NAR.g==="m"?VM.test(x.name)&&!VF.test(x.name):VF.test(x.name))||vs[0];
-  u.lang=LN[LI][3];if(v)u.voice=v;u.rate=NAR.r;u.pitch=NAR.g==="m"?.8:1.1;speechSynthesis.speak(u);
+const hasTTS="speechSynthesis"in window;let VOICES=[],spk=0;
+const refreshVoices=()=>{if(hasTTS){VOICES=speechSynthesis.getVoices()||[];if(cfgOpen&&!busy)side()}};
+if(hasTTS){VOICES=speechSynthesis.getVoices()||[];speechSynthesis.onvoiceschanged=refreshVoices}
+const waitVoices=()=>new Promise(res=>{if(!hasTTS||VOICES.length)return res();let n=0;const iv=setInterval(()=>{VOICES=speechSynthesis.getVoices()||[];if(VOICES.length||++n>15){clearInterval(iv);res()}},100)});
+const gOf=v=>VF.test(v.name)&&!VM.test(v.name)?"f":VM.test(v.name)&&!VF.test(v.name)?"m":"?";
+const voicesFor=li=>VOICES.filter(v=>v.lang.toLowerCase().replace("_","-").startsWith(LN[li??LI][0]));
+const pickVoice=li=>{const vs=voicesFor(li);return vs.find(v=>v.name===NAR.v)||vs.find(v=>gOf(v)===NAR.g)||vs.find(v=>v.localService)||vs[0]||null};
+const chunks=x=>{const a=String(x).replace(/\s+/g," ").trim().split(/(?<=[.!?…。！？])\s*/),o=[];let c="";for(const q of a){if(c&&(c+" "+q).length>170){o.push(c);c=q}else c=(c+" "+q).trim()}if(c)o.push(c);return o.flatMap(q=>q.length>200?q.match(/.{1,180}(\s|$)/g):[q])};
+async function speak(txt,li){
+  if(!hasTTS||!txt)return;li=Number.isInteger(li)&&LN[li]?li:LI;
+  const my=++spk;speechSynthesis.cancel();await waitVoices();if(my!==spk)return;
+  const q=chunks(txt),v=pickVoice(li);let i=0;
+  const next=()=>{
+    if(my!==spk||i>=q.length)return;
+    const idx=i++,u=new SpeechSynthesisUtterance(q[idx]);u.lang=v?v.lang:LN[li][3];if(v)u.voice=v;u.rate=NAR.r;u.pitch=NAR.p;u.volume=1;
+    let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(safe);next()};
+    const safe=setTimeout(()=>{if(my===spk&&!done){speechSynthesis.cancel();fin()}},5000+q[idx].length*140/NAR.r);
+    u.onend=fin;u.onerror=e=>{if(e.error==="interrupted"||e.error==="canceled"){done=true;clearTimeout(safe);return}fin()};
+    if(speechSynthesis.paused)speechSynthesis.resume();speechSynthesis.speak(u);
+  };
+  setTimeout(next,80);
 }
-window.speakLog=i=>{const l=(G.log||[])[i];if(l)speak(l.titre+". "+l.recit)};
+addEventListener("pointerdown",()=>{if(hasTTS){const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}},{once:true});
+window.speakLog=i=>{const l=(G.log||[])[i];if(l)speak(l.titre+". "+l.recit,l.lg)};
 window.speakTest=()=>speak(t("Bienvenue sur Cap Historica."));
-window.stopSpeak=()=>{if("speechSynthesis"in window)speechSynthesis.cancel()};
-if("speechSynthesis"in window)speechSynthesis.onvoiceschanged=()=>{};
+window.stopSpeak=()=>{spk++;if(hasTTS)speechSynthesis.cancel()};
 
 /* ---------- Interface ---------- */
 const LOGO=`<svg width="26" height="26" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/><path d="M16 4l3.5 12L16 28l-3.5-12z" fill="var(--ac)"/><path d="M4 16l12-3.5L28 16l-12 3.5z" fill="var(--hi)" opacity=".8"/></svg>`;
@@ -651,7 +692,9 @@ function settings(){
   <p class="mut small">${t("Tes clés restent dans ce navigateur et ne sont jamais envoyées aux autres joueurs. 🆓 = quota gratuit.")}</p>
   <h2 style="margin-top:12px">${t("Narrateur vocal")}</h2>
   <label><input type="checkbox" ${NAR.on?"checked":""} onchange="setNar('on',this.checked)"> ${t("Lire les récits à voix haute")}</label>
-  <div class="row"><div style="flex:1"><label>${t("Voix")}</label><select onchange="setNar('g',this.value)"><option value="f" ${NAR.g==="f"?"selected":""}>${t("Féminine")}</option><option value="m" ${NAR.g==="m"?"selected":""}>${t("Masculine")}</option></select></div><div style="flex:1"><label>${t("Vitesse")} (×${NAR.r})</label><input type="range" min="0.6" max="1.6" step="0.1" value="${NAR.r}" onchange="setNar('r',+this.value);side()"></div><button class="ghost" onclick="speakTest()">🔊</button></div>
+  <div class="row"><div style="flex:1"><label>${t("Voix")}</label><select onchange="setNar('v','');setNar('g',this.value);side()"><option value="f" ${NAR.g==="f"?"selected":""}>${t("Féminine")}</option><option value="m" ${NAR.g==="m"?"selected":""}>${t("Masculine")}</option></select></div><div style="flex:1"><label>${t("Voix du système")}</label><select onchange="setNar('v',this.value)"><option value="">Auto</option>${voicesFor().map(v=>`<option value="${esc(v.name)}" ${v.name===NAR.v?"selected":""}>${esc(v.name)} · ${gOf(v)}</option>`).join("")}</select></div></div>
+  <div class="row"><div style="flex:1"><label>🐢 ${t("Vitesse")} ×${NAR.r} 🐇</label><input type="range" min="0.5" max="2" step="0.1" value="${NAR.r}" onchange="setNar('r',+this.value);side()"></div><div style="flex:1"><label>${t("Timbre")} (${NAR.p})</label><input type="range" min="0.5" max="1.5" step="0.1" value="${NAR.p}" onchange="setNar('p',+this.value);side()"></div><button class="ghost" onclick="speakTest()">🔊</button><button class="ghost" onclick="stopSpeak()">⏹</button></div>
+  ${voicesFor().length?"":`<p class="mut small">${t("Aucune voix trouvée pour cette langue sur cet appareil.")}</p>`}
   <p><button onclick="saveCfg()">${t("Enregistrer")}</button></p></div>`;
 }
 function mapCard(){
@@ -671,7 +714,7 @@ function lobby(){
   if(T==="mine")b=MINE.length?MINE.map(g=>{const idle=Math.floor((Date.now()-(g.lastActive||g.created||Date.now()))/DAY),host=g.host===user.uid;
     return `<div class="card"><b>${esc(g.name||"…")}</b>${g.edu?" 🎓":""}<div class="mut">${esc(dateStr(g))} · ${Object.keys(g.players||{}).length}/${g.maxPlayers||8} ${t("joueurs")} · ${esc(g.c)}${host?" · 👑":""}</div>${idle>=7?`<div class="warn">${t("⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?",idle)}</div>`:""}
     <div class="row"><button data-c="${esc(g.c)}" onclick="join(this.dataset.c)">${t("▶ Ouvrir")}</button>${idle>=7?`<button class="ghost" data-c="${esc(g.c)}" onclick="keepG(this.dataset.c)">${t("Garder")}</button>`:""}${host?`<button class="ghost" data-c="${esc(g.c)}" onclick="delG(this.dataset.c)">${t("🗑️ Supprimer")}</button>`:`<button class="ghost" data-c="${esc(g.c)}" onclick="leaveG(this.dataset.c)">${t("Quitter")}</button>`}</div></div>`}).join(""):`<div class="card"><p class="mut">${t("Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte.")}</p></div>`;
-  else if(T==="join")b=`<div class="card"><h2>${t("🔑 Rejoindre")}</h2><div class="row"><input placeholder="${t("Code de la partie")}" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">${t("Rejoindre")}</button></div></div>`;
+  else if(T==="join")b=`<div class="card"><h2>${t("🔑 Rejoindre")}</h2><div class="row"><input placeholder="${t("Code de la partie")}" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">${t("Rejoindre")}</button></div></div><div class="card"><h2>${t("📥 Importer")}</h2><input type="file" accept="application/json,.json" onchange="importG(this.files[0])"></div>`;
   else if(T==="edu"){
     const cl=LF.edu?EDU.find(x=>x.id===LF.edu.lvl):null;
     b=`<div class="card"><h2>${t("🎓 Mode éducatif")}</h2><p class="mut">${t("Choisis ta classe puis une ou plusieurs époques du programme. Tu avances dans le temps, tu découvres dates, personnages et vocabulaire, et tu t'entraînes avec des quiz.")}</p>
@@ -710,6 +753,7 @@ function learn(){
   <div class="card"><h2>${t("Dates à retenir")}</h2>${dates.map(x=>`<div><b>${yr(+x.a)}</b> — ${esc(x.t)} <span class="mut small">${lk(x.t)}</span></div>`).join("")||"—"}</div>
   <div class="card"><h2>${t("📚 Sources")}</h2>${((ed.src||[]).map(x=>`<div class="mut">• ${esc(x)}</div>`).join(""))}<div class="mut" style="margin-top:6px">• ${t("Ton manuel et ton cahier de cours (priorité)")}</div><div class="mut">• ${t("Programme officiel de ta classe (Éduscol)")}</div><p class="warn small">${t("Contenu généré par une IA à partir de ces types de sources : il peut contenir des erreurs. Vérifie toujours avec ton manuel et les liens de recherche ci-dessus.")}</p></div>`;
 }
+const logOk=l=>{const f=(D.lf||"").toLowerCase(),m=me(),x=(l.titre+" "+l.recit+" "+(l.evenements||[]).map(e=>e.nation+" "+e.texte).join(" ")).toLowerCase();return(!f||x.includes(f))&&(!D.lm||!m||!m.nation||x.includes(m.nation.toLowerCase()))};
 function game(){
   if(D.turn!==G.turn){D.d=undefined;D.turn=G.turn}
   const P=Object.entries(G.players||{}),m=me(),host=G.host===user.uid,od=(G.orders&&G.orders[user.uid])||"",pl=P.filter(([,p])=>p.nation),nr=pl.filter(([,p])=>p.rt===G.turn).length;
@@ -727,10 +771,11 @@ function game(){
     <input placeholder="${t("Ta question…")}" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":t("Demander")}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>${t("💡 Suggérer des ordres")}</button></div></div>`;
   }else if(TAB==="learn")b=learn();
   else if(TAB==="log"){
-    b=`<div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2>${(G.log||[]).map((l,i)=>[l,i]).reverse().map(([l,i])=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)})</span> <button class="ghost" style="padding:2px 9px" onclick="speakLog(${i})">🔊</button><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">—</p>`}</div>`;
+    b=`<div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2><div class="row"><input placeholder="🔎" value="${esc(D.lf||"")}" onchange="D.lf=this.value;side()"><label style="margin:0"><input type="checkbox" ${D.lm?"checked":""} onchange="D.lm=this.checked;side()"> ${t("Ma nation")}</label></div>${(G.log||[]).map((l,i)=>[l,i]).reverse().filter(([l])=>logOk(l)).map(([l,i])=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)})</span> <button class="ghost" style="padding:2px 9px" onclick="speakLog(${i})">🔊</button><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">—</p>`}</div>`;
   }else{
-    b=`<div class="card"><h2>${t("👥 Joueurs")} (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${G.edu?` · ${p.sc||0} ⭐`:""}${id===user.uid?" ("+t("toi")+")":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">${t("Exclure")}</button>`:""}</div>`).join("")}</div>
-    <div class="card"><h2>🔗</h2><p class="mut">${t("Code de la partie")} : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">${t("📋 Copier le lien")}</button><button class="ghost" onclick="leaveG()">${t("Quitter")}</button>${host?`<button class="ghost" onclick="delG()">${t("🗑️ Supprimer")}</button>`:""}</div></div>
+    b=`<div class="card"><h2>${t("👥 Joueurs")} (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span>${p.seen&&Date.now()-p.seen<100000?"🟢":"⚪"}</span> <span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${G.edu?` · ${p.sc||0} ⭐`:""}${id===user.uid?" ("+t("toi")+")":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">${t("Exclure")}</button>`:""}</div>`).join("")}</div>
+    ${(G.trt||[]).length?`<div class="card"><h2>${t("Diplomatie")}</h2>${G.trt.map(x=>`<div>${({alliance:"🤝",guerre:"⚔️",paix:"🕊️",embargo:"🚫",commerce:"💱"})[x.type]||"•"} <b>${esc(x.a)}</b> ↔ <b>${esc(x.b)}</b> <span class="mut">${esc(x.note)}</span></div>`).join("")}</div>`:""}
+    <div class="card"><h2>🔗</h2><p class="mut">${t("Code de la partie")} : <b>${esc(code)}</b></p><div class="row"><button onclick="copyLink()">${t("📋 Copier le lien")}</button><button class="ghost" onclick="exportG()">${t("💾 Exporter")}</button><button class="ghost" onclick="leaveG()">${t("Quitter")}</button>${host?`<button class="ghost" onclick="delG()">${t("🗑️ Supprimer")}</button>`:""}</div></div>
     ${host?`<div class="card"><h2>${t("Paramètres")}</h2><label>${t("Nom de la partie")}</label><input maxlength="40" value="${esc(G.name||"")}" onchange="setParam('name',this.value)">
     <div class="row"><div><label>${t("Joueurs max")}</label><input type="number" min="2" max="12" value="${esc(G.maxPlayers||8)}" onchange="setParam('maxPlayers',this.value)"></div><div style="flex:1"><label>${t("Durée d'un tour")}</label>${stepSel(G.step||12,"setParam('step',this.value)")}</div></div>
     <label>${t("Difficulté")}</label><select onchange="setParam('diff',this.value)">${Object.keys(DIFF).map(k=>`<option value="${k}" ${k===G.diff?"selected":""}>${t(k)}</option>`).join("")}</select>
@@ -886,7 +931,7 @@ window.join=async c=>{
     await b.commit();await loadMine();TAB="play";watch(c);
   }catch(e){say(e.code==="permission-denied"?t("Refusé : limite de parties atteinte ou règles Firebase pas à jour."):"⚠️ "+(e.code||e.message))}
 };
-function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;SEL="";lastLog=-1;MAPDATA=LF.ai?LF.mapObj:null;csig="";history.replaceState(null,"",location.pathname);drawMap()}
+function stop(){if(unsub)unsub();unsub=null;G=null;code="";own_={};CH=[];D.d=D.q=undefined;curMJ=null;SEL="";lastLog=-1;MAPDATA=LF.ai?LF.mapObj:null;csig="";psig="";history.replaceState(null,"",location.pathname);drawMap()}
 function watch(c){
   stop();code=c;history.replaceState(null,"","#"+c);
   unsub=onSnapshot(doc(db,"games",c),s=>{
@@ -894,7 +939,7 @@ function watch(c){
     G=s.data();own_=J(G.ownersJson||"{}",{});
     if(!(G.players||{})[user.uid]){stop();loadMine();return say(t("Tu n'es plus dans cette partie."))}
     const mj=G.mapJson||"";
-    if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else{colorMap();drawEv()}
+    if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else{const sg=(G.ownersJson||"")+"|"+Object.values(G.players||{}).map(p=>p.nation).join(",");if(sg!==psig){psig=sg;colorMap()}drawEv()}
     const n=(G.log||[]).length;if(lastLog>=0&&n>lastLog&&NAR.on)speakLog(n-1);lastLog=n;
     const a=document.activeElement;if(!a||!["TEXTAREA","INPUT","SELECT"].includes(a.tagName))side();
   },e=>{stop();say("⚠️ "+e.code)});
@@ -935,7 +980,7 @@ window.rdy=async v=>{
   }catch(e){say("⚠️ "+e.code)}
 };
 window.force=()=>{if(G&&G.host===user.uid)resolve()};
-const hist=()=>(G.log||[]).slice(-3).map(l=>`${l.date||l.year}: ${l.recit}`).join("\n")||"(début de partie)";
+const hist=()=>(G.mem?"Mémoire cumulée : "+G.mem+"\n":"")+((G.log||[]).slice(-1).map(l=>`Dernier tour (${l.date||l.year}) : ${l.recit}`).join("\n")||"(début de partie)");
 window.advise=async s=>{
   const m=me(),q=s?"Propose-moi 3 ordres concrets et réalistes pour ce tour.":(D.q||"").trim();
   if(!m||!m.nation||!q)return;
@@ -951,6 +996,8 @@ window.ans=async(qi,oi,r)=>{
 async function resolve(){
   if(busy)return;busy="turn";side();
   try{
+    const lk=doc(db,"games",code),got=await runTransaction(db,async tx=>{const x=await tx.get(lk),d=x.data();if(!x.exists()||d.turn!==G.turn)return false;const L=d.lock;if(L&&L.turn===d.turn&&Date.now()-L.at<90000&&L.by!==user.uid)return false;tx.update(lk,{lock:{by:user.uid,turn:d.turn,at:Date.now()}});return true});
+    if(!got){busy="";toast(t("Un autre joueur résout déjà ce tour."));side();return}
     const step=G.step||12,cu=custom(),o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
     const m0=(G.month||1)-1+step,ny=G.year+Math.floor(m0/12);
     let eduP="";
@@ -958,11 +1005,12 @@ async function resolve(){
       eduP=`\nMODE ÉDUCATIF — niveau « ${G.edu.lvl} ». Époques du programme : ${G.edu.eps.map(e=>e.n+" ("+e.y+")").join(", ")}. Époque en cours : ${cur.n}.${sw?" Nous entrons dans une nouvelle époque : mets à jour les frontières (changements) pour son début.":""} Ajoute aussi "edu":{"dates":[{"a":année entière,"t":"événement daté"}],"persos":[{"n":"nom","r":"rôle en une phrase"}],"mot":{"t":"terme","d":"définition simple"},"plus":"anecdote ou fait hors programme","quiz":[{"q":"question","o":["réponse A","réponse B","réponse C"],"r":0,"e":"explication courte"}]} avec 3 dates, 3 personnages, 1 mot, 1 anecdote et 2 questions de quiz. Ajoute "src":["2 à 4 références fiables réelles sur lesquelles s'appuie ce contenu : programme officiel de la classe (Éduscol / ministère), manuel scolaire de la classe, Encyclopædia Britannica, BnF-Gallica, Larousse…"]. Appuie-toi sur les programmes scolaires, les manuels et des sources reconnues ; n'invente ni date, ni personnage, ni citation, et dis « incertain » quand les historiens divergent. Les joueurs peuvent donner des ordres hors programme : accepte-les s'ils sont plausibles et explique leurs conséquences en les comparant à l'histoire réelle. Vocabulaire et difficulté adaptés à la classe.`}
     const r=await ask(`Tu es le moteur d'un jeu de géopolitique multijoueur. Date : ${dateStr(G)}. Contexte : ${G.context}. Difficulté : ${G.diff} — ${DIFF[G.diff]||""}. Écris tous les textes en ${LANGN()}.
 Contrôleurs actuels qui diffèrent du nom d'origine : ${G.ownersJson}.
+Traités et alliances en cours : ${JSON.stringify(G.trt||[])}.
 Noms de territoires valides (exactement) : ${n.join("; ")}.
 ${cu&&MAPDATA?"Attributs des nations : "+JSON.stringify(MAPDATA.t.map(q=>({n:q.n,gov:q.gov,pop:q.pop,gdp:q.gdp,army:q.army,eco:q.eco,tech:q.tech,stab:q.stab})))+"\n":""}Historique récent :\n${hist()}
 Ordres des joueurs :\n${ords}
 ${G.aiOthers===false?"Les nations non jouées restent passives et n'agissent pas.":"Toutes les autres nations sont dirigées par toi, de façon cohérente et plausible selon l'époque."}
-Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases","evenements":[{"nation":"","texte":"court","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}]${G.edu?',"edu":{}':""}}. 3 à 8 événements localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).${eduP}`);
+Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases","evenements":[{"nation":"","texte":"court","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}],"memoire":"résumé cumulatif de 150 mots max : traités, trahisons, rancunes, personnalités des nations clés, objectifs en cours","traites":[{"type":"alliance|guerre|paix|embargo|commerce","a":"","b":"","note":""}]${G.edu?',"edu":{}':""}}. 3 à 8 événements localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).${eduP}`);
     const w={...own_};
     (Array.isArray(r.changements)?r.changements:[]).forEach(c=>{if(!c||!n.includes(c.pays))return;const v=typeof c.proprietaire==="string"?c.proprietaire.trim().slice(0,40):"";if(!v||v===c.pays)delete w[c.pays];else w[c.pays]=v});
     const nu=v=>v!==null&&v!==""&&Number.isFinite(+v)?+v:undefined,S=(v,l)=>String(v??"").slice(0,l);
@@ -971,14 +1019,15 @@ Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","re
       else{const a=nu(e.lat),b=nu(e.lng);if(a!==undefined&&b!==undefined&&Math.abs(a)<=85&&Math.abs(b)<=180){q.lat=a;q.lng=b}}return q});
     let edu;
     if(G.edu&&r.edu){const E=r.edu,A=Array.isArray;edu={dates:(A(E.dates)?E.dates:[]).slice(0,4).filter(x=>x&&nu(x.a)!==undefined).map(x=>({a:Math.round(+x.a),t:S(x.t,160)})),persos:(A(E.persos)?E.persos:[]).slice(0,4).map(x=>({n:S(x&&x.n,60),r:S(x&&x.r,160)})),mot:E.mot&&E.mot.t?{t:S(E.mot.t,60),d:S(E.mot.d,200)}:null,plus:S(E.plus,300),src:(A(E.src)?E.src:[]).slice(0,5).map(v=>S(v,160)),quiz:(A(E.quiz)?E.quiz:[]).slice(0,3).filter(x=>x&&A(x.o)&&x.o.length>=2).map(x=>({q:S(x.q,200),o:x.o.slice(0,4).map(v=>S(v,100)),r:Math.max(0,Math.min(x.o.length-1,Math.round(+x.r)||0)),e:S(x.e,200)}))}}
+    const mem=S(r.memoire,900),trt=(Array.isArray(r.traites)?r.traites:[]).slice(0,24).map(x=>({type:S(x&&x.type,12),a:S(x&&x.a,40),b:S(x&&x.b,40),note:S(x&&x.note,120)})).filter(x=>x.a&&x.b);
     const ref=doc(db,"games",code),turn=G.turn;
     await runTransaction(db,async tx=>{
       const s=await tx.get(ref);if(!s.exists()||s.data().turn!==turn)throw Error(t("Ce tour a déjà été résolu par un autre joueur."));
-      const d=s.data(),mm=(d.month||1)-1+(d.step||12),yy=d.year+Math.floor(mm/12),entry={titre:S(r.titre||"…",120),recit:S(r.recit,1500),year:d.year,date:dateStr(d),evenements:evs};if(edu)entry.edu=edu;
-      tx.update(ref,{year:yy,month:mm%12+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),...touch(),log:[...(d.log||[]),entry].slice(-30)});
+      const d=s.data(),mm=(d.month||1)-1+(d.step||12),yy=d.year+Math.floor(mm/12),entry={titre:S(r.titre||"…",120),recit:S(r.recit,1500),year:d.year,date:dateStr(d),evenements:evs,lg:LI};if(edu)entry.edu=edu;
+      tx.update(ref,{year:yy,month:mm%12+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),lock:deleteField(),...(mem?{mem}:{}),...(r.traites?{trt}:{}),...touch(),log:[...(d.log||[]),entry].slice(-30)});
     });
     D.d=undefined;TAB=G.edu?"learn":"log";
-  }catch(e){toast("⚠️ "+(e.message||"Erreur"),10000)}
+  }catch(e){toast("⚠️ "+(e.message||"Erreur"),10000);try{await updateDoc(doc(db,"games",code),{lock:deleteField()})}catch{}}
   busy="";side();
 }
 window.resolve=resolve;
@@ -996,6 +1045,29 @@ async function claimEmail(){
   }catch(e){return false}
 }
 
+const cut=(v,l)=>String(v??"").slice(0,l);
+const newCode=()=>Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>"ABCDEFGHJKMNPQRSTUVWXYZ23456789"[x%31]).join("");
+window.exportG=()=>{const {players,orders,lock,host,...g}=G,b=new Blob([JSON.stringify({app:"cap-historica",v:3,game:g})],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=cut((G.name||"partie").replace(/[^\w-]+/g,"_"),40)+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
+window.importG=async f=>{
+  if(!f||!gate(1))return;
+  if(MINE.length>=MAXG)return say(t("Limite de {0} parties atteinte : quitte ou supprime une partie.",MAXG));
+  try{
+    const d=JSON.parse(await f.text()),g=d&&d.game;if(!d||d.app!=="cap-historica"||!g||!Number.isFinite(+g.year)||!Array.isArray(g.log||[]))throw 0;
+    const c=newCode(),b=writeBatch(db);
+    b.set(doc(db,"users",user.uid),{games:arrayUnion(c),seen:Date.now()},{merge:true});
+    b.set(doc(db,"games",c),{sv:3,host:user.uid,name:cut(g.name||"Import",40),maxPlayers:Math.max(2,Math.min(12,+g.maxPlayers||6)),step:Math.max(1,+g.step||12),aiOthers:g.aiOthers!==false,locked:false,diff:DIFF[g.diff]?g.diff:"normal",year:Math.trunc(+g.year),month:Math.max(1,Math.min(12,+g.month||1)),turn:Math.max(1,Math.trunc(+g.turn)||1),context:cut(g.context,2000),ownersJson:cut(g.ownersJson||"{}",60000),mapJson:cut(g.mapJson,200000),viewJson:cut(g.viewJson,500),edu:g.edu&&g.edu.lvl?{lvl:cut(g.edu.lvl,4),eps:(g.edu.eps||[]).slice(0,40).map(e=>({n:cut(e.n,80),y:Math.trunc(+e.y)||0}))}:null,mem:cut(g.mem,900),trt:(g.trt||[]).slice(0,24),lang:g.lang|0,log:(g.log||[]).slice(-30),orders:{},players:{[user.uid]:{name:PSEUDO,nation:"",dev:DEV,rt:0,sc:0}},created:Date.now(),...touch()});
+    await b.commit();await loadMine();TAB="play";watch(c);toast(t("Partie importée ✓"));
+  }catch(e){say(e.code==="permission-denied"?t("Refusé : limite de parties atteinte ou règles Firebase pas à jour."):t("Fichier invalide."))}
+};
+const beat=()=>{if(G&&user&&me()&&document.visibilityState==="visible")updateDoc(doc(db,"games",code),{[`players.${user.uid}.seen`]:Date.now()}).catch(()=>{})};
+setInterval(beat,45000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){beat();side()}});
+addEventListener("keydown",e=>{
+  const a=document.activeElement;if((a&&["INPUT","TEXTAREA","SELECT"].includes(a.tagName))||e.ctrlKey||e.metaKey||e.altKey||!user)return;
+  const k=e.key.toLowerCase();
+  if(k==="escape"){if($("#mapbox").classList.contains("fs"))eb();else if(SEL)selClear()}
+  else if(k==="f")eb();else if(k==="o")mo();else if(k==="n"){setNar("on",!NAR.on);side()}else if(k==="s")stopSpeak();
+  else if(G&&"12345".includes(k)){const o=["play","adv",...(G.edu?["learn"]:[]),"log","ppl"];if(o[+k-1])tab(o[+k-1])}
+});
 $("#sel").onclick=()=>{const c=$("#cc");if(c)scrollTo({top:c.getBoundingClientRect().top+scrollY-(innerWidth<960?$("#mapbox").offsetHeight+70:76),behavior:"smooth"})};
 onAuthStateChanged(auth,async u=>{
   user=u;ready=true;side();
