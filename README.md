@@ -1,6 +1,6 @@
 # 🧭 Cap Historica
 
-**🎮 Play / Jouer / Jugar / 开始游戏 / Играть:** https://conptetrol-commits.github.io/Multiplayer-AI-country-simulator/
+**🎮 Play / Jouer / Jugar / 开始游戏 / Играть:** https://conptetrol-commits.github.io/Cap-Historica/
 
 [Français](#-français) · [English](#-english) · [Español](#-español) · [中文](#-中文) · [Русский](#-русский) · [Credits](#-credits)
 
