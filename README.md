@@ -1,6 +1,6 @@
 # 🧭 Cap Historica
 
-**🎮 Play / Jouer / Jugar / 开始游戏 / Играть:** https://conptetrol-commits.github.io/Cap-Historica/
+**🎮 Play / Jouer / Jugar / 开始游戏 / Играть:** https://conptetrol-commits.github.io/Multiplayer-AI-country-simulator/
 
 [Français](#-français) · [English](#-english) · [Español](#-español) · [中文](#-中文) · [Русский](#-русский) · [Credits](#-credits)
 
@@ -17,6 +17,7 @@ Un jeu de géopolitique et d'histoire multijoueur, gratuit, propulsé par l'IA. 
 - 🎓 **Mode éducatif** : choisis ta **classe** (primaire à terminale) ou **« culture générale »** si tu n'as plus d'école, puis une ou plusieurs **époques**. Tu avances année par année et tu découvres **dates, personnages, vocabulaire, anecdotes hors programme**, avec des quiz et un score. Tu peux tenter des **actions hors programme** : l'IA les compare à la vraie histoire. Les **sources** (programmes officiels, manuels, encyclopédies) sont affichées avec des liens de recherche. ⚠️ Le contenu est généré par une IA : vérifie toujours avec ton manuel.
 - 🔊 **Narrateur IA optionnel** (voix du navigateur) : activable à tout moment, voix féminine ou masculine, vitesse réglable, dans toutes les langues du site.
 - 👥 **Multijoueur** : prêts pour le tour suivant, l'hôte peut forcer le tour, exclure, fermer la partie. Paramètres de partie : nom, joueurs, durée d'un tour (1 mois à 25 ans), difficulté, nations IA.
+- 💾 **Sauvegarde et diplomatie** : export / import d'une partie en fichier, l'IA retient les traités, alliances et rancunes d'un tour à l'autre, carte en plein écran, choix de la voix du système.
 - 🤖 **IA au choix** : Gemini, OpenRouter, Groq (gratuits), OpenAI, Claude, Grok. Chacun utilise sa propre clé. Bouton « 🧪 Tester l'IA ».
 - 🔐 **Connexion** : Google ou e-mail + mot de passe.
 
@@ -37,6 +38,7 @@ A free multiplayer geopolitics and history game powered by AI. Pick a nation, gi
 - 🎓 **Educational mode**: choose your **class** (primary to final year) or **"general knowledge"** if you're out of school, then one or more **eras**. Move year by year and discover **dates, key figures, vocabulary and extra off-curriculum facts**, with quizzes and a score. You can try **off-curriculum actions**: the AI compares them with real history. **Sources** (official curricula, textbooks, encyclopedias) are shown with search links. ⚠️ Content is AI-generated: always check with your textbook.
 - 🔊 **Optional AI narrator** (browser voices): toggle any time, female or male voice, adjustable speed, in every site language.
 - 👥 **Multiplayer**: ready for next turn, the host can force the turn, kick, close the game. Game settings: name, players, turn length (1 month to 25 years), difficulty, AI nations.
+- 💾 **Saves and diplomacy**: export / import a game as a file, the AI remembers treaties, alliances and grudges from turn to turn, full-screen map, system voice choice.
 - 🤖 **Choose your AI**: Gemini, OpenRouter, Groq (free), OpenAI, Claude, Grok. Everyone uses their own key. "🧪 Test the AI" button.
 - 🔐 **Sign-in**: Google or email + password.
 
@@ -57,6 +59,7 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 🎓 **Modo educativo**: elige tu **curso** (primaria a bachillerato) o **«cultura general»** si ya no estudias, y una o varias **épocas**. Avanzas año a año y descubres **fechas, personajes, vocabulario y datos extra fuera del programa**, con cuestionarios y puntuación. Puedes probar **acciones fuera del programa**: la IA las compara con la historia real. Se muestran **fuentes** (programas oficiales, libros de texto, enciclopedias) con enlaces de búsqueda. ⚠️ Contenido generado por IA: compruébalo siempre con tu libro.
 - 🔊 **Narrador IA opcional** (voces del navegador): actívalo cuando quieras, voz femenina o masculina, velocidad ajustable, en todos los idiomas del sitio.
 - 👥 **Multijugador**: listos para el siguiente turno, el anfitrión puede forzar el turno, expulsar y cerrar la partida. Ajustes: nombre, jugadores, duración del turno (1 mes a 25 años), dificultad, naciones con IA.
+- 💾 **Guardado y diplomacia**: exporta / importa una partida como archivo, la IA recuerda tratados, alianzas y rencores de un turno a otro, mapa a pantalla completa, elección de la voz del sistema.
 - 🤖 **Elige tu IA**: Gemini, OpenRouter, Groq (gratis), OpenAI, Claude, Grok. Cada uno usa su clave. Botón «🧪 Probar la IA».
 - 🔐 **Acceso**: Google o correo + contraseña.
 
@@ -77,6 +80,7 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 🎓 **教育模式**：选择你的**年级**（小学到高三），或选择**“通识”**（不再上学的人），再选择一个或多个**时代**。逐年推进，学习**日期、重要人物、词汇和课程之外的知识**，并通过测验获得积分。你可以尝试**课程之外的行动**：AI 会与真实历史对比。界面会显示**资料来源**（官方课程标准、教材、百科全书）及搜索链接。⚠️ 内容由 AI 生成，请务必对照课本核实。
 - 🔊 **可选的 AI 旁白**（使用浏览器语音）：随时开关，可选女声或男声，可调语速，支持网站的所有语言。
 - 👥 **多人游戏**：全员“已准备”后进入下一回合，房主可强制结束回合、移除玩家、关闭游戏。游戏设置：名称、玩家数、回合时长（1 个月到 25 年）、难度、AI 国家。
+- 💾 **存档与外交**：可将游戏导出/导入为文件；AI 会记住各回合的条约、联盟和恩怨；全屏地图；可选择系统语音。
 - 🤖 **自选 AI**：Gemini、OpenRouter、Groq（免费）、OpenAI、Claude、Grok。每人使用自己的密钥。提供“🧪 测试 AI”按钮。
 - 🔐 **登录**：Google 或邮箱 + 密码。
 
@@ -97,6 +101,7 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 🎓 **Обучающий режим**: выбери **класс** (от начальной школы до выпускного) или **«общую эрудицию»**, если ты уже не учишься, затем одну или несколько **эпох**. Двигайся год за годом и узнавай **даты, ключевых персонажей, слова и факты вне программы**, проходи викторины и набирай очки. Можно пробовать **действия вне программы**: ИИ сравнит их с реальной историей. Показываются **источники** (официальные программы, учебники, энциклопедии) со ссылками для поиска. ⚠️ Контент создан ИИ: всегда сверяйся с учебником.
 - 🔊 **Необязательный ИИ-рассказчик** (голоса браузера): включай когда угодно, женский или мужской голос, настраиваемая скорость, на всех языках сайта.
 - 👥 **Мультиплеер**: «готов» к следующему ходу, хозяин может форсировать ход, исключать игроков, закрыть игру. Параметры: название, игроки, длительность хода (от 1 месяца до 25 лет), сложность, нации под управлением ИИ.
+- 💾 **Сохранения и дипломатия**: экспорт / импорт игры в файл, ИИ помнит договоры, союзы и обиды от хода к ходу, полноэкранная карта, выбор системного голоса.
 - 🤖 **Выбор ИИ**: Gemini, OpenRouter, Groq (бесплатно), OpenAI, Claude, Grok. У каждого свой ключ. Кнопка «🧪 Проверить ИИ».
 - 🔐 **Вход**: Google или e-mail + пароль.
 

@@ -68,6 +68,7 @@ a{color:var(--hi)}
 <header id="bar"></header>
 <div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Fullscreen" title="F">⤢</button><button onclick="mo()" aria-label="Map options" title="O">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
 <div id="toast" onclick="this.style.display='none'"></div>
+<script>setTimeout(function(){if(window.__capOk)return;var s=document.getElementById("side");if(s)s.innerHTML='<div class="card"><h2>Cap Historica</h2><p>Le jeu n\'a pas pu démarrer : réseau coupé, bloqueur de contenu (désactive-le pour ce site) ou navigateur trop ancien. Recharge la page.</p><button onclick="location.reload()">Recharger</button></div>';var m=document.getElementById("mapbox");if(m)m.style.display="none"},12000)</script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendEmailVerification,sendPasswordResetEmail,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -315,6 +316,7 @@ const LANGN=()=>LN[LI][2];
 document.documentElement.lang=LN[LI][0];
 
 const DIFF={facile:"Monde clément : les ordres des joueurs réussissent souvent, les IA sont passives.",normal:"Équilibré et plausible.",réaliste:"Conséquences réalistes (logistique, économie, opinion, rivalités) ; les plans ambitieux échouent souvent.",difficile:"Impitoyable : IA agressives et opportunistes, crises, coups d'État et guerres fréquents."};
+const VER="Cap Historica · v26.11.26";
 const DAY=864e5,MAXG=3,GL="https://generativelanguage.googleapis.com/v1beta/models";
 const PROV={
   gemini:{n:"Google Gemini · gratuit",free:1,k:"https://aistudio.google.com/apikey",def:["gemini-2.5-flash","gemini-2.5-flash-lite"]},
@@ -457,7 +459,8 @@ let RND=null;
 function drawLeaf(){
   if(!LM){
     const CRSW=L.extend({},L.CRS.EPSG3857,{wrapLat:[-85.0511,85.0511]});RND=L.canvas({padding:.5});
-    LM=L.map("lmap",{crs:CRSW,minZoom:1,maxZoom:14,zoomSnap:.5,preferCanvas:true,worldCopyJump:false}).setView([20,5],2);
+    const LMO={minZoom:1,maxZoom:14,zoomSnap:.5,preferCanvas:true};
+    try{LM=L.map("lmap",{...LMO,crs:CRSW,worldCopyJump:false}).setView([20,5],2)}catch(e){console.warn("CRS de repli",e);$("#lmap")._leaflet_id=undefined;LM=L.map("lmap",{...LMO,worldCopyJump:true}).setView([20,5],2)}
     const tl=(u,o)=>L.tileLayer(u,{maxZoom:19,...o}),at="© OpenStreetMap · © CARTO",es="Tiles © Esri";
     const base={"🌑 Sombre":tl("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:at}),"🗺️ Clair":tl("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{subdomains:"abcd",attribution:at}),"🛣️ Rues":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18}),"⛰️ Relief":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18}),"🛰️ Satellite":tl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{attribution:es,maxZoom:18})};
     const cities=L.layerGroup(),labels=tl("https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png",{subdomains:"abcd",pane:"shadowPane"});
@@ -792,7 +795,7 @@ function side(){
   if(!ready){s.innerHTML=`<p class="mut">…</p>`;return}
   if(!user){s.innerHTML=loginCard();return}
   const vb=needVerify()?`<div class="warn">${t("📧 Vérifie ton adresse e-mail pour jouer (regarde aussi les spams).")}<div class="row"><button class="ghost" onclick="resend()">${t("Renvoyer l'e-mail")}</button><button class="ghost" onclick="reloadU()">${t("J'ai vérifié")}</button></div></div>`:"";
-  s.innerHTML=((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+(mapOpen?mapCard():"")+card()+(G?game():lobby());
+  s.innerHTML=((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+(mapOpen?mapCard():"")+card()+(G?game():lobby())+`<p class="mut small" style="text-align:center;margin:18px 0 4px">${VER}</p>`;
 }
 
 /* ---------- Connexion : Google et e-mail uniquement ---------- */
@@ -1077,4 +1080,5 @@ onAuthStateChanged(auth,async u=>{
   drawMap();side();
   if(location.hash.length>1&&PSEUDO)join(location.hash.slice(1));
 });
+window.__capOk=1;
 </script></body></html>
