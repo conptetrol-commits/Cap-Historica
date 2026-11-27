@@ -2,7 +2,7 @@
 
 **🎮 Play / Jouer / Jugar / 开始游戏 / Играть:** https://conptetrol-commits.github.io/Cap-Historica/
 
-[Français](#-français) · [English](#-english) · [Español](#-español) · [中文](#-中文) · [Русский](#-русский) · [Credits](#-credits)
+[Français](#-français) · [English](#-english) · [Español](#-español) · [中文](#-中文) · [Русский](#-русский) · [Tutorial / Tutoriel](#tutoriel-dinstallation--self-hosting-tutorial) · [Credits](#-credits)
 
 ---
 
@@ -18,6 +18,7 @@ Un jeu de géopolitique et d'histoire multijoueur, gratuit, propulsé par l'IA. 
 - 🔊 **Narrateur IA optionnel** (voix du navigateur) : activable à tout moment, voix féminine ou masculine, vitesse réglable, dans toutes les langues du site.
 - 👥 **Multijoueur** : prêts pour le tour suivant, l'hôte peut forcer le tour, exclure, fermer la partie. Paramètres de partie : nom, joueurs, durée d'un tour (1 mois à 25 ans), difficulté, nations IA.
 - 💾 **Sauvegarde et diplomatie** : export / import d'une partie en fichier, l'IA retient les traités, alliances et rancunes d'un tour à l'autre, carte en plein écran, choix de la voix du système.
+- 🎨 **Interface** : illustrations animées, **10 thèmes** (Océan, Parchemin, Nuit, Forêt, Rubis, Désert, Cyber, Aurore, Glace, Royal), menu latéral ☰ (accueil, parties, créer, éducatif, rejoindre, tutoriel, thèmes, réglages) et **chronique éditable** : chaque paragraphe terminé s'y range, l'hôte peut le modifier (✏️), chacun peut l'épingler (📌) dans son **carnet** personnel.
 - 🤖 **IA au choix** : Gemini, OpenRouter, Groq (gratuits), OpenAI, Claude, Grok. Chacun utilise sa propre clé. Bouton « 🧪 Tester l'IA ».
 - 🔐 **Connexion** : Google ou e-mail + mot de passe.
 
@@ -39,6 +40,7 @@ A free multiplayer geopolitics and history game powered by AI. Pick a nation, gi
 - 🔊 **Optional AI narrator** (browser voices): toggle any time, female or male voice, adjustable speed, in every site language.
 - 👥 **Multiplayer**: ready for next turn, the host can force the turn, kick, close the game. Game settings: name, players, turn length (1 month to 25 years), difficulty, AI nations.
 - 💾 **Saves and diplomacy**: export / import a game as a file, the AI remembers treaties, alliances and grudges from turn to turn, full-screen map, system voice choice.
+- 🎨 **Interface**: animated illustrations, **10 themes** (Ocean, Parchment, Night, Forest, Ruby, Desert, Cyber, Aurora, Ice, Royal), side menu ☰ (home, games, create, educational, join, tutorial, themes, settings) and an **editable chronicle**: each finished paragraph is stored there, the host can edit it (✏️), everyone can pin it (📌) to a personal **notebook**.
 - 🤖 **Choose your AI**: Gemini, OpenRouter, Groq (free), OpenAI, Claude, Grok. Everyone uses their own key. "🧪 Test the AI" button.
 - 🔐 **Sign-in**: Google or email + password.
 
@@ -60,6 +62,7 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 🔊 **Narrador IA opcional** (voces del navegador): actívalo cuando quieras, voz femenina o masculina, velocidad ajustable, en todos los idiomas del sitio.
 - 👥 **Multijugador**: listos para el siguiente turno, el anfitrión puede forzar el turno, expulsar y cerrar la partida. Ajustes: nombre, jugadores, duración del turno (1 mes a 25 años), dificultad, naciones con IA.
 - 💾 **Guardado y diplomacia**: exporta / importa una partida como archivo, la IA recuerda tratados, alianzas y rencores de un turno a otro, mapa a pantalla completa, elección de la voz del sistema.
+- 🎨 **Interfaz**: ilustraciones animadas, **10 temas**, menú lateral ☰ (inicio, partidas, crear, educativo, unirse, tutorial, temas, ajustes) y **crónica editable**: cada párrafo terminado se guarda allí, el anfitrión puede editarlo (✏️) y cada jugador puede fijarlo (📌) en su **cuaderno** personal.
 - 🤖 **Elige tu IA**: Gemini, OpenRouter, Groq (gratis), OpenAI, Claude, Grok. Cada uno usa su clave. Botón «🧪 Probar la IA».
 - 🔐 **Acceso**: Google o correo + contraseña.
 
@@ -81,6 +84,7 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 🔊 **可选的 AI 旁白**（使用浏览器语音）：随时开关，可选女声或男声，可调语速，支持网站的所有语言。
 - 👥 **多人游戏**：全员“已准备”后进入下一回合，房主可强制结束回合、移除玩家、关闭游戏。游戏设置：名称、玩家数、回合时长（1 个月到 25 年）、难度、AI 国家。
 - 💾 **存档与外交**：可将游戏导出/导入为文件；AI 会记住各回合的条约、联盟和恩怨；全屏地图；可选择系统语音。
+- 🎨 **界面**：动画插图、**10 种主题**、侧边菜单 ☰（首页、游戏、创建、教育、加入、教程、主题、设置）和**可编辑编年史**：每个完成的段落都会存入其中，房主可修改（✏️），每位玩家可将其钉到个人**笔记本**（📌）。
 - 🤖 **自选 AI**：Gemini、OpenRouter、Groq（免费）、OpenAI、Claude、Grok。每人使用自己的密钥。提供“🧪 测试 AI”按钮。
 - 🔐 **登录**：Google 或邮箱 + 密码。
 
@@ -102,12 +106,97 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 🔊 **Необязательный ИИ-рассказчик** (голоса браузера): включай когда угодно, женский или мужской голос, настраиваемая скорость, на всех языках сайта.
 - 👥 **Мультиплеер**: «готов» к следующему ходу, хозяин может форсировать ход, исключать игроков, закрыть игру. Параметры: название, игроки, длительность хода (от 1 месяца до 25 лет), сложность, нации под управлением ИИ.
 - 💾 **Сохранения и дипломатия**: экспорт / импорт игры в файл, ИИ помнит договоры, союзы и обиды от хода к ходу, полноэкранная карта, выбор системного голоса.
+- 🎨 **Интерфейс**: анимированные иллюстрации, **10 тем**, боковое меню ☰ (главная, игры, создать, обучение, присоединиться, руководство, темы, настройки) и **редактируемая хроника**: каждый завершённый абзац попадает туда, хозяин может его править (✏️), а каждый игрок — закрепить (📌) в личном **блокноте**.
 - 🤖 **Выбор ИИ**: Gemini, OpenRouter, Groq (бесплатно), OpenAI, Claude, Grok. У каждого свой ключ. Кнопка «🧪 Проверить ИИ».
 - 🔐 **Вход**: Google или e-mail + пароль.
 
 **Как играть**: открой ссылку, войди, в ⚙️ Настройках укажи псевдоним, поставщика ИИ, ключ, модель, тему, язык и рассказчика, затем «Создать», «🎓 Обучение» или «Присоединиться».
 
 **Правила**: **не более 3 игр** на аккаунт; **один аккаунт на человека** (подтверждённый e-mail, алиасы `+test` и точки в Gmail распознаются, на одном устройстве — один аккаунт в игре вне обучающего режима); через **7 дней без активности** появится предложение сохранить игру, а через **14 дней** без активности она удаляется (письма не отправляются). Игры сохраняются в аккаунте и остаются совместимыми с обновлениями. Другие игроки видят только твой **псевдоним**.
+
+---
+
+## Tutoriel d'installation · Self-hosting tutorial
+
+Les règles Firestore sont communes aux deux tutoriels (Firestore → onglet **Règles** → tout remplacer → **Publier**) / The Firestore rules are shared by both tutorials (Firestore → **Rules** tab → replace everything → **Publish**):
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['games','seen'])
+        && request.resource.data.games.size() <= 3;
+      allow delete: if false;
+    }
+    match /emails/{h} {
+      allow get: if request.auth != null && (resource == null || resource.data.uid == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.keys().hasOnly(['uid']) && request.resource.data.uid == request.auth.uid;
+      allow update, delete, list: if false;
+    }
+    match /games/{code} {
+      allow get: if request.auth != null;
+      allow list: if false;
+      allow create: if request.auth != null && request.resource.data.host == request.auth.uid
+        && getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.games.hasAny([code]);
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null && (resource.data.host == request.auth.uid
+        || request.time.toMillis() - resource.data.lastActive > 1209600000);
+    }
+  }
+}
+```
+
+### 🇫🇷 Créer ta propre copie, pas à pas (gratuit)
+1. **Firebase** : va sur https://console.firebase.google.com et clique sur **Ajouter un projet** (Analytics : non).
+2. **Authentication** → Commencer → active **Google** et **E-mail/Mot de passe** (choisis ton e-mail d'assistance).
+3. **Firestore Database** → Créer une base de données (mode production, région proche de tes joueurs), puis colle les **règles** ci-dessus.
+4. **Configuration** : roue dentée → Paramètres du projet → Tes applications → icône **`</>`** → enregistre une application web et copie `apiKey`, `authDomain`, `projectId`, `appId`. Dans `index.html`, remplace ces 4 valeurs dans la ligne `const FB={…}`. Ces valeurs ne sont pas secrètes : ce sont les règles qui protègent les données.
+5. **GitHub** : crée un compte, puis un **dépôt public**. **Add file → Upload files** : envoie `index.html` (et `README.md`), puis **Commit changes**.
+6. **Publication** : dépôt → **Settings → Pages** → Source : *Deploy from a branch* → branche `main`, dossier `/ (root)` → **Save**. Après 1 à 2 minutes, ton jeu est à `https://TON-PSEUDO.github.io/NOM-DU-DEPOT/`.
+7. **Domaine autorisé** : Firebase → Authentication → **Paramètres → Domaines autorisés → Ajouter** `TON-PSEUDO.github.io` (sans `https://` ni chemin).
+8. **Clé d'IA gratuite** : https://aistudio.google.com/apikey (Gemini) ou https://console.groq.com/keys. Dans le jeu : ☰ → ⚙️ Réglages → colle la clé → **🧪 Tester l'IA**.
+9. **Modifier le jeu** : dans GitHub, ouvre `index.html` → crayon ✏️ → modifie → **Commit changes** (sur téléphone : « Version pour ordinateur »). Recharge le jeu **deux fois** ; le numéro de version est affiché en bas du panneau.
+
+**Bon à savoir :** 3 parties maximum par compte ; une partie inactive est proposée à la conservation après 7 jours et supprimée après 14 jours sans activité quand un joueur ouvre le site (aucune règle TTL ni e-mail nécessaire). Les quotas gratuits de Firebase et des IA sont limités.
+
+| Message | Solution |
+|---|---|
+| `auth/unauthorized-domain` | Ajoute ton domaine `github.io` dans Authentication → Paramètres → Domaines autorisés |
+| `auth/operation-not-allowed` | Active Google ou E-mail/Mot de passe dans Authentication |
+| `permission-denied` | Publie les règles Firestore ci-dessus |
+| Page vide / 404 | Utilise l'adresse complète avec le nom du dépôt et le `/` final |
+| Clé refusée / modèle inconnu | ⚙️ Réglages → **↻ Charger mes modèles** → choisis-en un → **🧪 Tester l'IA** |
+| Quota atteint | Attends une minute ou change de modèle / de fournisseur |
+
+### 🇬🇧 Host your own copy, step by step (free)
+1. **Firebase**: go to https://console.firebase.google.com and click **Add project** (Analytics: no).
+2. **Authentication** → Get started → enable **Google** and **Email/Password** (choose a support email).
+3. **Firestore Database** → Create database (production mode, a region near your players), then paste the **rules** above.
+4. **Config**: gear icon → Project settings → Your apps → **`</>`** → register a web app and copy `apiKey`, `authDomain`, `projectId`, `appId`. In `index.html`, replace these 4 values in the `const FB={…}` line. They are not secret: the rules protect your data.
+5. **GitHub**: create an account and a **public repository**. **Add file → Upload files**: upload `index.html` (and `README.md`), then **Commit changes**.
+6. **Publish**: repository → **Settings → Pages** → Source: *Deploy from a branch* → branch `main`, folder `/ (root)` → **Save**. After 1–2 minutes your game is at `https://YOUR-USERNAME.github.io/REPOSITORY/`.
+7. **Authorized domain**: Firebase → Authentication → **Settings → Authorized domains → Add** `YOUR-USERNAME.github.io` (no `https://`, no path).
+8. **Free AI key**: https://aistudio.google.com/apikey (Gemini) or https://console.groq.com/keys. In the game: ☰ → ⚙️ Settings → paste the key → **🧪 Test the AI**.
+9. **Edit the game**: on GitHub open `index.html` → pencil ✏️ → edit → **Commit changes** (on a phone use "Desktop site"). Reload the game **twice**; the version number appears at the bottom of the panel.
+
+**Good to know:** 3 games maximum per account; an inactive game is offered for keeping after 7 days and deleted after 14 days without activity when a player opens the site (no TTL rule or email needed). Free quotas of Firebase and AI providers are limited.
+
+| Message | Fix |
+|---|---|
+| `auth/unauthorized-domain` | Add your `github.io` domain in Authentication → Settings → Authorized domains |
+| `auth/operation-not-allowed` | Enable Google or Email/Password in Authentication |
+| `permission-denied` | Publish the Firestore rules above |
+| Blank page / 404 | Use the full URL with the repository name and trailing `/` |
+| Key rejected / unknown model | ⚙️ Settings → **↻ Load my models** → pick one → **🧪 Test the AI** |
+| Quota reached | Wait a minute or change model / provider |
+
+### 🇪🇸 🇨🇳 🇷🇺 Versión corta · 简版 · Кратко
+- **ES:** 1) Crea un proyecto en Firebase. 2) Activa Google y correo/contraseña en Authentication. 3) Crea Firestore y pega las reglas de arriba. 4) Copia la configuración web en `const FB={…}` de `index.html`. 5) Sube `index.html` a un repositorio público de GitHub y activa Pages (main, /root). 6) Añade `TU-USUARIO.github.io` en Authentication → Ajustes → Dominios autorizados. 7) Pon tu clave de IA en ⚙️ Ajustes.
+- **中文：** 1）创建 Firebase 项目。2）在 Authentication 启用 Google 和邮箱/密码。3）创建 Firestore，并粘贴上面的规则。4）把网页应用配置填入 `index.html` 的 `const FB={…}`。5）把 `index.html` 上传到公开的 GitHub 仓库，并启用 Pages（main，/root）。6）在 Authentication → 设置 → 已授权网域中添加 `你的用户名.github.io`。7）在 ⚙️ 设置中填写 AI 密钥。
+- **RU:** 1) Создай проект Firebase. 2) Включи Google и e-mail/пароль в Authentication. 3) Создай Firestore и вставь правила выше. 4) Вставь веб-конфигурацию в `const FB={…}` в `index.html`. 5) Загрузи `index.html` в публичный репозиторий GitHub и включи Pages (main, /root). 6) Добавь `ТВОЙ-НИК.github.io` в Authentication → Настройки → Авторизованные домены. 7) Укажи ключ ИИ в ⚙️ Настройках.
 
 ---
 

@@ -64,9 +64,46 @@ a{color:var(--hi)}
 #mapbox.fs{position:fixed!important;inset:0;top:0!important;z-index:3000;border-radius:0;border:0}
 #mapbox.fs #lmap,#mapbox.fs #cmap{aspect-ratio:auto;height:100vh;height:100dvh}
 ::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:9px}
+
+[data-th=forest]{--bg:#07140e;--bg2:#12352a;--p:#0e2219;--p2:#17382a;--bd:#2d6b4f;--tx:#e6f4ea;--mu:#8fbfa4;--ac:#a3e635;--ac2:#65a30d;--hi:#fbbf24;--on:#0b1a05;--sea:#0a2a22}
+[data-th=ruby]{--bg:#14070b;--bg2:#3a1020;--p:#240d15;--p2:#38141f;--bd:#7a2a42;--tx:#fbe9ee;--mu:#c9929f;--ac:#fb7185;--ac2:#e11d48;--hi:#fbbf24;--on:#200509;--sea:#2a0c18}
+[data-th=desert]{--bg:#f6ead2;--bg2:#ecd3a0;--p:#fbf3df;--p2:#f3e2bd;--bd:#d6b57a;--tx:#3b2a12;--mu:#8a6d3b;--ac:#c2410c;--ac2:#9a3412;--hi:#0d9488;--on:#fff7ed;--sea:#c7e2e8}
+[data-th=cyber]{--bg:#05030f;--bg2:#1a0b3d;--p:#0d0a22;--p2:#181338;--bd:#4c2fb8;--tx:#e8f0ff;--mu:#8f9be0;--ac:#22d3ee;--ac2:#0891b2;--hi:#f0abfc;--on:#02131a;--sea:#090a2a}
+[data-th=aurora]{--bg:#eef6ff;--bg2:#d9ecff;--p:#ffffff;--p2:#e6f1fb;--bd:#b6d3ee;--tx:#12233a;--mu:#5b7694;--ac:#7c3aed;--ac2:#5b21b6;--hi:#06b6d4;--on:#ffffff;--sea:#bfe3f5}
+[data-th=ice]{--bg:#0a1822;--bg2:#1d4b66;--p:#11273a;--p2:#1b3b54;--bd:#4aa3c7;--tx:#eaf8ff;--mu:#9cc7dc;--ac:#7dd3fc;--ac2:#0ea5e9;--hi:#a7f3d0;--on:#04202f;--sea:#0c3550}
+[data-th=royal]{--bg:#100a1f;--bg2:#2a1a4e;--p:#1a1230;--p2:#271a48;--bd:#6d4fb3;--tx:#f5efff;--mu:#b9a6e0;--ac:#fbbf24;--ac2:#d97706;--hi:#f472b6;--on:#1f1303;--sea:#1a1040}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes wave{0%,100%{transform:translateX(0)}50%{transform:translateX(-16px)}}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shine{0%{background-position:0 0}100%{background-position:200% 0}}
+@keyframes pop{0%{scale:0}70%{scale:1.3}100%{scale:1}}
+@keyframes reveal{from{opacity:0;max-height:0}to{opacity:1;max-height:1200px}}
+#side.anim .card{animation:rise .4s ease both}#side.anim .card:nth-child(2){animation-delay:.06s}#side.anim .card:nth-child(3){animation-delay:.12s}
+.ev.new{animation:reveal 1s ease both;overflow:hidden}
+.float{animation:floaty 4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}.wave{animation:wave 6s ease-in-out infinite}.sun{animation:pulse 3s ease-in-out infinite}
+.mk{animation:pop .55s ease both}
+.logo svg{animation:spin 30s linear infinite}
+.logo b{background:linear-gradient(90deg,var(--ac),var(--hi),var(--ac));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+#prog{position:fixed;top:0;left:0;right:0;height:3px;z-index:6000;display:none;background:linear-gradient(90deg,transparent,var(--ac),var(--hi),transparent);background-size:200% 100%;animation:shine 1.1s linear infinite}#prog.on{display:block}
+.art{width:100%;height:auto;border-radius:16px;margin-bottom:10px;display:block}.art.sm{width:96px;margin:0 auto 6px}
+.era{font-size:26px;display:inline-block;animation:floaty 3s ease-in-out infinite}
+.sm{padding:2px 9px!important;font-size:13px}
+.sw3{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:3px;border:1px solid #0006}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}.tg button{text-align:left;display:flex;align-items:center;gap:6px;flex-wrap:wrap}.tg button.on{outline:2px solid var(--ac)}
+#drawer{position:fixed;inset:0;z-index:3000;pointer-events:none}
+#drawer .dr-bg{position:absolute;inset:0;background:#0009;opacity:0;transition:opacity .25s}
+#drawer .dr{position:absolute;top:0;left:0;bottom:0;width:min(82vw,310px);background:var(--p);border-right:1px solid var(--bd);padding:16px;transform:translateX(-102%);transition:transform .28s ease;overflow:auto;box-shadow:10px 0 40px #0008}
+#drawer.open{pointer-events:auto}#drawer.open .dr-bg{opacity:1}#drawer.open .dr{transform:none}
+#drawer .dr button{display:block;width:100%;text-align:left;margin:5px 0}
+.menu-b{margin-right:8px;padding:6px 11px}
+ol.tuto{padding-left:20px;margin:6px 0}ol.tuto li{margin:7px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <header id="bar"></header>
 <div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Fullscreen" title="F">⤢</button><button onclick="mo()" aria-label="Map options" title="O">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
+<div id="prog"></div><div id="drawer"></div>
 <div id="toast" onclick="this.style.display='none'"></div>
 <script>setTimeout(function(){if(window.__capOk)return;var s=document.getElementById("side");if(s)s.innerHTML='<div class="card"><h2>Cap Historica</h2><p>Le jeu n\'a pas pu démarrer : réseau coupé, bloqueur de contenu (désactive-le pour ce site) ou navigateur trop ancien. Recharge la page.</p><button onclick="location.reload()">Recharger</button></div>';var m=document.getElementById("mapbox");if(m)m.style.display="none"},12000)</script>
 <script type="module">
@@ -311,12 +348,14 @@ const TT=[
 const LN=[["fr","Français","français","fr-FR"],["en","English","English","en-US"],["es","Español","español","es-ES"],["zh","中文","中文 (chinois simplifié)","zh-CN"],["ru","Русский","русский","ru-RU"]];
 let LI=Math.max(0,LN.findIndex(l=>l[0]===(ls.get("lang")||(navigator.language||"fr").slice(0,2))));
 const TM={};TT.forEach(r=>TM[r[0]]=r);
+const TT2=[["Menu", "Menu", "Menú", "菜单", "Меню"], ["🏠 Accueil", "🏠 Home", "🏠 Inicio", "🏠 首页", "🏠 Главная"], ["📖 Tutoriel", "📖 Tutorial", "📖 Tutorial", "📖 教程", "📖 Руководство"], ["🎨 Thèmes", "🎨 Themes", "🎨 Temas", "🎨 主题", "🎨 Темы"], ["ℹ️ À propos", "ℹ️ About", "ℹ️ Acerca de", "ℹ️ 关于", "ℹ️ О игре"], ["Forêt", "Forest", "Bosque", "森林", "Лес"], ["Rubis", "Ruby", "Rubí", "红宝石", "Рубин"], ["Désert", "Desert", "Desierto", "沙漠", "Пустыня"], ["Cyber", "Cyber", "Cyber", "赛博", "Кибер"], ["Aurore", "Aurora", "Aurora", "极光", "Аврора"], ["Glace", "Ice", "Hielo", "冰", "Лёд"], ["Royal", "Royal", "Real", "皇家", "Королевский"], ["Annuler", "Cancel", "Cancelar", "取消", "Отмена"], ["📓 Carnet", "📓 Notebook", "📓 Cuaderno", "📓 笔记本", "📓 Блокнот"], ["Paragraphe modifié ✓", "Paragraph edited ✓", "Párrafo editado ✓", "段落已修改 ✓", "Абзац изменён ✓"], ["Ajouté au carnet ✓", "Added to notebook ✓", "Añadido al cuaderno ✓", "已加入笔记本 ✓", "Добавлено в блокнот ✓"], ["Télécharger", "Download", "Descargar", "下载", "Скачать"], ["Épingle les paragraphes de la chronique (📌) et écris tes notes ici. Elles restent sur cet appareil.", "Pin chronicle paragraphs (📌) and write your notes here. They stay on this device."], ["Rien pour l'instant. Joue un tour pour écrire l'histoire.", "Nothing yet. Play a turn to write history."], ["Chaque paragraphe terminé arrive dans la chronique : l'hôte peut le modifier (✏️), et l'IA reprend le dernier paragraphe modifié au tour suivant.", "Each finished paragraph goes to the chronicle: the host can edit it (✏️), and the AI picks up the latest edited paragraph on the next turn."], ["Choisis l'apparence du jeu. Le thème est enregistré sur cet appareil.", "Pick the look of the game. The theme is saved on this device."], ["1. Connecte-toi avec Google ou par e-mail, puis choisis un pseudo dans ⚙️ Réglages.", "1. Sign in with Google or email, then pick a nickname in ⚙️ Settings."], ["2. Ajoute une clé d'IA gratuite (Gemini, Groq…) et appuie sur « 🧪 Tester l'IA ».", "2. Add a free AI key (Gemini, Groq…) and press “🧪 Test the AI”."], ["3. Menu ☰ → ➕ Créer : choisis la carte, l'époque, la difficulté et le contexte (ou laisse l'IA les écrire).", "3. Menu ☰ → ➕ Create: pick the map, era, difficulty and context (or let the AI write them)."], ["4. Clique sur un pays pour voir son drapeau et sa fiche, puis « 🎮 Jouer » pour le diriger.", "4. Click a country to see its flag and profile, then “🎮 Play” to lead it."], ["5. Écris tes ordres librement, puis « ✅ Je suis prêt ». Quand tout le monde est prêt, l'IA résout le tour.", "5. Write your orders freely, then “✅ I'm ready”. When everyone is ready, the AI resolves the turn."], ["6. Lis la chronique : l'hôte peut corriger les paragraphes (✏️) et chacun peut les épingler dans son carnet (📌).", "6. Read the chronicle: the host can fix paragraphs (✏️) and everyone can pin them to their notebook (📌)."], ["7. Invite tes amis avec le lien (👥 Joueurs → Copier le lien). 3 parties maximum par compte.", "7. Invite friends with the link (👥 Players → Copy link). 3 games maximum per account."], ["8. Mode 🎓 Éducatif : choisis ta classe et tes époques, apprends dates et personnages, réponds aux quiz.", "8. 🎓 Educational mode: pick your class and eras, learn dates and key figures, answer the quizzes."], ["Cap Historica : jeu de géopolitique et d'histoire propulsé par l'IA. Idée et tests : conptetrol-commits. Conception et développement : Claude (Anthropic).", "Cap Historica: an AI-powered geopolitics and history game. Idea and testing: conptetrol-commits. Design and development: Claude (Anthropic)."]];
+TT2.forEach(r=>TM[r[0]]=r);
 const t=(s,...a)=>{const r=TM[s];let o=LI===0||!r?s:(r[LI]||r[1]||s);a.forEach((v,i)=>o=o.split("{"+i+"}").join(v));return o};
 const LANGN=()=>LN[LI][2];
 document.documentElement.lang=LN[LI][0];
 
 const DIFF={facile:"Monde clément : les ordres des joueurs réussissent souvent, les IA sont passives.",normal:"Équilibré et plausible.",réaliste:"Conséquences réalistes (logistique, économie, opinion, rivalités) ; les plans ambitieux échouent souvent.",difficile:"Impitoyable : IA agressives et opportunistes, crises, coups d'État et guerres fréquents."};
-const VER="Cap Historica · v26.11.26";
+const VER="Cap Historica · v26.11.27";
 const DAY=864e5,MAXG=3,GL="https://generativelanguage.googleapis.com/v1beta/models";
 const PROV={
   gemini:{n:"Google Gemini · gratuit",free:1,k:"https://aistudio.google.com/apikey",def:["gemini-2.5-flash","gemini-2.5-flash-lite"]},
@@ -674,9 +713,63 @@ window.stopSpeak=()=>{spk++;if(hasTTS)speechSynthesis.cancel()};
 
 /* ---------- Interface ---------- */
 const LOGO=`<svg width="26" height="26" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/><path d="M16 4l3.5 12L16 28l-3.5-12z" fill="var(--ac)"/><path d="M4 16l12-3.5L28 16l-12 3.5z" fill="var(--hi)" opacity=".8"/></svg>`;
-function bar(){$("#bar").innerHTML=`<div class="logo">${LOGO}<b>Cap Historica</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:`<div><select onchange="setLang(this.value)" style="width:auto">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div>`)}
+
+/* ---------- Illustrations, thèmes, menu latéral ---------- */
+const THEMES=[["ocean","🌊","Océan","#07131f","#f5b942","#2dd4bf"],["parch","📜","Parchemin","#efe4cc","#b45f1c","#2f7d6b"],["night","🌌","Nuit","#0f0d1a","#c4a1ff","#f472b6"],["forest","🌲","Forêt","#07140e","#a3e635","#fbbf24"],["ruby","🍷","Rubis","#14070b","#fb7185","#fbbf24"],["desert","🏜️","Désert","#f6ead2","#c2410c","#0d9488"],["cyber","🤖","Cyber","#05030f","#22d3ee","#f0abfc"],["aurora","🌈","Aurore","#eef6ff","#7c3aed","#06b6d4"],["ice","❄️","Glace","#0a1822","#7dd3fc","#a7f3d0"],["royal","👑","Royal","#100a1f","#fbbf24","#f472b6"]];
+const ART={
+ hero:`<svg viewBox="0 0 320 150" class="art" aria-hidden="true"><defs><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--hi)" stop-opacity=".35"/><stop offset="1" stop-color="var(--ac)" stop-opacity=".06"/></linearGradient></defs><rect width="320" height="150" rx="16" fill="url(#gs)"/><circle cx="262" cy="40" r="22" fill="var(--ac)" class="sun"/><g class="float"><circle cx="96" cy="70" r="42" fill="var(--p2)" stroke="var(--hi)" stroke-width="2"/><path d="M58 66c14-12 24 6 38-2s26-12 40 4M60 88c18 8 30-6 46 0s24 6 32-2" fill="none" stroke="var(--hi)" stroke-width="2" opacity=".85"/><ellipse cx="96" cy="70" rx="18" ry="42" fill="none" stroke="var(--hi)" opacity=".5"/><path d="M96 20v100" stroke="var(--hi)" opacity=".4"/></g><g class="float" style="animation-delay:-1.5s"><path d="M196 112h40l-7 11h-26z" fill="var(--ac2)"/><path d="M216 112V74l22 34z" fill="var(--tx)" opacity=".92"/><path d="M214 112V84l-18 24z" fill="var(--tx)" opacity=".7"/></g><path d="M0 124c40-14 80 8 120-2s80-14 120-2 60 6 80 0v30H0z" fill="var(--hi)" opacity=".28" class="wave"/></svg>`,
+ folder:`<svg viewBox="0 0 64 64" class="art sm" aria-hidden="true"><path d="M8 20h18l6 7h24v26H8z" fill="var(--p2)" stroke="var(--ac)" stroke-width="2" stroke-linejoin="round"/><path d="M8 30h48" stroke="var(--ac)" stroke-width="2" opacity=".6"/><circle cx="48" cy="46" r="6" fill="var(--hi)" class="sun"/></svg>`,
+ scroll:`<svg viewBox="0 0 64 64" class="art sm" aria-hidden="true"><rect x="12" y="8" width="40" height="46" rx="6" fill="var(--p2)" stroke="var(--ac)" stroke-width="2"/><path d="M20 22h24M20 30h24M20 38h15" stroke="var(--mu)" stroke-width="3" stroke-linecap="round"/><circle cx="46" cy="46" r="7" fill="var(--ac)" class="sun"/></svg>`,
+ book:`<svg viewBox="0 0 64 64" class="art sm" aria-hidden="true"><path d="M8 14c10-4 18-2 24 4 6-6 14-8 24-4v34c-10-4-18-2-24 4-6-6-14-8-24-4z" fill="var(--p2)" stroke="var(--ac)" stroke-width="2" stroke-linejoin="round"/><path d="M32 18v34" stroke="var(--ac)" stroke-width="2"/></svg>`
+};
+const ERAS=[[-1e9,-3500,"🦣"],[-3500,-800,"🔺"],[-800,-27,"🏛️"],[-27,476,"🏟️"],[476,1000,"🛡️"],[1000,1450,"🏰"],[1450,1650,"🎨"],[1650,1789,"👑"],[1789,1850,"⚔️"],[1850,1914,"🏭"],[1914,1945,"🪖"],[1945,1991,"🚀"],[1991,9999,"🌐"]];
+const eraIcon=y=>(ERAS.find(e=>y>=e[0]&&y<e[1])||ERAS[ERAS.length-1])[2];
+let NAVOPEN=false,PANEL="",lastVK="";
+function drawer(){
+  const d=$("#drawer");if(!d)return;
+  const it=(k,l)=>`<button class="ghost" onclick="nav('${k}')">${l}</button>`;
+  d.className=NAVOPEN?"open":"";
+  d.innerHTML=`<div class="dr-bg" onclick="nav('toggle')"></div><nav class="dr"><h2>${LOGO} ${t("Menu")}</h2>${user?it("home",t("🏠 Accueil"))+it("mine",t("📂 Mes parties"))+it("new",t("➕ Créer"))+it("edu",t("🎓 Éducatif"))+it("join",t("🔑 Rejoindre")):""}${it("tuto",t("📖 Tutoriel"))}${it("themes",t("🎨 Thèmes"))}${user?it("settings",t("⚙️ Réglages")):""}${it("about",t("ℹ️ À propos"))}</nav>`;
+}
+window.nav=k=>{
+  if(k==="toggle"){NAVOPEN=!NAVOPEN;return drawer()}
+  NAVOPEN=false;
+  if(k==="tuto"||k==="themes"||k==="about"){PANEL=PANEL===k?"":k}
+  else if(k==="settings"){PANEL="";cfgOpen=true}
+  else{PANEL="";if(G)stop();LF.menu=k==="home"?"":k}
+  side();scrollTo({top:0,behavior:"smooth"});
+};
+function panelCard(){
+  if(!PANEL)return"";
+  const x=`<button class="ghost" style="margin-top:8px" onclick="nav('${PANEL}')">${t("Fermer")}</button>`;
+  if(PANEL==="tuto")return `<div class="card"><div style="text-align:center">${ART.book}</div><h2>${t("📖 Tutoriel")}</h2><ol class="tuto" style="list-style:none;padding:0">${[1,2,3,4,5,6,7,8].map(i=>`<li>${t(TUTO[i-1])}</li>`).join("")}</ol>${x}</div>`;
+  if(PANEL==="themes")return `<div class="card"><h2>${t("🎨 Thèmes")}</h2><p class="mut">${t("Choisis l'apparence du jeu. Le thème est enregistré sur cet appareil.")}</p><div class="tg">${THEMES.map(h=>`<button class="ghost ${h[0]===TH?"on":""}" onclick="setTheme('${h[0]}')"><span>${h[1]}</span> <span>${t(h[2])}</span><span style="flex-basis:100%"><i class="sw3" style="background:${h[3]}"></i><i class="sw3" style="background:${h[4]}"></i><i class="sw3" style="background:${h[5]}"></i></span></button>`).join("")}</div>${x}</div>`;
+  return `<div class="card"><div style="text-align:center">${LOGO}</div><h2>Cap Historica</h2><p class="mut">${t("Cap Historica : jeu de géopolitique et d'histoire propulsé par l'IA. Idée et tests : conptetrol-commits. Conception et développement : Claude (Anthropic).")}</p><p class="mut small">${VER}</p>${x}</div>`;
+}
+const TUTO=["1. Connecte-toi avec Google ou par e-mail, puis choisis un pseudo dans ⚙️ Réglages.","2. Ajoute une clé d'IA gratuite (Gemini, Groq…) et appuie sur « 🧪 Tester l'IA ».","3. Menu ☰ → ➕ Créer : choisis la carte, l'époque, la difficulté et le contexte (ou laisse l'IA les écrire).","4. Clique sur un pays pour voir son drapeau et sa fiche, puis « 🎮 Jouer » pour le diriger.","5. Écris tes ordres librement, puis « ✅ Je suis prêt ». Quand tout le monde est prêt, l'IA résout le tour.","6. Lis la chronique : l'hôte peut corriger les paragraphes (✏️) et chacun peut les épingler dans son carnet (📌).","7. Invite tes amis avec le lien (👥 Joueurs → Copier le lien). 3 parties maximum par compte.","8. Mode 🎓 Éducatif : choisis ta classe et tes époques, apprends dates et personnages, réponds aux quiz."];
+
+/* ---------- Carnet personnel et édition des paragraphes de la chronique ---------- */
+const nbGet=()=>ls.get("nb:"+code),nbSet=v=>ls.set("nb:"+code,v);
+function notebook(){
+  return `<div class="card"><h2>${t("📓 Carnet")}</h2><p class="mut small">${t("Épingle les paragraphes de la chronique (📌) et écris tes notes ici. Elles restent sur cet appareil.")}</p><textarea id="nb" oninput="nbSet(this.value)" style="min-height:110px">${esc(nbGet())}</textarea><div class="row"><button class="ghost sm" onclick="nbDl()">${t("Télécharger")}</button></div></div>`;
+}
+window.nbSet=nbSet;
+window.nbDl=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([nbGet()],{type:"text/plain"}));a.download="carnet-"+code+".txt";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};
+window.pinLog=i=>{const l=(G.log||[])[i];if(!l)return;nbSet((nbGet()?nbGet()+"\n\n":"")+"["+(l.date||l.year)+"] "+l.titre+"\n"+l.recit);toast(t("Ajouté au carnet ✓"));side()};
+window.editLog=i=>{if(G&&G.host===user.uid){D.ed=i;side()}};
+function editForm(l,i){return `<div class="ev"><input id="et" value="${esc(l.titre)}" maxlength="120"><textarea id="er" style="margin-top:6px;min-height:150px">${esc(l.recit)}</textarea><div class="row"><button onclick="saveLog(${i})">${t("Enregistrer")}</button><button class="ghost" onclick="D.ed=undefined;side()">${t("Annuler")}</button></div>`}
+window.saveLog=async i=>{
+  if(!G||G.host!==user.uid)return;
+  const ti=($("#et")||{}).value,re=($("#er")||{}).value;
+  try{
+    await runTransaction(db,async tx=>{const r=doc(db,"games",code),sn=await tx.get(r),lg=[...(sn.data().log||[])];if(!lg[i])throw Error("?");lg[i]={...lg[i],titre:String(ti||lg[i].titre).slice(0,120),recit:String(re||lg[i].recit).slice(0,3000),edited:true};tx.update(r,{log:lg,...touch()})});
+    D.ed=undefined;toast(t("Paragraphe modifié ✓"));side();
+  }catch(e){toast("⚠️ "+(e.message||e))}
+};
+
+function bar0(){$("#bar").innerHTML=`<div class="logo">${LOGO}<b>Cap Historica</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:`<div><select onchange="setLang(this.value)" style="width:auto">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div>`)}
 function loginCard(){
-  return `<div class="card hero"><h2>${t("Dirige une nation. Réécris l'histoire.")}</h2><p class="mut">${t("Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, mode éducatif, parties sauvegardées.")}</p>
+  return `<div class="card hero">${ART.hero}<h2>${t("Dirige une nation. Réécris l'histoire.")}</h2><p class="mut">${t("Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, mode éducatif, parties sauvegardées.")}</p>
   <button class="big" onclick="loginG()">${t("Se connecter avec Google")}</button>
   <h2 style="margin-top:16px">${t("Ou par e-mail")}</h2>
   <input type="email" placeholder="${t("E-mail")}" value="${esc(D.em||"")}" oninput="D.em=this.value"><input type="password" placeholder="${t("Mot de passe (6 caractères min.)")}" value="${esc(D.pw||"")}" oninput="D.pw=this.value" style="margin-top:6px">
@@ -686,7 +779,7 @@ function loginCard(){
 function settings(){
   const P=AI.prov,fr=id=>PROV[P].free||/:free$/.test(id),Ls=[...new Set([mdl(),...(AI.lists[P]||[]),...PROV[P].def])];
   return `<div class="card"><h2>${t("⚙️ Réglages")}</h2>
-  <div class="row"><div style="flex:1"><label>${t("Langue")}</label><select onchange="setLang(this.value)">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div><div style="flex:1"><label>${t("Thème")}</label><select onchange="setTheme(this.value)">${[["ocean",t("Océan")],["parch",t("Parchemin")],["night",t("Nuit")]].map(([k,l])=>`<option value="${k}" ${k===TH?"selected":""}>${l}</option>`).join("")}</select></div></div>
+  <div class="row"><div style="flex:1"><label>${t("Langue")}</label><select onchange="setLang(this.value)">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div><div style="flex:1"><label>${t("Thème")}</label><select onchange="setTheme(this.value)">${THEMES.map(x=>[x[0],x[1]+" "+t(x[2])]).map(([k,l])=>`<option value="${k}" ${k===TH?"selected":""}>${l}</option>`).join("")}</select></div></div>
   <label>${t("Pseudo (seul nom visible par les autres)")}</label><input id="ps" maxlength="20" value="${esc(PSEUDO)}">
   <label>${t("Fournisseur d'IA")}</label><select id="pv" onchange="chProv(this.value)">${Object.entries(PROV).map(([k,v])=>`<option value="${k}" ${k===P?"selected":""}>${v.n}</option>`).join("")}</select>
   <label>${t("Clé API")} <a href="${PROV[P].k}" target="_blank" rel="noopener">(${t("obtenir une clé")})</a></label><input id="ky" type="password" autocomplete="off" value="${esc(AI.keys[P]||"")}">
@@ -716,7 +809,7 @@ function lobby(){
   let b="";
   if(T==="mine")b=MINE.length?MINE.map(g=>{const idle=Math.floor((Date.now()-(g.lastActive||g.created||Date.now()))/DAY),host=g.host===user.uid;
     return `<div class="card"><b>${esc(g.name||"…")}</b>${g.edu?" 🎓":""}<div class="mut">${esc(dateStr(g))} · ${Object.keys(g.players||{}).length}/${g.maxPlayers||8} ${t("joueurs")} · ${esc(g.c)}${host?" · 👑":""}</div>${idle>=7?`<div class="warn">${t("⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?",idle)}</div>`:""}
-    <div class="row"><button data-c="${esc(g.c)}" onclick="join(this.dataset.c)">${t("▶ Ouvrir")}</button>${idle>=7?`<button class="ghost" data-c="${esc(g.c)}" onclick="keepG(this.dataset.c)">${t("Garder")}</button>`:""}${host?`<button class="ghost" data-c="${esc(g.c)}" onclick="delG(this.dataset.c)">${t("🗑️ Supprimer")}</button>`:`<button class="ghost" data-c="${esc(g.c)}" onclick="leaveG(this.dataset.c)">${t("Quitter")}</button>`}</div></div>`}).join(""):`<div class="card"><p class="mut">${t("Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte.")}</p></div>`;
+    <div class="row"><button data-c="${esc(g.c)}" onclick="join(this.dataset.c)">${t("▶ Ouvrir")}</button>${idle>=7?`<button class="ghost" data-c="${esc(g.c)}" onclick="keepG(this.dataset.c)">${t("Garder")}</button>`:""}${host?`<button class="ghost" data-c="${esc(g.c)}" onclick="delG(this.dataset.c)">${t("🗑️ Supprimer")}</button>`:`<button class="ghost" data-c="${esc(g.c)}" onclick="leaveG(this.dataset.c)">${t("Quitter")}</button>`}</div></div>`}).join(""):`<div class="card"><div style="text-align:center">${ART.folder}</div><p class="mut">${t("Aucune partie sauvegardée. Crée-en une ou rejoins tes amis. Tes parties restent enregistrées sur ton compte.")}</p></div>`;
   else if(T==="join")b=`<div class="card"><h2>${t("🔑 Rejoindre")}</h2><div class="row"><input placeholder="${t("Code de la partie")}" value="${esc(LF.jc)}" oninput="LF.jc=this.value"><button onclick="join(LF.jc)">${t("Rejoindre")}</button></div></div><div class="card"><h2>${t("📥 Importer")}</h2><input type="file" accept="application/json,.json" onchange="importG(this.files[0])"></div>`;
   else if(T==="edu"){
     const cl=LF.edu?EDU.find(x=>x.id===LF.edu.lvl):null;
@@ -774,7 +867,7 @@ function game(){
     <input placeholder="${t("Ta question…")}" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":t("Demander")}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>${t("💡 Suggérer des ordres")}</button></div></div>`;
   }else if(TAB==="learn")b=learn();
   else if(TAB==="log"){
-    b=`<div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2><div class="row"><input placeholder="🔎" value="${esc(D.lf||"")}" onchange="D.lf=this.value;side()"><label style="margin:0"><input type="checkbox" ${D.lm?"checked":""} onchange="D.lm=this.checked;side()"> ${t("Ma nation")}</label></div>${(G.log||[]).map((l,i)=>[l,i]).reverse().filter(([l])=>logOk(l)).map(([l,i])=>`<div class="ev"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)})</span> <button class="ghost" style="padding:2px 9px" onclick="speakLog(${i})">🔊</button><p>${esc(l.recit)}</p>${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<p class="mut">—</p>`}</div>`;
+    b=`${notebook()}<p class="mut small">${t("Chaque paragraphe terminé arrive dans la chronique : l'hôte peut le modifier (✏️), et l'IA reprend le dernier paragraphe modifié au tour suivant.")}</p><div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2><div class="row"><input placeholder="🔎" value="${esc(D.lf||"")}" onchange="D.lf=this.value;side()"><label style="margin:0"><input type="checkbox" ${D.lm?"checked":""} onchange="D.lm=this.checked;side()"> ${t("Ma nation")}</label></div>${(G.log||[]).map((l,i)=>[l,i]).reverse().filter(([l])=>logOk(l)).map(([l,i])=>`${D.ed===i?editForm(l,i):`<div class="ev${i===(G.log||[]).length-1?" new":""}"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)}${l.edited?" ✏️":""})</span> <button class="ghost sm" onclick="speakLog(${i})">🔊</button> <button class="ghost sm" onclick="pinLog(${i})">📌</button>${G.host===user.uid?` <button class="ghost sm" onclick="editLog(${i})">✏️</button>`:""}<p>${esc(l.recit)}</p>`}${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<div style="text-align:center">${ART.scroll}<p class="mut">${t("Rien pour l'instant. Joue un tour pour écrire l'histoire.")}</p></div>`}</div>`;
   }else{
     b=`<div class="card"><h2>${t("👥 Joueurs")} (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span>${p.seen&&Date.now()-p.seen<100000?"🟢":"⚪"}</span> <span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${G.edu?` · ${p.sc||0} ⭐`:""}${id===user.uid?" ("+t("toi")+")":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">${t("Exclure")}</button>`:""}</div>`).join("")}</div>
     ${(G.trt||[]).length?`<div class="card"><h2>${t("Diplomatie")}</h2>${G.trt.map(x=>`<div>${({alliance:"🤝",guerre:"⚔️",paix:"🕊️",embargo:"🚫",commerce:"💱"})[x.type]||"•"} <b>${esc(x.a)}</b> ↔ <b>${esc(x.b)}</b> <span class="mut">${esc(x.note)}</span></div>`).join("")}</div>`:""}
@@ -787,15 +880,29 @@ function game(){
   }
   const TB=[["play",t("🎮 Jouer")],["adv",t("🧠 Conseiller")],...(G.edu?[["learn",t("🎓 Apprendre")]]:[]),["log",t("📜 Chronique")],["ppl",t("👥 Joueurs")]];
   return `${idle>=7?`<div class="warn">${t("⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?",idle)} <button class="ghost" onclick="keepG()">${t("Garder")}</button></div>`:""}
-  <div class="card head"><b>${esc(G.name||"…")}</b>${G.edu?" 🎓":""}<span>· ${esc(dateStr(G))} · ${t("Tour")} ${esc(G.turn)}</span><span class="tag">${t(G.diff)}</span><span class="tag">⏱ ${stepLbl(G.step||12)}</span></div>
+  <div class="card head"><span class="era">${eraIcon(G.year)}</span><b>${esc(G.name||"…")}</b>${G.edu?" 🎓":""}<span>· ${esc(dateStr(G))} · ${t("Tour")} ${esc(G.turn)}</span><span class="tag">${t(G.diff)}</span><span class="tag">⏱ ${stepLbl(G.step||12)}</span></div>
   <div class="tabs">${TB.map(([k,l])=>`<button class="${TAB===k?"on":""}" onclick="tab('${k}')">${l}</button>`).join("")}</div>`+b;
 }
+
+function bar(){
+  bar0();
+  const lg=document.querySelector("#bar .logo");
+  if(lg&&!lg.querySelector(".menu-b"))lg.insertAdjacentHTML("afterbegin",'<button class="ghost menu-b" onclick="nav(\'toggle\')" aria-label="Menu">☰</button>');
+  drawer();
+}
 function side(){
+  side0();
+  const sd=$("#side"),vk=(G?code+TAB:"menu"+LF.menu)+PANEL+(cfgOpen?"c":"")+(SEL?"s":"");
+  if(vk!==lastVK){lastVK=vk;sd.classList.remove("anim");void sd.offsetWidth;sd.classList.add("anim")}
+  const pg=$("#prog");if(pg)pg.className=busy?"on":"";
+}
+
+function side0(){
   bar();const s=$("#side");$("#mapbox").style.display=user?"block":"none";
   if(!ready){s.innerHTML=`<p class="mut">…</p>`;return}
   if(!user){s.innerHTML=loginCard();return}
   const vb=needVerify()?`<div class="warn">${t("📧 Vérifie ton adresse e-mail pour jouer (regarde aussi les spams).")}<div class="row"><button class="ghost" onclick="resend()">${t("Renvoyer l'e-mail")}</button><button class="ghost" onclick="reloadU()">${t("J'ai vérifié")}</button></div></div>`:"";
-  s.innerHTML=((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+(mapOpen?mapCard():"")+card()+(G?game():lobby())+`<p class="mut small" style="text-align:center;margin:18px 0 4px">${VER}</p>`;
+  s.innerHTML=panelCard()+((cfgOpen||!PSEUDO||!AI.keys[AI.prov])?settings():"")+vb+(mapOpen?mapCard():"")+card()+(G?game():lobby())+`<p class="mut small" style="text-align:center;margin:18px 0 4px">${VER}</p>`;
 }
 
 /* ---------- Connexion : Google et e-mail uniquement ---------- */
@@ -814,7 +921,7 @@ window.reloadU=async()=>{try{await user.reload();user=auth.currentUser;side()}ca
 window.out=()=>{stop();MINE=[];signOut(auth)};
 window.cfg=()=>{cfgOpen=!cfgOpen;side()};
 window.setLang=l=>{ls.set("lang",l);location.reload()};
-window.setTheme=v=>{TH=v;ls.set("th",v);document.documentElement.dataset.th=v;const c={ocean:"#07131f",parch:"#efe4cc",night:"#0f0d1a"}[v];document.querySelector('meta[name=theme-color]').content=c;side()};
+window.setTheme=v=>{TH=v;ls.set("th",v);document.documentElement.dataset.th=v;const mt_=document.querySelector("meta[name=theme-color]");if(mt_)mt_.content=(THEMES.find(x=>x[0]===v)||[])[3]||"#07131f";side()};
 window.setNar=(k,v)=>{NAR[k]=v;ls.set("nar",JSON.stringify(NAR));if(k==="on"&&!v)stopSpeak()};
 window.setMO=(k,v)=>{MO[k]=v;ls.set("mo",JSON.stringify(MO));osig="";colorMap();side()};
 window.chProv=p=>{readCfg();AI.prov=p;side()};
