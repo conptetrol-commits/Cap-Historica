@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#07131f">
 <title>Cap Historica</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;600;700&family=IM+Fell+English&family=Orbitron:wght@500;700&family=Rajdhani:wght@500;700&family=Playfair+Display:wght@600;800&family=Quicksand:wght@500;700&family=Marcellus&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -100,9 +100,105 @@ a{color:var(--hi)}
 .menu-b{margin-right:8px;padding:6px 11px}
 ol.tuto{padding-left:20px;margin:6px 0}ol.tuto li{margin:7px 0}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== Personnalités de thèmes : polices, formes, textures et fonds de carte différents ===== */
+[data-th=parch] body{font-family:"IM Fell English",Georgia,serif;font-size:17px;background:radial-gradient(900px 500px at 50% -10%,#fff7e0,transparent),repeating-linear-gradient(0deg,#0000 0 3px,#8a6d3b10 3px 4px),var(--bg)}
+[data-th=parch] h1,[data-th=parch] h2,[data-th=parch] .logo b{font-family:"IM Fell English",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:.2px}
+[data-th=parch] h2::first-letter{font-size:1.5em}
+[data-th=parch] .card{border:3px double #8a6d3b;border-radius:3px;background:linear-gradient(180deg,#fbf4e1,#f4e8cb);box-shadow:3px 4px 0 #8a6d3b33}
+[data-th=parch] button{border-radius:2px;background:#6b3f12;color:#fff4dc;box-shadow:2px 2px 0 #0003;text-transform:none;font-family:inherit;border:1px solid #3d230a}
+[data-th=parch] button.ghost{background:#efe2c3;color:#3d230a;border:1px solid #8a6d3b}
+[data-th=parch] input,[data-th=parch] select,[data-th=parch] textarea{border-radius:2px;background:#fffaf0;border:1px solid #8a6d3b;font-family:inherit}
+[data-th=parch] #mapbox{border:4px double #6b3f12;border-radius:4px}
+[data-th=parch] .leaflet-tile-pane{filter:sepia(.55) contrast(.95) saturate(.85)}
+[data-th=parch] #bar{background:#f2e6c9ee;border-bottom:3px double #8a6d3b}
+[data-th=night] body{background:radial-gradient(2px 2px at 12% 18%,#fff,transparent),radial-gradient(1.5px 1.5px at 78% 12%,#fff,transparent),radial-gradient(2px 2px at 46% 70%,#fff9,transparent),radial-gradient(1.5px 1.5px at 90% 62%,#fff,transparent),radial-gradient(1px 1px at 30% 40%,#fff,transparent),radial-gradient(1000px 520px at 15% -8%,var(--bg2),transparent),var(--bg)}
+[data-th=night] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(1.5px 1.5px at 20% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 60% 20%,#fffc,transparent),radial-gradient(2px 2px at 85% 80%,#fff,transparent),radial-gradient(1px 1px at 40% 85%,#fff,transparent);animation:twinkle 4s ease-in-out infinite}
+[data-th=night] .card{border-radius:22px;background:linear-gradient(160deg,#2a2150cc,#1a1630cc);backdrop-filter:blur(8px);box-shadow:0 0 0 1px #8b5cf655,0 10px 40px #8b5cf622}
+[data-th=night] button{border-radius:999px;box-shadow:0 0 18px #8b5cf655}
+[data-th=night] #mapbox{border-radius:26px;box-shadow:0 0 40px #8b5cf644}
+[data-th=night] .leaflet-tile-pane{filter:hue-rotate(235deg) saturate(.75) brightness(.92)}
+[data-th=forest] body{font-family:Quicksand,system-ui,sans-serif;background:radial-gradient(circle at 15% 12%,#1f5a3f55 0 120px,transparent 121px),radial-gradient(circle at 88% 78%,#2d6b4f44 0 160px,transparent 161px),radial-gradient(circle at 60% 40%,#a3e63510 0 90px,transparent 91px),var(--bg)}
+[data-th=forest] h1,[data-th=forest] h2,[data-th=forest] .logo b{font-family:Quicksand,sans-serif;font-weight:700}
+[data-th=forest] .card{border-radius:28px 28px 28px 8px;border:2px solid #2d6b4f;background:linear-gradient(180deg,#17382a,#0e2219)}
+[data-th=forest] button{border-radius:999px 999px 999px 8px}
+[data-th=forest] #mapbox{border-radius:34px 34px 34px 10px;border:3px solid #2d6b4f}
+[data-th=forest] .leaflet-tile-pane{filter:hue-rotate(78deg) saturate(.8) brightness(.95)}
+[data-th=ruby] body{font-family:"Playfair Display",Georgia,serif;font-size:16px;background:radial-gradient(1000px 520px at 50% -20%,#5a1530,transparent),repeating-linear-gradient(45deg,#0000 0 14px,#ffffff05 14px 15px),var(--bg)}
+[data-th=ruby] h1,[data-th=ruby] h2,[data-th=ruby] .logo b{font-family:"Playfair Display",serif;font-weight:800;letter-spacing:.8px;text-transform:uppercase;font-size:15px}
+[data-th=ruby] .card{border-radius:2px;border:1px solid #fbbf2466;background:linear-gradient(180deg,#2c0f1a,#1b0910);box-shadow:inset 0 0 0 4px #14070b,inset 0 0 0 5px #fbbf2433}
+[data-th=ruby] button{border-radius:0;background:transparent;color:#fbbf24;border:1px solid #fbbf24;box-shadow:none;text-transform:uppercase;letter-spacing:1px;font-size:13px}
+[data-th=ruby] button:hover{background:#fbbf24;color:#2a0c18}
+[data-th=ruby] button.ghost{border-color:#fb718588;color:#fbe9ee}
+[data-th=ruby] .tabs button.on,[data-th=ruby] .seg button.on{background:#fbbf24;color:#2a0c18}
+[data-th=ruby] #mapbox{border-radius:0;border:1px solid #fbbf24}
+[data-th=ruby] .leaflet-tile-pane{filter:hue-rotate(-38deg) saturate(1.15) brightness(.88)}
+[data-th=desert] body{font-family:Marcellus,Georgia,serif;background:radial-gradient(900px 420px at 80% -10%,#ffd98a,transparent),linear-gradient(180deg,#f6ead2,#efd9a7 60%,#e7c486)}
+[data-th=desert] h1,[data-th=desert] h2,[data-th=desert] .logo b{font-family:Marcellus,serif;font-weight:400;letter-spacing:1.4px;text-transform:uppercase;font-size:15px}
+[data-th=desert] .card{border-radius:6px 26px 6px 26px;border:2px solid #c2410c55;background:linear-gradient(180deg,#fff8e8,#f6e7c4);box-shadow:5px 6px 0 #c2410c22}
+[data-th=desert] button{border-radius:6px 18px 6px 18px;background:linear-gradient(135deg,#c2410c,#ea580c)}
+[data-th=desert] #mapbox{border-radius:8px 34px 8px 34px;border:3px solid #c2410c88}
+[data-th=desert] .leaflet-tile-pane{filter:sepia(.75) saturate(1.4) hue-rotate(-12deg) brightness(1.02)}
+[data-th=cyber] body{font-family:Rajdhani,system-ui,sans-serif;font-size:17px;letter-spacing:.3px}
+[data-th=cyber] body::after{content:"";position:fixed;inset:0;z-index:5500;pointer-events:none;background:repeating-linear-gradient(0deg,#0000 0 2px,#22d3ee08 2px 3px);animation:scan 8s linear infinite}
+[data-th=cyber] h1,[data-th=cyber] h2,[data-th=cyber] .logo b{font-family:Orbitron,sans-serif;text-transform:uppercase;letter-spacing:2px;font-size:14px}
+[data-th=cyber] .card{border-radius:0;border:1px solid #22d3ee;background:linear-gradient(180deg,#120d2e,#0a0820);box-shadow:0 0 0 1px #f0abfc44,0 0 22px #22d3ee33,inset 0 0 30px #4c2fb822}
+[data-th=cyber] button{border-radius:0;background:#22d3ee;color:#02131a;box-shadow:0 0 16px #22d3ee88;text-transform:uppercase;letter-spacing:1px;font-family:Orbitron,sans-serif;font-size:12px}
+[data-th=cyber] button.ghost{background:transparent;color:#22d3ee;border:1px solid #22d3ee;box-shadow:none}
+[data-th=cyber] input,[data-th=cyber] select,[data-th=cyber] textarea{border-radius:0;border:1px solid #4c2fb8;background:#0a0820}
+[data-th=cyber] #mapbox{border-radius:0;border:1px solid #22d3ee;box-shadow:0 0 36px #22d3ee44}
+[data-th=cyber] .leaflet-tile-pane{filter:hue-rotate(250deg) saturate(1.9) contrast(1.15) brightness(.82)}
+[data-th=aurora] body{font-family:Quicksand,system-ui,sans-serif;background:linear-gradient(120deg,#c7f0ff,#e4d4ff,#ffd9f0,#c7f0ff);background-size:300% 300%;animation:aur 14s ease-in-out infinite}
+[data-th=aurora] h1,[data-th=aurora] h2,[data-th=aurora] .logo b{font-family:Quicksand,sans-serif;font-weight:700}
+[data-th=aurora] .card{border-radius:26px;background:#ffffffaa;backdrop-filter:blur(14px);border:1px solid #ffffffcc;box-shadow:0 10px 40px #7c3aed22}
+[data-th=aurora] button{border-radius:999px;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
+[data-th=aurora] #mapbox{border-radius:30px;border:2px solid #ffffffcc;box-shadow:0 14px 50px #7c3aed33}
+[data-th=aurora] .leaflet-tile-pane{filter:hue-rotate(22deg) saturate(.9) brightness(1.05)}
+[data-th=aurora] #bar{background:#ffffffaa}
+[data-th=ice] body{font-family:Rajdhani,system-ui,sans-serif;font-size:17px}
+[data-th=ice] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(3px 3px at 10% 0,#fff,transparent),radial-gradient(2px 2px at 35% 0,#fffc,transparent),radial-gradient(3px 3px at 60% 0,#fff,transparent),radial-gradient(2px 2px at 85% 0,#fffc,transparent);background-size:100% 400px;animation:snow 9s linear infinite}
+[data-th=ice] h1,[data-th=ice] h2,[data-th=ice] .logo b{font-family:Rajdhani,sans-serif;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+[data-th=ice] .card{border-radius:14px;background:#ffffff0f;backdrop-filter:blur(16px) saturate(1.3);border:1px solid #ffffff3a;box-shadow:inset 0 1px 0 #ffffff44,0 8px 30px #0006}
+[data-th=ice] button{border-radius:10px;background:linear-gradient(135deg,#0ea5e9,#7dd3fc)}
+[data-th=ice] #mapbox{border-radius:16px;border:1px solid #ffffff55}
+[data-th=ice] .leaflet-tile-pane{filter:hue-rotate(15deg) saturate(.75) brightness(1.12)}
+[data-th=royal] body{font-family:"Playfair Display",Georgia,serif;background:radial-gradient(900px 480px at 50% -10%,#3b2470,transparent),var(--bg)}
+[data-th=royal] h1,[data-th=royal] h2,[data-th=royal] .logo b{font-family:"Playfair Display",serif;font-weight:800;letter-spacing:.6px}
+[data-th=royal] h2::after{content:"❖";display:block;font-size:11px;color:#fbbf24aa;letter-spacing:6px;margin-top:2px}
+[data-th=royal] .card{border-radius:8px;border:2px solid #fbbf24;background:linear-gradient(180deg,#2a1a4e,#1a1230);box-shadow:inset 0 0 0 4px #1a1230,inset 0 0 0 5px #fbbf2466,0 10px 30px #0008}
+[data-th=royal] button{border-radius:4px;background:linear-gradient(180deg,#fcd34d,#d97706);box-shadow:0 2px 0 #7c4a03}
+[data-th=royal] #mapbox{border-radius:10px;border:3px double #fbbf24}
+[data-th=royal] .leaflet-tile-pane{filter:hue-rotate(-28deg) saturate(1.1) brightness(.9)}
+@keyframes twinkle{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes scan{from{transform:translateY(-3px)}to{transform:translateY(3px)}}
+@keyframes aur{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+@keyframes snow{from{background-position:0 -400px}to{background-position:40px 0}}
+@keyframes slideup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes ripple{0%{transform:scale(1);opacity:.9}100%{transform:scale(4.2);opacity:0}}
+@keyframes conf{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(var(--dx),105vh) rotate(720deg);opacity:.2}}
+/* ===== Lecture pas à pas du tour, chargement, confettis, actions ===== */
+#cine{display:none;padding:12px 14px;border-top:1px solid var(--bd);background:linear-gradient(180deg,color-mix(in srgb,var(--p) 92%,transparent),var(--p))}
+#cine.on{display:block;animation:slideup .4s ease both}
+.ch-h{display:flex;align-items:center;gap:8px}.ch-ic{font-size:28px;animation:pop .5s ease both}
+.ch-t{font-family:var(--fh,Cinzel,serif);color:var(--ac);font-size:16px;margin:4px 0}.ch-x{min-height:64px;font-size:15px;line-height:1.5}
+.ch-bar{flex:1;height:6px;border-radius:6px;background:var(--p2);overflow:hidden;min-width:60px}.ch-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac2),var(--ac));transition:width .6s ease}
+#mapld{position:absolute;inset:0;z-index:1500;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);color:#fff;font-weight:700}#mapld.on{display:flex;animation:rise .3s ease both}
+.ring{width:46px;height:46px;border-radius:50%;border:4px solid #fff4;border-top-color:var(--ac);animation:spin 1s linear infinite}
+.rp{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;border:2px solid var(--ac);animation:ripple 1.8s ease-out infinite;pointer-events:none}
+.fxc{position:fixed;inset:0;pointer-events:none;z-index:7000;overflow:hidden}.fxc i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;animation:conf 1.9s ease-in forwards}
+.act{border:1px dashed var(--bd);border-radius:12px;padding:8px;margin:8px 0}
+
+/* ===== Discussions entre nations ===== */
+.chatbox{max-height:46vh;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:8px 2px;margin:8px 0}
+.cb{max-width:90%;background:var(--p2);border:1px solid var(--bd);border-radius:14px;padding:8px 11px;animation:rise .25s ease both;align-self:flex-start;font-size:15px}
+.cb.me{align-self:flex-end;background:linear-gradient(135deg,color-mix(in srgb,var(--ac2) 38%,var(--p2)),var(--p2));border-color:var(--ac2)}
+.cb.ai{border-style:dashed}
+.cbh{display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:3px;flex-wrap:wrap}.cbh .fl{width:22px;height:15px}
+.cb.typing{animation:pulse 1s infinite;font-size:22px;letter-spacing:4px}
+.prop{margin-top:6px;border-top:1px dashed var(--bd);padding-top:6px;font-size:14px}
 </style></head><body>
 <header id="bar"></header>
-<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div class="zc"><button onclick="eb()" aria-label="Fullscreen" title="F">⤢</button><button onclick="mo()" aria-label="Map options" title="O">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
+<div id="wrap"><div id="mapbox"><div id="lmap"></div><div id="cmap"></div><div id="cmsg"></div><div id="sel"></div><div id="mapld"><span class="ring"></span><span id="mapldt"></span></div><div id="cine"></div><div class="zc"><button onclick="eb()" aria-label="Fullscreen" title="F">⤢</button><button onclick="mo()" aria-label="Map options" title="O">🎛️</button></div></div><aside id="side"><p class="mut">…</p></aside></div>
 <div id="prog"></div><div id="drawer"></div>
 <div id="toast" onclick="this.style.display='none'"></div>
 <script>setTimeout(function(){if(window.__capOk)return;var s=document.getElementById("side");if(s)s.innerHTML='<div class="card"><h2>Cap Historica</h2><p>Le jeu n\'a pas pu démarrer : réseau coupé, bloqueur de contenu (désactive-le pour ce site) ou navigateur trop ancien. Recharge la page.</p><button onclick="location.reload()">Recharger</button></div>';var m=document.getElementById("mapbox");if(m)m.style.display="none"},12000)</script>
@@ -350,12 +446,16 @@ let LI=Math.max(0,LN.findIndex(l=>l[0]===(ls.get("lang")||(navigator.language||"
 const TM={};TT.forEach(r=>TM[r[0]]=r);
 const TT2=[["Menu", "Menu", "Menú", "菜单", "Меню"], ["🏠 Accueil", "🏠 Home", "🏠 Inicio", "🏠 首页", "🏠 Главная"], ["📖 Tutoriel", "📖 Tutorial", "📖 Tutorial", "📖 教程", "📖 Руководство"], ["🎨 Thèmes", "🎨 Themes", "🎨 Temas", "🎨 主题", "🎨 Темы"], ["ℹ️ À propos", "ℹ️ About", "ℹ️ Acerca de", "ℹ️ 关于", "ℹ️ О игре"], ["Forêt", "Forest", "Bosque", "森林", "Лес"], ["Rubis", "Ruby", "Rubí", "红宝石", "Рубин"], ["Désert", "Desert", "Desierto", "沙漠", "Пустыня"], ["Cyber", "Cyber", "Cyber", "赛博", "Кибер"], ["Aurore", "Aurora", "Aurora", "极光", "Аврора"], ["Glace", "Ice", "Hielo", "冰", "Лёд"], ["Royal", "Royal", "Real", "皇家", "Королевский"], ["Annuler", "Cancel", "Cancelar", "取消", "Отмена"], ["📓 Carnet", "📓 Notebook", "📓 Cuaderno", "📓 笔记本", "📓 Блокнот"], ["Paragraphe modifié ✓", "Paragraph edited ✓", "Párrafo editado ✓", "段落已修改 ✓", "Абзац изменён ✓"], ["Ajouté au carnet ✓", "Added to notebook ✓", "Añadido al cuaderno ✓", "已加入笔记本 ✓", "Добавлено в блокнот ✓"], ["Télécharger", "Download", "Descargar", "下载", "Скачать"], ["Épingle les paragraphes de la chronique (📌) et écris tes notes ici. Elles restent sur cet appareil.", "Pin chronicle paragraphs (📌) and write your notes here. They stay on this device."], ["Rien pour l'instant. Joue un tour pour écrire l'histoire.", "Nothing yet. Play a turn to write history."], ["Chaque paragraphe terminé arrive dans la chronique : l'hôte peut le modifier (✏️), et l'IA reprend le dernier paragraphe modifié au tour suivant.", "Each finished paragraph goes to the chronicle: the host can edit it (✏️), and the AI picks up the latest edited paragraph on the next turn."], ["Choisis l'apparence du jeu. Le thème est enregistré sur cet appareil.", "Pick the look of the game. The theme is saved on this device."], ["1. Connecte-toi avec Google ou par e-mail, puis choisis un pseudo dans ⚙️ Réglages.", "1. Sign in with Google or email, then pick a nickname in ⚙️ Settings."], ["2. Ajoute une clé d'IA gratuite (Gemini, Groq…) et appuie sur « 🧪 Tester l'IA ».", "2. Add a free AI key (Gemini, Groq…) and press “🧪 Test the AI”."], ["3. Menu ☰ → ➕ Créer : choisis la carte, l'époque, la difficulté et le contexte (ou laisse l'IA les écrire).", "3. Menu ☰ → ➕ Create: pick the map, era, difficulty and context (or let the AI write them)."], ["4. Clique sur un pays pour voir son drapeau et sa fiche, puis « 🎮 Jouer » pour le diriger.", "4. Click a country to see its flag and profile, then “🎮 Play” to lead it."], ["5. Écris tes ordres librement, puis « ✅ Je suis prêt ». Quand tout le monde est prêt, l'IA résout le tour.", "5. Write your orders freely, then “✅ I'm ready”. When everyone is ready, the AI resolves the turn."], ["6. Lis la chronique : l'hôte peut corriger les paragraphes (✏️) et chacun peut les épingler dans son carnet (📌).", "6. Read the chronicle: the host can fix paragraphs (✏️) and everyone can pin them to their notebook (📌)."], ["7. Invite tes amis avec le lien (👥 Joueurs → Copier le lien). 3 parties maximum par compte.", "7. Invite friends with the link (👥 Players → Copy link). 3 games maximum per account."], ["8. Mode 🎓 Éducatif : choisis ta classe et tes époques, apprends dates et personnages, réponds aux quiz.", "8. 🎓 Educational mode: pick your class and eras, learn dates and key figures, answer the quizzes."], ["Cap Historica : jeu de géopolitique et d'histoire propulsé par l'IA. Idée et tests : conptetrol-commits. Conception et développement : Claude (Anthropic).", "Cap Historica: an AI-powered geopolitics and history game. Idea and testing: conptetrol-commits. Design and development: Claude (Anthropic)."]];
 TT2.forEach(r=>TM[r[0]]=r);
+const TT3=[["➕ Ajouter une action", "➕ Add an action", "➕ Añadir una acción", "➕ 添加行动", "➕ Добавить действие"], ["Action {0}", "Action {0}", "Acción {0}", "行动 {0}", "Действие {0}"], ["Action", "Action", "Acción", "行动", "Действие"], ["Étape {0}/{1}", "Step {0}/{1}", "Paso {0}/{1}", "第 {0}/{1} 步", "Шаг {0}/{1}"], ["Frontières modifiées", "Borders changed", "Fronteras modificadas", "边界变化", "Границы изменены"], ["{0} passe sous le contrôle de {1}.", "{0} falls under the control of {1}."], ["Chaque action sera détaillée séparément dans la chronique et dans la lecture pas à pas du tour.", "Each action will be detailed separately in the chronicle and in the step-by-step replay of the turn."], ["Supprimer ce paragraphe ?", "Delete this paragraph?"], ["Paragraphe supprimé ✓", "Paragraph deleted ✓"]];
+TT3.forEach(r=>TM[r[0]]=r);
+const TT4=[["🗣️ Discussions", "🗣️ Discussions", "🗣️ Diálogos", "🗣️ 外交对话", "🗣️ Переговоры"], ["🌍 Public (toutes les nations)", "🌍 Public (all nations)", "🌍 Público (todas las naciones)", "🌍 公开（所有国家）", "🌍 Публично (все нации)"], ["Joueurs", "Players", "Jugadores", "玩家", "Игроки"], ["Nations dirigées par l'IA", "AI-run nations", "Naciones dirigidas por IA", "AI 管理的国家", "Нации под управлением ИИ"], ["Nation non jouée : l'IA parle à sa place.", "Unplayed nation: the AI speaks for it."], ["Message privé entre joueurs (masqué dans l'interface, mais enregistré dans la partie).", "Private message between players (hidden in the interface, but stored in the game)."], ["Aucun message. Lance la discussion !", "No messages yet. Start the discussion!"], ["Écris un message…", "Write a message…", "Escribe un mensaje…", "输入消息…", "Напиши сообщение…"], ["Envoyer", "Send", "Enviar", "发送", "Отправить"], ["🌐 Demander l'avis des nations", "🌐 Ask the nations' opinion", "🌐 Pedir la opinión de las naciones", "🌐 征求各国意见", "🌐 Узнать мнение наций"], ["✅ Accepter", "✅ Accept", "✅ Aceptar", "✅ 接受", "✅ Принять"], ["❌ Refuser", "❌ Refuse", "❌ Rechazar", "❌ 拒绝", "❌ Отклонить"], ["Traité conclu : {0}", "Treaty signed: {0}", "Tratado firmado: {0}", "条约已签订：{0}", "Договор заключён: {0}"], ["Coulisses diplomatiques", "Diplomatic backstage", "Entre bastidores diplomáticos", "外交幕后", "Дипломатические кулуары"]];
+TT4.forEach(r=>TM[r[0]]=r);
 const t=(s,...a)=>{const r=TM[s];let o=LI===0||!r?s:(r[LI]||r[1]||s);a.forEach((v,i)=>o=o.split("{"+i+"}").join(v));return o};
 const LANGN=()=>LN[LI][2];
 document.documentElement.lang=LN[LI][0];
 
 const DIFF={facile:"Monde clément : les ordres des joueurs réussissent souvent, les IA sont passives.",normal:"Équilibré et plausible.",réaliste:"Conséquences réalistes (logistique, économie, opinion, rivalités) ; les plans ambitieux échouent souvent.",difficile:"Impitoyable : IA agressives et opportunistes, crises, coups d'État et guerres fréquents."};
-const VER="Cap Historica · v26.11.27";
+const VER="Cap Historica · v26.11.29";
 const DAY=864e5,MAXG=3,GL="https://generativelanguage.googleapis.com/v1beta/models";
 const PROV={
   gemini:{n:"Google Gemini · gratuit",free:1,k:"https://aistudio.google.com/apikey",def:["gemini-2.5-flash","gemini-2.5-flash-lite"]},
@@ -482,7 +582,8 @@ function fillReal(n){
   if(MO.mode==="continent")return hue(P.cont||n);
   return ramp(MO.mode==="pop"?(P.pop?Math.log10(P.pop)/9.2:0):MO.mode==="gdp"?(P.gdp?Math.log10(P.gdp*1e6)/13.5:0):(5-(+String(P.inc)[0]||5))/4);
 }
-function lstyle(f){const n=f.properties.n,mine=me()&&me().nation&&own(n)===me().nation;return{color:mine?"#fff":"#0b1118",weight:mine?2.5:MO.bd?.7:0,fillColor:fillReal(n),fillOpacity:SEL&&own(SEL)===own(n)?Math.min(.9,MO.op/100+.25):MO.op/100}}
+function lstyle0(f){const n=f.properties.n,mine=me()&&me().nation&&own(n)===me().nation;return{color:mine?"#fff":"#0b1118",weight:mine?2.5:MO.bd?.7:0,fillColor:fillReal(n),fillOpacity:SEL&&own(SEL)===own(n)?Math.min(.9,MO.op/100+.25):MO.op/100}}
+function lstyle(f){const r=lstyle0(f),n=f.properties.n;if(FLASH.has(n)){r.color="#ffffff";r.weight=4;r.fillOpacity=.95}return r}
 const curView=()=>{const v=G?J(G.viewJson||"",null):LF.view;return v&&Number.isFinite(+v.lat)&&Number.isFinite(+v.lng)?v:null};
 function fitWorld(){
   const b=L.latLngBounds([[-60,-180],[82,180]]);LM.invalidateSize();const z=LM.getBoundsZoom(b,false);
@@ -597,10 +698,10 @@ async function drawCustom(){
 }
 function paintOv(){
   if(!TR||!OVs.length||!MAPDATA)return;
-  const m=me()&&me().nation,sg=JSON.stringify(own_)+"|"+SEL+"|"+m+"|"+MO.mode+"|"+MO.op;if(sg===osig)return;osig=sg;
+  const m=me()&&me().nation,sg=JSON.stringify(own_)+"|"+SEL+"|"+m+"|"+MO.mode+"|"+MO.op+"|"+[...FLASH].join(",");if(sg===osig)return;osig=sg;
   const T=TR,img=new ImageData(T.W,T.H),px=new Uint32Array(img.data.buffer),pk=(r,g,b,a)=>(a<<24)|(b<<16)|(g<<8)|r,al=Math.round(MO.op*2.2);
   const hs=q=>{const m=/hsl\((\d+),(\d+)%,(\d+)%\)/.exec(q);if(!m)return hex(q);const h=+m[1],s=+m[2]/100,l=+m[3]/100,a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1))))};return[f(0),f(8),f(4)]};
-  const tint=MAPDATA.t.map(q=>{const o=own(q.n);if(SEL&&own(SEL)===o)return pk(255,255,255,100);if(m&&o===m)return pk(255,215,0,80);
+  const tint=MAPDATA.t.map(q=>{const o=own(q.n);if(FLASH.has(q.n))return pk(255,255,255,150);if(SEL&&own(SEL)===o)return pk(255,255,255,100);if(m&&o===m)return pk(255,215,0,80);
     if(MO.mode!=="owner"&&o===q.n){const v=MO.mode==="pop"?Math.log10((q.pop||1)*1e6)/9.5:(q[MO.mode]||0)/100,c=hs(ramp(v));return pk(c[0],c[1],c[2],Math.max(80,al))}
     if(o===q.n)return 0;const c=hex(colorOf(o));return pk(c[0],c[1],c[2],150)});
   for(let i=0;i<px.length;i++){const id=T.ids[i];if(id!==255&&tint[id])px[i]=tint[id]}
@@ -612,7 +713,7 @@ function drawEv(){
   if(EVL.g)EVL.g.remove();EVL={g:L.layerGroup().addTo(mp),m:mp};
   const ev=G&&G.log&&G.log.length?G.log[G.log.length-1].evenements||[]:[];
   ev.forEach(e=>{const p=custom()?(Number.isFinite(e.x)&&Number.isFinite(e.y)?llx(e.x,e.y):null):(Number.isFinite(e.lat)&&Number.isFinite(e.lng)?[e.lat,e.lng]:null);if(!p)return;
-    L.marker(p,{icon:L.divIcon({className:"mk",html:esc(e.ic||"📍"),iconSize:[24,24]})}).bindTooltip(esc((e.nation?e.nation+" : ":"")+e.texte)).addTo(EVL.g)});
+    L.marker(p,{icon:L.divIcon({className:"mk",html:'<span class="rp"></span>'+esc(e.ic||"📍"),iconSize:[24,24]})}).bindTooltip(esc((e.nation?e.nation+" : ":"")+e.texte)).addTo(EVL.g)});
 }
 function colorMap(){if(custom())paintOv();else LGs.forEach(g=>g.setStyle(lstyle))}
 function drawMap(){
@@ -767,6 +868,132 @@ window.saveLog=async i=>{
   }catch(e){toast("⚠️ "+(e.message||e))}
 };
 
+
+/* ---------- Lecture pas à pas du tour : zooms sur la carte, une étape par action ---------- */
+let CINE=null,CT=0,TY=0,FLASH=new Set();
+const llxc=(x,y)=>[600-y,x];
+function buildSteps(l){
+  const st=(l.evenements||[]).map(e=>({ic:e.ic||"📍",nation:e.nation,action:e.action,title:e.texte,text:e.detail||e.texte,lat:e.lat,lng:e.lng,x:e.x,y:e.y}));
+  (l.chg||[]).forEach(c=>st.push({ic:"🗺️",nation:c.proprietaire,title:t("Frontières modifiées"),text:t("{0} passe sous le contrôle de {1}.",c.pays,c.proprietaire),flash:[c.pays],bounds:c.pays}));
+  if(l.disc&&l.disc.length)st.push({ic:"🗣️",nation:"",title:t("Coulisses diplomatiques"),text:l.disc.slice(0,4).map(d=>d.de+" → "+(d.a||"…")+" : "+d.t).join("\n")});
+  st.push({ic:"📜",nation:"",title:l.titre,text:l.recit,final:true});
+  return st;
+}
+const rmotion=()=>typeof matchMedia==="function"&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function cineRefit(){try{if(custom()&&CM&&TR){CM.invalidateSize();CM.fitBounds([[0,0],[600,1000]],{animate:!rmotion()})}else if(LM)fitWorld()}catch(e){}}
+function cineMove(s){
+  const mp=custom()?CM:LM;if(!mp)return;const o={duration:rmotion()?0:1.7,animate:!rmotion()};
+  try{
+    if(s.bounds&&!custom()){const f=feats.find(x=>x.properties.n===s.bounds);if(f){mp.flyToBounds(L.geoJSON(f).getBounds(),{...o,maxZoom:6,padding:[30,30]});return}}
+    if(custom()){if(Number.isFinite(s.x)&&Number.isFinite(s.y))mp.flyTo(llxc(s.x,s.y),1.4,o);else if(s.final)cineRefit()}
+    else{if(Number.isFinite(s.lat)&&Number.isFinite(s.lng))mp.flyTo([s.lat,s.lng],5,o);else if(s.final)cineRefit()}
+  }catch(e){}
+}
+function cineType(txt){
+  clearInterval(TY);const el=$("#cinetx");if(!el)return;
+  if(rmotion()){el.textContent=txt;return}
+  let k=0;el.textContent="";TY=setInterval(()=>{k+=2;el.textContent=txt.slice(0,k);if(k>=txt.length)clearInterval(TY)},22);
+}
+function cineShow(){
+  const c=CINE,box=$("#cine");if(!c)return;
+  const s=c.st[c.k],n=c.st.length;
+  box.className="on";
+  box.innerHTML=`<div class="ch-h"><span class="ch-ic">${esc(s.ic)}</span><b>${esc(s.nation||"")}</b><span class="mut small">${t("Étape {0}/{1}",c.k+1,n)}</span><span style="flex:1"></span><button class="ghost sm" onclick="cineStop()">✕</button></div>${s.action?`<div class="mut small">${t("Action")} : <i>${esc(s.action)}</i></div>`:""}<div class="ch-t">${esc(s.title||"")}</div><div id="cinetx" class="ch-x"></div><div class="row"><button class="ghost sm" onclick="cinePrev()">◀</button><button class="ghost sm" onclick="cinePlay()">${c.play&&!s.final?"⏸":"▶"}</button><button class="ghost sm" onclick="cineNext()">▶▶</button><div class="ch-bar"><i style="width:${(c.k+1)/n*100}%"></i></div></div>`;
+  FLASH=new Set(s.flash||[]);colorMap();cineMove(s);cineType(s.text||"");
+  clearTimeout(CT);if(c.play&&!s.final)CT=setTimeout(cineNext,Math.max(6500,(s.text||"").length*60));
+  if(NAR.on)speak((s.title?s.title+". ":"")+(s.text||""));
+}
+function cineStart(i){const l=(G&&G.log||[])[i];if(!l)return;CINE={i,st:buildSteps(l),k:0,play:true};try{scrollTo({top:0,behavior:rmotion()?"auto":"smooth"})}catch(e){}cineShow()}
+window.cineStart=cineStart;
+function cineNext(){if(!CINE)return;if(CINE.k<CINE.st.length-1)CINE.k++;else CINE.play=false;cineShow()}
+window.cineNext=cineNext;
+window.cinePrev=()=>{if(CINE&&CINE.k>0){CINE.k--;CINE.play=false;cineShow()}};
+window.cinePlay=()=>{if(!CINE)return;CINE.play=!CINE.play;cineShow()};
+window.cineStop=()=>{clearTimeout(CT);clearInterval(TY);CINE=null;FLASH=new Set();colorMap();const b=$("#cine");b.className="";b.innerHTML="";if(typeof stopSpeak==="function")stopSpeak();cineRefit()};
+function confetti(){
+  const c=document.createElement("div");c.className="fxc";const cols=["var(--ac)","var(--hi)","#ffffff","#f472b6","#34d399"];
+  for(let i=0;i<46;i++){const q=document.createElement("i");q.style.left=Math.random()*100+"vw";q.style.background=cols[i%5];q.style.animationDelay=Math.random()*.4+"s";q.style.setProperty("--dx",(Math.random()*160-80)+"px");c.appendChild(q)}
+  document.body.appendChild(c);setTimeout(()=>c.remove(),2700);
+}
+window.delLog=async i=>{
+  if(!G||G.host!==user.uid||!confirm(t("Supprimer ce paragraphe ?")))return;
+  try{await runTransaction(db,async tx=>{const r=doc(db,"games",code),sn=await tx.get(r),lg=[...(sn.data().log||[])];lg.splice(i,1);tx.update(r,{log:lg,...touch()})});toast(t("Paragraphe supprimé ✓"));side()}catch(e){toast("⚠️ "+(e.message||e))}
+};
+
+
+/* ---------- Discussions entre nations : joueurs, nations IA, avis du monde ---------- */
+let CHAN="*";
+const myN=()=>(me()&&me().nation)||"";
+const humanNs=()=>Object.values((G&&G.players)||{}).map(p=>p.nation).filter(Boolean);
+const seenKey=()=>"cs:"+code;
+const TICO={alliance:"🤝",guerre:"⚔️",paix:"🕊️",embargo:"🚫",commerce:"💱"};
+function unreadN(){if(!G||!myN())return 0;const sn=+ls.get(seenKey())||0;return(G.chat||[]).filter(m=>m.ts>sn&&m.u!==user.uid&&(m.to==="*"||m.to===myN())).length}
+function chatMsgs(){const mN=myN();return(G.chat||[]).filter(m=>CHAN==="*"?m.to==="*":((m.n===mN&&m.to===CHAN)||(m.n===CHAN&&m.to===mN)))}
+async function addChat(list){
+  const ref=doc(db,"games",code);
+  await runTransaction(db,async tx=>{const sn=await tx.get(ref);if(!sn.exists())throw Error("?");tx.update(ref,{chat:[...(sn.data().chat||[]),...list.map(m=>({id:Math.random().toString(36).slice(2,9)+Date.now().toString(36),...m}))].slice(-120),...touch()})});
+}
+function chatBubble(m){
+  const mine=m.u===user.uid,pr=m.prop;
+  return `<div class="cb ${mine?"me":""} ${m.ai?"ai":""}"><div class="cbh">${flagOf(m.n)} <b>${esc(m.n)}</b>${m.re?` <span class="mut small">→ ${esc(m.re)}</span>`:""}${m.ai?` <span class="tag">IA</span>`:""}</div><div>${esc(m.t)}</div>${pr?`<div class="prop">${TICO[pr.type]||"📜"} <b>${esc(pr.type)}</b> — ${esc(pr.note||"")}${pr.s==="open"&&m.to===myN()?`<div class="row"><button class="sm" onclick="propAns('${m.id}',1)">${t("✅ Accepter")}</button><button class="ghost sm" onclick="propAns('${m.id}',0)">${t("❌ Refuser")}</button></div>`:pr.s==="yes"?` <span class="tag">✅</span>`:pr.s==="no"?` <span class="tag">❌</span>`:""}</div>`:""}</div>`;
+}
+function chatView(){
+  ls.set(seenKey(),Date.now());
+  if(!myN())return `<div class="card"><p class="mut">${t("Choisis d'abord une nation.")}</p></div>`;
+  const hs=humanNs().filter(n=>n!==myN()),all=nations().filter(n=>n!==myN()&&!hs.includes(n));
+  const opts=`<option value="*" ${CHAN==="*"?"selected":""}>${t("🌍 Public (toutes les nations)")}</option>${hs.length?`<optgroup label="${t("Joueurs")}">${hs.map(n=>`<option ${CHAN===n?"selected":""}>${esc(n)}</option>`).join("")}</optgroup>`:""}<optgroup label="${t("Nations dirigées par l'IA")}">${all.map(n=>`<option ${CHAN===n?"selected":""}>${esc(n)}</option>`).join("")}</optgroup>`;
+  const aiCh=CHAN!=="*"&&!humanNs().includes(CHAN),ms=chatMsgs();
+  return `<div class="card"><h2>${t("🗣️ Discussions")}</h2><select onchange="setChan(this.value)">${opts}</select>${aiCh?`<p class="mut small">${t("Nation non jouée : l'IA parle à sa place.")}</p>`:CHAN!=="*"?`<p class="mut small">${t("Message privé entre joueurs (masqué dans l'interface, mais enregistré dans la partie).")}</p>`:""}
+  <div id="chatbox" class="chatbox">${ms.map(chatBubble).join("")||`<p class="mut" style="text-align:center">${t("Aucun message. Lance la discussion !")}</p>`}${busy==="chat"||busy==="world"?`<div class="cb typing">…</div>`:""}</div>
+  <div class="row"><input id="cm" placeholder="${t("Écris un message…")}" value="${esc(D.cm||"")}" oninput="D.cm=this.value" onkeydown="if(event.key==='Enter')chatSend()"><button onclick="chatSend()" ${busy?"disabled":""}>${t("Envoyer")}</button></div>
+  ${CHAN==="*"?`<div class="row"><button class="ghost" onclick="askWorld()" ${busy?"disabled":""}>${t("🌐 Demander l'avis des nations")}</button></div>`:""}</div>`;
+}
+window.setChan=v=>{CHAN=v;D.cm="";side()};
+window.chatSend=async()=>{
+  const txt=String(D.cm||"").trim().slice(0,500),mN=myN();if(!txt||busy)return;if(!mN)return toast(t("Choisis d'abord une nation."));
+  D.cm="";
+  try{await addChat([{u:user.uid,n:mN,to:CHAN,t:txt,ts:Date.now()}])}catch(e){return toast("⚠️ "+(e.message||e))}
+  if(CHAN!=="*"&&!humanNs().includes(CHAN))await aiReply(CHAN,txt);else side();
+};
+async function aiReply(nat,txt){
+  busy="chat";side();
+  try{
+    const mN=myN(),hist=chatMsgs().slice(-8).map(m=>m.n+" : "+m.t).join("\n"),q=custom()&&MAPDATA?MAPDATA.t.find(x=>x.n===nat):null;
+    const r=await ask(`Tu joues ${nat}, nation dirigée par l'IA dans un jeu de géopolitique. Date : ${dateStr(G)}. Contexte : ${G.context}. ${G.mem?"Mémoire : "+G.mem+". ":""}${(G.trt||[]).length?"Traités : "+G.trt.map(x=>x.type+" "+x.a+"-"+x.b).join(", ")+". ":""}${q?"Ta nation : "+JSON.stringify({gov:q.gov,army:q.army,eco:q.eco,tech:q.tech,stab:q.stab})+". ":""}Contrôleurs modifiés : ${G.ownersJson}.
+Conversation récente avec le dirigeant de ${mN} :\n${hist}\nDernier message du dirigeant de ${mN} : « ${txt} »
+Réponds en ${LANGN()}, en personnage (diplomate ou chef d'État de ${nat}), 2 à 4 phrases, selon l'intérêt, la puissance, les alliances et rancunes de ta nation à cette date ; tu peux refuser, négocier ou menacer. Tu peux faire UNE proposition concrète si c'est pertinent.
+Réponds UNIQUEMENT en JSON : {"reply":"","proposal":{"type":"alliance|guerre|paix|embargo|commerce","note":"conditions en une phrase"}} (proposal vaut null s'il n'y en a pas)`);
+    const pr=r.proposal&&TICO[r.proposal.type]?{type:r.proposal.type,note:String(r.proposal.note||"").slice(0,160),s:"open"}:null;
+    await addChat([{u:"ai",n:nat,to:mN,t:String(r.reply||"…").slice(0,600),ts:Date.now(),ai:1,...(pr?{prop:pr}:{})}]);
+  }catch(e){toast("⚠️ "+e.message,9000)}
+  busy="";side();
+}
+window.askWorld=async()=>{
+  if(busy)return;busy="world";side();
+  try{
+    const hist=chatMsgs().slice(-6).map(m=>m.n+" : "+m.t).join("\n")||"(aucun message)";
+    const r=await ask(`Jeu de géopolitique. Date : ${dateStr(G)}. Contexte : ${G.context}. ${G.mem?"Mémoire : "+G.mem+". ":""}Derniers messages publics :\n${hist}\nGénère 3 à 5 réactions publiques courtes (1 à 2 phrases) de nations dirigées par l'IA (pas ${humanNs().join(", ")||"aucune"}), réalistes et variées (soutien, condamnation, prudence, opportunisme). Écris en ${LANGN()}. Réponds UNIQUEMENT en JSON : {"reactions":[{"n":"nation","t":"texte"}]}`);
+    const list=(Array.isArray(r.reactions)?r.reactions:[]).slice(0,5).filter(x=>x&&x.t);
+    if(list.length)await addChat(list.map((x,k)=>({u:"ai",n:String(x.n||"?").slice(0,40),to:"*",t:String(x.t).slice(0,300),ts:Date.now()+k,ai:1})));
+  }catch(e){toast("⚠️ "+e.message,9000)}
+  busy="";side();
+};
+window.propAns=async(mid,yes)=>{
+  try{
+    await runTransaction(db,async tx=>{
+      const ref=doc(db,"games",code),sn=await tx.get(ref),d=sn.data(),ch=[...(d.chat||[])],i=ch.findIndex(m=>m.id===mid);
+      if(i<0||!ch[i].prop)throw Error("?");
+      const m=ch[i],pr={...m.prop,s:yes?"yes":"no"};ch[i]={...m,prop:pr};const up={...touch()};
+      if(yes){
+        up.trt=[...(d.trt||[]).filter(x=>!(x.type===pr.type&&((x.a===m.n&&x.b===m.to)||(x.a===m.to&&x.b===m.n)))),{type:pr.type,a:m.to,b:m.n,note:pr.note}].slice(-24);
+        ch.push({u:"ai",n:m.n,to:"*",t:t("Traité conclu : {0}",pr.type+" "+m.to+" ↔ "+m.n),ts:Date.now(),ai:1});
+      }
+      up.chat=ch.slice(-120);tx.update(ref,up);
+    });
+    if(yes)confetti();side();
+  }catch(e){toast("⚠️ "+(e.message||e))}
+};
+
 function bar0(){$("#bar").innerHTML=`<div class="logo">${LOGO}<b>Cap Historica</b></div>`+(user?`<div><span class="chip">${esc(PSEUDO||"…")}</span> <button class="ghost" onclick="cfg()">⚙️</button> <button class="ghost" onclick="out()">⎋</button></div>`:`<div><select onchange="setLang(this.value)" style="width:auto">${LN.map((l,i)=>`<option value="${l[0]}" ${i===LI?"selected":""}>${l[1]}</option>`).join("")}</select></div>`)}
 function loginCard(){
   return `<div class="card hero">${ART.hero}<h2>${t("Dirige une nation. Réécris l'histoire.")}</h2><p class="mut">${t("Géopolitique multijoueur propulsée par l'IA : vraie carte du monde ou mondes inventés, scénarios historiques, mode éducatif, parties sauvegardées.")}</p>
@@ -851,13 +1078,13 @@ function learn(){
 }
 const logOk=l=>{const f=(D.lf||"").toLowerCase(),m=me(),x=(l.titre+" "+l.recit+" "+(l.evenements||[]).map(e=>e.nation+" "+e.texte).join(" ")).toLowerCase();return(!f||x.includes(f))&&(!D.lm||!m||!m.nation||x.includes(m.nation.toLowerCase()))};
 function game(){
-  if(D.turn!==G.turn){D.d=undefined;D.turn=G.turn}
+  if(D.turn!==G.turn){D.d=undefined;D.acts=undefined;D.turn=G.turn}
   const P=Object.entries(G.players||{}),m=me(),host=G.host===user.uid,od=(G.orders&&G.orders[user.uid])||"",pl=P.filter(([,p])=>p.nation),nr=pl.filter(([,p])=>p.rt===G.turn).length;
   const idle=Math.floor((Date.now()-(G.lastActive||G.created||Date.now()))/DAY);let b="";
   if(TAB==="play"){
     b=!m?`<div class="card"><p>${t("Tu n'es plus dans cette partie.")}</p></div>`
     :!m.nation?`<div class="card"><h2>${t("Choisis ta nation")}</h2><p class="mut">${t("Clique sur la carte puis 🎮 Jouer, ou utilise la liste.")}</p><div class="row"><select id="nsel">${nations().filter(n=>!P.some(([,p])=>p.nation===n)).map(n=>`<option>${esc(n)}</option>`).join("")}</select><button onclick="pickSel(document.getElementById('nsel').value)">${t("Jouer")}</button></div></div>`
-    :`<div class="card"><h2>${t("Tes ordres")} — ${esc(m.nation)}</h2><textarea oninput="D.d=this.value" placeholder="${G.edu?t("Tu peux aussi tenter des actions hors programme : l'IA les compare à la vraie histoire."):t("Que fait ton gouvernement pendant ce tour ?")}">${esc(D.d??od)}</textarea>
+    :`<div class="card"><h2>${t("Tes ordres")} — ${esc(m.nation)}</h2>${actsHtml()}
     <p class="mut">${m.rt===G.turn?"✅":"⏳"} ${nr}/${pl.length} ${t("joueurs prêts")}</p>
     <div class="row">${m.rt===G.turn?`<button class="ghost" onclick="rdy(0)">${t("↩️ Pas prêt")}</button>`:`<button onclick="rdy(1)" ${busy?"disabled":""}>${busy==="turn"?t("L'IA simule…"):t("✅ Je suis prêt")}</button>`}<button class="ghost" onclick="saveO()">${t("💾 Enregistrer")}</button>${host?`<button class="ghost" onclick="force()" ${busy?"disabled":""}>${busy==="turn"?t("L'IA simule…"):t("⏩ Forcer le tour")}</button>`:""}</div>
     <p class="mut small">${t("Le tour se résout automatiquement quand tous les joueurs sont prêts.")}</p></div>`;
@@ -865,9 +1092,10 @@ function game(){
     b=!m||!m.nation?`<div class="card"><p class="mut">${t("Choisis d'abord une nation.")}</p></div>`
     :`<div class="card"><h2>${t("🧠 Conseiller")}</h2>${CH.slice(-6).map(c=>`<div class="ch"><b>${esc(c.r)} :</b> ${esc(c.t)}</div>`).join("")||`<p class="mut">${t("Pose une question ou demande des idées d'ordres.")}</p>`}
     <input placeholder="${t("Ta question…")}" value="${esc(D.q||"")}" oninput="D.q=this.value"><div class="row"><button onclick="advise(false)" ${busy?"disabled":""}>${busy==="adv"?"…":t("Demander")}</button><button class="ghost" onclick="advise(true)" ${busy?"disabled":""}>${t("💡 Suggérer des ordres")}</button></div></div>`;
-  }else if(TAB==="learn")b=learn();
+  }else if(TAB==="chat")b=chatView();
+  else if(TAB==="learn")b=learn();
   else if(TAB==="log"){
-    b=`${notebook()}<p class="mut small">${t("Chaque paragraphe terminé arrive dans la chronique : l'hôte peut le modifier (✏️), et l'IA reprend le dernier paragraphe modifié au tour suivant.")}</p><div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2><div class="row"><input placeholder="🔎" value="${esc(D.lf||"")}" onchange="D.lf=this.value;side()"><label style="margin:0"><input type="checkbox" ${D.lm?"checked":""} onchange="D.lm=this.checked;side()"> ${t("Ma nation")}</label></div>${(G.log||[]).map((l,i)=>[l,i]).reverse().filter(([l])=>logOk(l)).map(([l,i])=>`${D.ed===i?editForm(l,i):`<div class="ev${i===(G.log||[]).length-1?" new":""}"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)}${l.edited?" ✏️":""})</span> <button class="ghost sm" onclick="speakLog(${i})">🔊</button> <button class="ghost sm" onclick="pinLog(${i})">📌</button>${G.host===user.uid?` <button class="ghost sm" onclick="editLog(${i})">✏️</button>`:""}<p>${esc(l.recit)}</p>`}${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<div style="text-align:center">${ART.scroll}<p class="mut">${t("Rien pour l'instant. Joue un tour pour écrire l'histoire.")}</p></div>`}</div>`;
+    b=`${notebook()}<p class="mut small">${t("Chaque paragraphe terminé arrive dans la chronique : l'hôte peut le modifier (✏️), et l'IA reprend le dernier paragraphe modifié au tour suivant.")}</p><div class="card"><h2>${t("📖 Contexte")}</h2><p class="mut">${esc(G.context)}</p></div><div class="card"><h2>${t("📜 Chronique")}</h2><div class="row"><input placeholder="🔎" value="${esc(D.lf||"")}" onchange="D.lf=this.value;side()"><label style="margin:0"><input type="checkbox" ${D.lm?"checked":""} onchange="D.lm=this.checked;side()"> ${t("Ma nation")}</label></div>${(G.log||[]).map((l,i)=>[l,i]).reverse().filter(([l])=>logOk(l)).map(([l,i])=>`${D.ed===i?editForm(l,i):`<div class="ev${i===(G.log||[]).length-1?" new":""}"><b>${esc(l.titre)}</b> <span class="mut">(${esc(l.date||l.year)}${l.edited?" ✏️":""})</span> <button class="ghost sm" onclick="cineStart(${i})">🎬</button> <button class="ghost sm" onclick="speakLog(${i})">🔊</button> <button class="ghost sm" onclick="pinLog(${i})">📌</button>${G.host===user.uid?` <button class="ghost sm" onclick="editLog(${i})">✏️</button> <button class="ghost sm" onclick="delLog(${i})">🗑️</button>`:""}<p>${esc(l.recit)}</p>`}${(l.evenements||[]).map(e=>`<span class="tag">${esc(e.ic||"")} ${esc(e.nation)} : ${esc(e.texte)}</span>`).join("")}</div>`).join("")||`<div style="text-align:center">${ART.scroll}<p class="mut">${t("Rien pour l'instant. Joue un tour pour écrire l'histoire.")}</p></div>`}</div>`;
   }else{
     b=`<div class="card"><h2>${t("👥 Joueurs")} (${P.length}/${G.maxPlayers||8})</h2>${P.map(([id,p])=>`<div class="row"><span><span>${p.seen&&Date.now()-p.seen<100000?"🟢":"⚪"}</span> <span class="sw" style="background:${p.nation?colorOf(own(p.nation)):"#555"}"></span>${esc(p.name)} — ${esc(p.nation||"…")} ${p.nation?(p.rt===G.turn?"✅":"⏳"):""}${id===G.host?" 👑":""}${G.edu?` · ${p.sc||0} ⭐`:""}${id===user.uid?" ("+t("toi")+")":""}</span>${host&&id!==user.uid?`<button class="ghost" data-id="${esc(id)}" onclick="kick(this.dataset.id)">${t("Exclure")}</button>`:""}</div>`).join("")}</div>
     ${(G.trt||[]).length?`<div class="card"><h2>${t("Diplomatie")}</h2>${G.trt.map(x=>`<div>${({alliance:"🤝",guerre:"⚔️",paix:"🕊️",embargo:"🚫",commerce:"💱"})[x.type]||"•"} <b>${esc(x.a)}</b> ↔ <b>${esc(x.b)}</b> <span class="mut">${esc(x.note)}</span></div>`).join("")}</div>`:""}
@@ -878,7 +1106,7 @@ function game(){
     <label><input type="checkbox" ${G.aiOthers!==false?"checked":""} onchange="setParam('aiOthers',this.checked)"> ${t("Nations non jouées dirigées par l'IA")}</label>
     <label><input type="checkbox" ${G.locked?"checked":""} onchange="setParam('locked',this.checked)"> ${t("Fermer la partie aux nouveaux joueurs")}</label></div>`:""}`;
   }
-  const TB=[["play",t("🎮 Jouer")],["adv",t("🧠 Conseiller")],...(G.edu?[["learn",t("🎓 Apprendre")]]:[]),["log",t("📜 Chronique")],["ppl",t("👥 Joueurs")]];
+  const TB=[["play",t("🎮 Jouer")],["adv",t("🧠 Conseiller")],["chat",t("🗣️ Discussions")+(unreadN()?" ("+unreadN()+")":"")],...(G.edu?[["learn",t("🎓 Apprendre")]]:[]),["log",t("📜 Chronique")],["ppl",t("👥 Joueurs")]];
   return `${idle>=7?`<div class="warn">${t("⚠️ Inactive depuis {0} jours. Sans activité, elle sera supprimée automatiquement après 14 jours. Veux-tu la garder ?",idle)} <button class="ghost" onclick="keepG()">${t("Garder")}</button></div>`:""}
   <div class="card head"><span class="era">${eraIcon(G.year)}</span><b>${esc(G.name||"…")}</b>${G.edu?" 🎓":""}<span>· ${esc(dateStr(G))} · ${t("Tour")} ${esc(G.turn)}</span><span class="tag">${t(G.diff)}</span><span class="tag">⏱ ${stepLbl(G.step||12)}</span></div>
   <div class="tabs">${TB.map(([k,l])=>`<button class="${TAB===k?"on":""}" onclick="tab('${k}')">${l}</button>`).join("")}</div>`+b;
@@ -895,6 +1123,8 @@ function side(){
   const sd=$("#side"),vk=(G?code+TAB:"menu"+LF.menu)+PANEL+(cfgOpen?"c":"")+(SEL?"s":"");
   if(vk!==lastVK){lastVK=vk;sd.classList.remove("anim");void sd.offsetWidth;sd.classList.add("anim")}
   const pg=$("#prog");if(pg)pg.className=busy?"on":"";
+  const cbx=$("#chatbox");if(cbx)cbx.scrollTop=cbx.scrollHeight;
+  const ml=$("#mapld");if(ml){ml.className=(busy==="turn"||busy==="map")?"on":"";const mt2=$("#mapldt");if(mt2)mt2.textContent=busy==="map"?t("L'IA dessine…"):t("L'IA simule…")}
 }
 
 function side0(){
@@ -1050,7 +1280,7 @@ function watch(c){
     if(!(G.players||{})[user.uid]){stop();loadMine();return say(t("Tu n'es plus dans cette partie."))}
     const mj=G.mapJson||"";
     if(mj!==curMJ){curMJ=mj;MAPDATA=mj?J(mj,null):null;drawMap()}else{const sg=(G.ownersJson||"")+"|"+Object.values(G.players||{}).map(p=>p.nation).join(",");if(sg!==psig){psig=sg;colorMap()}drawEv()}
-    const n=(G.log||[]).length;if(lastLog>=0&&n>lastLog&&NAR.on)speakLog(n-1);lastLog=n;
+    const n=(G.log||[]).length;if(lastLog>=0&&n>lastLog)cineStart(n-1);lastLog=n;
     const a=document.activeElement;if(!a||!["TEXTAREA","INPUT","SELECT"].includes(a.tagName))side();
   },e=>{stop();say("⚠️ "+e.code)});
 }
@@ -1079,7 +1309,16 @@ async function pick(n){
   try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.nation`]:n,...touch()});side()}catch(e){say("⚠️ "+e.code)}
 }
 window.pickSel=n=>n&&pick(n);
-const orderTxt=()=>String(D.d??((G.orders||{})[user.uid]||"")).slice(0,1500);
+const DELIM="\n¶\n";
+function acts(){if(D.acts)return D.acts;const od=(G&&G.orders&&G.orders[user.uid])||"",a=String(od).split(DELIM).filter(x=>x.trim());return a.length?a:[""]}
+const orderTxt=()=>acts().map(x=>x.trim()).filter(Boolean).join(DELIM).slice(0,3000);
+window.actSet=(i,v)=>{const a=acts();a[i]=v;D.acts=a};
+window.actAdd=()=>{const a=acts();if(a.length<8){a.push("");D.acts=a;side()}};
+window.actDel=i=>{const a=acts();a.splice(i,1);D.acts=a.length?a:[""];window.saveO();side()};
+function actsHtml(){
+  const a=acts(),ph=G.edu?t("Tu peux aussi tenter des actions hors programme : l'IA les compare à la vraie histoire."):t("Que fait ton gouvernement pendant ce tour ?");
+  return a.map((x,i)=>`<div class="act"><div class="row"><b>${t("Action {0}",i+1)}</b><span style="flex:1"></span><button class="ghost sm" onclick="saveO()" title="${t("💾 Enregistrer")}">💾</button><button class="ghost sm" onclick="actDel(${i})" title="${t("🗑️ Supprimer")}">🗑️</button></div><textarea oninput="actSet(${i},this.value)" placeholder="${esc(ph)}" style="min-height:70px">${esc(x)}</textarea></div>`).join("")+(a.length<8?`<button class="ghost" onclick="actAdd()">${t("➕ Ajouter une action")}</button>`:"")+`<p class="mut small">${t("Chaque action sera détaillée séparément dans la chronique et dans la lecture pas à pas du tour.")}</p>`;
+}
 window.saveO=async()=>{try{await updateDoc(doc(db,"games",code),{[`orders.${user.uid}`]:orderTxt(),...touch()});D.d=undefined;say(t("Ordres enregistrés ✓"))}catch(e){say("⚠️ "+e.code)}};
 window.rdy=async v=>{
   const m=me();if(!m||!m.nation||busy)return;
@@ -1101,14 +1340,14 @@ window.advise=async s=>{
 };
 window.ans=async(qi,oi,r)=>{
   D.qa=D.qa||{};const k=G.turn+"-"+qi;if(D.qa[k]!==undefined)return;D.qa[k]=oi;side();
-  if(oi===r)try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.sc`]:increment(1)})}catch{}
+  if(oi===r){confetti();try{await updateDoc(doc(db,"games",code),{[`players.${user.uid}.sc`]:increment(1)})}catch{}}
 };
 async function resolve(){
   if(busy)return;busy="turn";side();
   try{
     const lk=doc(db,"games",code),got=await runTransaction(db,async tx=>{const x=await tx.get(lk),d=x.data();if(!x.exists()||d.turn!==G.turn)return false;const L=d.lock;if(L&&L.turn===d.turn&&Date.now()-L.at<90000&&L.by!==user.uid)return false;tx.update(lk,{lock:{by:user.uid,turn:d.turn,at:Date.now()}});return true});
     if(!got){busy="";toast(t("Un autre joueur résout déjà ce tour."));side();return}
-    const step=G.step||12,cu=custom(),o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) : ${o[id]}`).join("\n")||"(aucun ordre)";
+    const step=G.step||12,cu=custom(),o=G.orders||{},n=names(),ords=Object.entries(G.players).filter(([id,p])=>p.nation&&o[id]).map(([id,p])=>`- ${p.nation} (joueur ${p.name}) :${String(o[id]).split(DELIM).filter(x=>x.trim()).map((x,k)=>"\n    Action "+(k+1)+" : "+x).join("")}`).join("\n")||"(aucun ordre)";
     const m0=(G.month||1)-1+step,ny=G.year+Math.floor(m0/12);
     let eduP="";
     if(G.edu){const cur=G.edu.eps.filter(e=>e.y<=ny).pop()||G.edu.eps[0],sw=G.edu.eps.some(e=>e.y>G.year&&e.y<=ny);
@@ -1120,21 +1359,23 @@ Noms de territoires valides (exactement) : ${n.join("; ")}.
 ${cu&&MAPDATA?"Attributs des nations : "+JSON.stringify(MAPDATA.t.map(q=>({n:q.n,gov:q.gov,pop:q.pop,gdp:q.gdp,army:q.army,eco:q.eco,tech:q.tech,stab:q.stab})))+"\n":""}Historique récent :\n${hist()}
 Ordres des joueurs :\n${ords}
 ${G.aiOthers===false?"Les nations non jouées restent passives et n'agissent pas.":"Toutes les autres nations sont dirigées par toi, de façon cohérente et plausible selon l'époque."}
-Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases","evenements":[{"nation":"","texte":"court","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}],"memoire":"résumé cumulatif de 150 mots max : traités, trahisons, rancunes, personnalités des nations clés, objectifs en cours","traites":[{"type":"alliance|guerre|paix|embargo|commerce","a":"","b":"","note":""}]${G.edu?',"edu":{}':""}}. 3 à 8 événements localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).${eduP}`);
+Simule les ${step} prochains mois. Réponds UNIQUEMENT en JSON : {"titre":"","recit":"4 à 6 phrases","evenements":[{"nation":"","action":"l'action du joueur concernée, recopiée (vide pour un événement mondial)","texte":"titre court","detail":"2 à 4 phrases : ce qui se passe concrètement, pourquoi, et les conséquences","ic":"un emoji",${cu?'"x":500,"y":300':'"lat":0,"lng":0'}}],"changements":[{"pays":"<nom valide>","proprietaire":"<nom de l'État>"}],"discussions":[{"de":"nation","a":"nation ou tous","texte":"1 à 2 phrases de message diplomatique : 3 à 6 échanges réalistes entre nations (déclarations publiques, messages privés, offres, menaces)"}],"memoire":"résumé cumulatif de 150 mots max : traités, trahisons, rancunes, personnalités des nations clés, objectifs en cours","traites":[{"type":"alliance|guerre|paix|embargo|commerce","a":"","b":"","note":""}]${G.edu?',"edu":{}':""}}. Pour CHAQUE action des joueurs, dans l'ordre, écris un événement détaillé distinct (champ « action » recopié), puis ajoute 2 à 4 événements mondiaux ; 4 à 14 événements au total, localisés sur la carte (${cu?"x de 0 à 1000, y de 0 à 600":"latitude et longitude réelles"}) ; changements seulement si des territoires changent de main (conquête, traité, indépendance).${eduP}`);
     const w={...own_};
     (Array.isArray(r.changements)?r.changements:[]).forEach(c=>{if(!c||!n.includes(c.pays))return;const v=typeof c.proprietaire==="string"?c.proprietaire.trim().slice(0,40):"";if(!v||v===c.pays)delete w[c.pays];else w[c.pays]=v});
     const nu=v=>v!==null&&v!==""&&Number.isFinite(+v)?+v:undefined,S=(v,l)=>String(v??"").slice(0,l);
-    const evs=(Array.isArray(r.evenements)?r.evenements:[]).slice(0,8).map(e=>{const q={nation:S(e.nation,40),texte:S(e.texte,200),ic:S(e.ic||"📍",4)};
+    const evs=(Array.isArray(r.evenements)?r.evenements:[]).slice(0,14).map(e=>{const q={nation:S(e.nation,40),texte:S(e.texte,200),ic:S(e.ic||"📍",4)};if(e.detail)q.detail=S(e.detail,600);if(e.action)q.action=S(e.action,300);
       if(cu){const x=nu(e.x),y=nu(e.y);if(x!==undefined&&y!==undefined){q.x=Math.max(0,Math.min(1000,x));q.y=Math.max(0,Math.min(600,y))}}
       else{const a=nu(e.lat),b=nu(e.lng);if(a!==undefined&&b!==undefined&&Math.abs(a)<=85&&Math.abs(b)<=180){q.lat=a;q.lng=b}}return q});
+    const chg=(Array.isArray(r.changements)?r.changements:[]).filter(c=>c&&n.includes(c.pays)&&typeof c.proprietaire==="string").slice(0,12).map(c=>({pays:S(c.pays,40),proprietaire:S(c.proprietaire,40)}));
     let edu;
     if(G.edu&&r.edu){const E=r.edu,A=Array.isArray;edu={dates:(A(E.dates)?E.dates:[]).slice(0,4).filter(x=>x&&nu(x.a)!==undefined).map(x=>({a:Math.round(+x.a),t:S(x.t,160)})),persos:(A(E.persos)?E.persos:[]).slice(0,4).map(x=>({n:S(x&&x.n,60),r:S(x&&x.r,160)})),mot:E.mot&&E.mot.t?{t:S(E.mot.t,60),d:S(E.mot.d,200)}:null,plus:S(E.plus,300),src:(A(E.src)?E.src:[]).slice(0,5).map(v=>S(v,160)),quiz:(A(E.quiz)?E.quiz:[]).slice(0,3).filter(x=>x&&A(x.o)&&x.o.length>=2).map(x=>({q:S(x.q,200),o:x.o.slice(0,4).map(v=>S(v,100)),r:Math.max(0,Math.min(x.o.length-1,Math.round(+x.r)||0)),e:S(x.e,200)}))}}
     const mem=S(r.memoire,900),trt=(Array.isArray(r.traites)?r.traites:[]).slice(0,24).map(x=>({type:S(x&&x.type,12),a:S(x&&x.a,40),b:S(x&&x.b,40),note:S(x&&x.note,120)})).filter(x=>x.a&&x.b);
+    const disc=(Array.isArray(r.discussions)?r.discussions:[]).slice(0,6).map(x=>({de:S(x&&x.de,40),a:S(x&&x.a,40),t:S(x&&x.texte,260)})).filter(x=>x.de&&x.t);
     const ref=doc(db,"games",code),turn=G.turn;
     await runTransaction(db,async tx=>{
       const s=await tx.get(ref);if(!s.exists()||s.data().turn!==turn)throw Error(t("Ce tour a déjà été résolu par un autre joueur."));
-      const d=s.data(),mm=(d.month||1)-1+(d.step||12),yy=d.year+Math.floor(mm/12),entry={titre:S(r.titre||"…",120),recit:S(r.recit,1500),year:d.year,date:dateStr(d),evenements:evs,lg:LI};if(edu)entry.edu=edu;
-      tx.update(ref,{year:yy,month:mm%12+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),lock:deleteField(),...(mem?{mem}:{}),...(r.traites?{trt}:{}),...touch(),log:[...(d.log||[]),entry].slice(-30)});
+      const d=s.data(),mm=(d.month||1)-1+(d.step||12),yy=d.year+Math.floor(mm/12),entry={titre:S(r.titre||"…",120),recit:S(r.recit,1500),year:d.year,date:dateStr(d),evenements:evs,chg:chg,disc:disc,lg:LI};if(edu)entry.edu=edu;
+      tx.update(ref,{year:yy,month:mm%12+1,turn:turn+1,orders:{},ownersJson:JSON.stringify(w),lock:deleteField(),chat:[...(d.chat||[]),...disc.map((x,k)=>({u:"ai",n:x.de,to:"*",re:x.a&&x.a!=="tous"?x.a:"",t:x.t,ts:Date.now()+k,ai:1}))].slice(-120),...(mem?{mem}:{}),...(r.traites?{trt}:{}),...touch(),log:[...(d.log||[]),entry].slice(-30)});
     });
     D.d=undefined;TAB=G.edu?"learn":"log";
   }catch(e){toast("⚠️ "+(e.message||"Erreur"),10000);try{await updateDoc(doc(db,"games",code),{lock:deleteField()})}catch{}}

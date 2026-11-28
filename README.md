@@ -19,6 +19,8 @@ Un jeu de géopolitique et d'histoire multijoueur, gratuit, propulsé par l'IA. 
 - 👥 **Multijoueur** : prêts pour le tour suivant, l'hôte peut forcer le tour, exclure, fermer la partie. Paramètres de partie : nom, joueurs, durée d'un tour (1 mois à 25 ans), difficulté, nations IA.
 - 💾 **Sauvegarde et diplomatie** : export / import d'une partie en fichier, l'IA retient les traités, alliances et rancunes d'un tour à l'autre, carte en plein écran, choix de la voix du système.
 - 🎨 **Interface** : illustrations animées, **10 thèmes** (Océan, Parchemin, Nuit, Forêt, Rubis, Désert, Cyber, Aurore, Glace, Royal), menu latéral ☰ (accueil, parties, créer, éducatif, rejoindre, tutoriel, thèmes, réglages) et **chronique éditable** : chaque paragraphe terminé s'y range, l'hôte peut le modifier (✏️), chacun peut l'épingler (📌) dans son **carnet** personnel.
+- 🎬 **Tour détaillé pas à pas** : chaque action est résolue séparément. Après le tour, la carte zoome sur chaque événement (zoom animé, frontières qui clignotent) pendant que le texte s'écrit à l'écran, avec pause, précédent et suivant. En mode éducatif, le récit du tour s'affiche automatiquement sous la carte. Tu peux écrire **plusieurs actions** par tour, les enregistrer et les supprimer une à une ; l'hôte peut aussi supprimer un paragraphe de la chronique. Les **10 thèmes** changent aussi les polices, les formes, les textures et le style de la carte.
+- 🗣️ **Discussions entre nations** : messages publics ou privés entre joueurs, conversations avec les nations dirigées par l'IA (elles répondent en personnage, négocient, menacent et proposent des traités que tu acceptes ou refuses), bouton « avis des nations » et **coulisses diplomatiques** générées à chaque tour. Les messages privés entre joueurs sont masqués dans l'interface mais enregistrés dans la partie.
 - 🤖 **IA au choix** : Gemini, OpenRouter, Groq (gratuits), OpenAI, Claude, Grok. Chacun utilise sa propre clé. Bouton « 🧪 Tester l'IA ».
 - 🔐 **Connexion** : Google ou e-mail + mot de passe.
 
@@ -41,6 +43,8 @@ A free multiplayer geopolitics and history game powered by AI. Pick a nation, gi
 - 👥 **Multiplayer**: ready for next turn, the host can force the turn, kick, close the game. Game settings: name, players, turn length (1 month to 25 years), difficulty, AI nations.
 - 💾 **Saves and diplomacy**: export / import a game as a file, the AI remembers treaties, alliances and grudges from turn to turn, full-screen map, system voice choice.
 - 🎨 **Interface**: animated illustrations, **10 themes** (Ocean, Parchment, Night, Forest, Ruby, Desert, Cyber, Aurora, Ice, Royal), side menu ☰ (home, games, create, educational, join, tutorial, themes, settings) and an **editable chronicle**: each finished paragraph is stored there, the host can edit it (✏️), everyone can pin it (📌) to a personal **notebook**.
+- 🎬 **Step-by-step turns**: every action is resolved separately. After the turn the map zooms to each event (animated zoom, flashing borders) while the text is typed on screen, with pause, previous and next. In educational mode the turn's story appears automatically under the map. Write **several actions** per turn, save and delete them one by one; the host can also delete a chronicle paragraph. The **10 themes** also change fonts, shapes, textures and the map style.
+- 🗣️ **Discussions between nations**: public or private messages between players, conversations with AI-run nations (they answer in character, negotiate, threaten and propose treaties you can accept or refuse), an "ask the nations" button and **diplomatic backstage** generated every turn. Private messages between players are hidden in the interface but stored in the game.
 - 🤖 **Choose your AI**: Gemini, OpenRouter, Groq (free), OpenAI, Claude, Grok. Everyone uses their own key. "🧪 Test the AI" button.
 - 🔐 **Sign-in**: Google or email + password.
 
@@ -63,6 +67,8 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 👥 **Multijugador**: listos para el siguiente turno, el anfitrión puede forzar el turno, expulsar y cerrar la partida. Ajustes: nombre, jugadores, duración del turno (1 mes a 25 años), dificultad, naciones con IA.
 - 💾 **Guardado y diplomacia**: exporta / importa una partida como archivo, la IA recuerda tratados, alianzas y rencores de un turno a otro, mapa a pantalla completa, elección de la voz del sistema.
 - 🎨 **Interfaz**: ilustraciones animadas, **10 temas**, menú lateral ☰ (inicio, partidas, crear, educativo, unirse, tutorial, temas, ajustes) y **crónica editable**: cada párrafo terminado se guarda allí, el anfitrión puede editarlo (✏️) y cada jugador puede fijarlo (📌) en su **cuaderno** personal.
+- 🎬 **Turno paso a paso**: cada acción se resuelve por separado. Tras el turno, el mapa hace zoom en cada evento (zoom animado, fronteras parpadeantes) mientras el texto se escribe en pantalla, con pausa, anterior y siguiente. En modo educativo el relato del turno aparece solo bajo el mapa. Escribe **varias acciones** por turno, guárdalas y bórralas una a una; el anfitrión también puede borrar un párrafo de la crónica. Los **10 temas** cambian además tipografías, formas, texturas y el estilo del mapa.
+- 🗣️ **Diálogos entre naciones**: mensajes públicos o privados entre jugadores, conversaciones con las naciones dirigidas por la IA (responden en personaje, negocian, amenazan y proponen tratados que puedes aceptar o rechazar), botón «opinión de las naciones» y **bastidores diplomáticos** generados cada turno. Los mensajes privados entre jugadores se ocultan en la interfaz pero se guardan en la partida.
 - 🤖 **Elige tu IA**: Gemini, OpenRouter, Groq (gratis), OpenAI, Claude, Grok. Cada uno usa su clave. Botón «🧪 Probar la IA».
 - 🔐 **Acceso**: Google o correo + contraseña.
 
@@ -85,6 +91,8 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 👥 **多人游戏**：全员“已准备”后进入下一回合，房主可强制结束回合、移除玩家、关闭游戏。游戏设置：名称、玩家数、回合时长（1 个月到 25 年）、难度、AI 国家。
 - 💾 **存档与外交**：可将游戏导出/导入为文件；AI 会记住各回合的条约、联盟和恩怨；全屏地图；可选择系统语音。
 - 🎨 **界面**：动画插图、**10 种主题**、侧边菜单 ☰（首页、游戏、创建、教育、加入、教程、主题、设置）和**可编辑编年史**：每个完成的段落都会存入其中，房主可修改（✏️），每位玩家可将其钉到个人**笔记本**（📌）。
+- 🎬 **逐步回合**：每个行动单独结算。回合结束后，地图会逐个缩放到各事件（动画缩放、边界闪烁），文字同步显示，可暂停、上一步、下一步。教育模式下，回合叙述会自动显示在地图下方。每回合可写**多个行动**，可逐个保存和删除；房主也可删除编年史中的段落。**10 种主题**还会改变字体、形状、纹理和地图风格。
+- 🗣️ **国家之间的对话**：玩家之间的公开或私密消息；与 AI 国家对话（它们会以角色身份回应、谈判、威胁并提出你可接受或拒绝的条约）；“征求各国意见”按钮；每回合生成**外交幕后**内容。玩家之间的私密消息在界面中隐藏，但会保存在游戏中。
 - 🤖 **自选 AI**：Gemini、OpenRouter、Groq（免费）、OpenAI、Claude、Grok。每人使用自己的密钥。提供“🧪 测试 AI”按钮。
 - 🔐 **登录**：Google 或邮箱 + 密码。
 
@@ -107,6 +115,8 @@ Un juego multijugador gratuito de geopolítica e historia con IA. Elige una naci
 - 👥 **Мультиплеер**: «готов» к следующему ходу, хозяин может форсировать ход, исключать игроков, закрыть игру. Параметры: название, игроки, длительность хода (от 1 месяца до 25 лет), сложность, нации под управлением ИИ.
 - 💾 **Сохранения и дипломатия**: экспорт / импорт игры в файл, ИИ помнит договоры, союзы и обиды от хода к ходу, полноэкранная карта, выбор системного голоса.
 - 🎨 **Интерфейс**: анимированные иллюстрации, **10 тем**, боковое меню ☰ (главная, игры, создать, обучение, присоединиться, руководство, темы, настройки) и **редактируемая хроника**: каждый завершённый абзац попадает туда, хозяин может его править (✏️), а каждый игрок — закрепить (📌) в личном **блокноте**.
+- 🎬 **Ход шаг за шагом**: каждое действие разрешается отдельно. После хода карта плавно приближается к каждому событию (анимация, мигающие границы), а текст печатается на экране; есть пауза, назад и вперёд. В обучающем режиме рассказ о ходе сам появляется под картой. Можно писать **несколько действий** за ход, сохранять и удалять их по одному; хозяин может удалить абзац хроники. **10 тем** меняют также шрифты, формы, текстуры и стиль карты.
+- 🗣️ **Переговоры между нациями**: публичные и личные сообщения между игроками, разговоры с нациями под управлением ИИ (они отвечают в образе, торгуются, угрожают и предлагают договоры, которые можно принять или отклонить), кнопка «мнение наций» и **дипломатические кулуары** каждый ход. Личные сообщения между игроками скрыты в интерфейсе, но хранятся в игре.
 - 🤖 **Выбор ИИ**: Gemini, OpenRouter, Groq (бесплатно), OpenAI, Claude, Grok. У каждого свой ключ. Кнопка «🧪 Проверить ИИ».
 - 🔐 **Вход**: Google или e-mail + пароль.
 
